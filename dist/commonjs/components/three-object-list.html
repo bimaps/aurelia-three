@@ -1,0 +1,36 @@
+<template class="three-object-list">
+  <require from="./three-object-list.css"></require>
+
+  <div class="three-object-list-item" repeat.for="object of objects | filterObjectList:q:limit:showAll">
+    <div class="three-object-list-item__main-row">
+      <div class="three-object-list-item__settings" xclick.delegate="selectObject(object, $event)">
+        <ux-icon icon="videocam" if.bind="isCamera(object)"></ux-icon>
+        <ux-icon icon="lightbulb_outline" if.bind="isLight(object)"></ux-icon>
+        <ux-icon icon="group_work" if.bind="isGroup(object)"></ux-icon>
+        <ux-icon icon="format_shapes" if.bind="isMesh(object)"></ux-icon>
+        <ux-icon icon="timeline" if.bind="isGeometry(object)"></ux-icon>
+        <ux-icon icon="texture" if.bind="isMaterial(object)"></ux-icon>
+        <ux-icon icon="blur_on" if.bind="isPointClouds(object)"></ux-icon>
+        <ux-icon icon="panorama_wide_angle" if.bind="isObject(object)"></ux-icon>
+      </div>
+      <div class="three-object-list-item__content click" click.delegate="toggleObject(object, $event)">
+        <div class="three-object-list-item__type">${object.type}</div>
+        <div class="three-object-list-item__name">${object.name || object.uuid} <span class="three-object-list-item__badge" if.bind="object.children && object.children.length">${object.children.length}</span></div>
+        <div class="three-object-list-item__tools">
+          <span if.bind="object.type.indexOf('Camera') === -1">
+            <ux-icon icon="${object.visible ? 'visibility':'visibility_off'}" click.delegate="toggleVisible(object, $event)"></ux-icon>
+          </span>
+        </div>
+      </div>
+      <div class="three-object-list-item__action" click.delegate="selectObject(object, $event)">
+        <ux-icon icon="chevron_right"></ux-icon>
+      </div>
+    </div>
+    <three-object-list limit.bind="limit" q.bind="q" class="three-object-list-item__children" objects.bind="object.children" if.bind="object.__list_opened"></three-object-list>
+  </div>
+
+  <div class="three-object-list-show-all" if.bind="!q && objects.length > limit">
+    <ux-button type="text" click.delegate="showAll = !showAll" if.bind="!showAll">Show All Objects (${objects.length})</ux-button>
+    <ux-button type="text" click.delegate="showAll = !showAll" if.bind="showAll">Limit to ${limit} objects</ux-button>
+  </div>
+</template>

@@ -1,0 +1,187 @@
+/* Styles for page ThreeAdmin */
+.three-admin {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.three-admin-menu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200px;
+  bottom: 0;
+  background: var(--ux-swatch--grey-p100);
+  box-shadow: var(--aurelia-ux--design-elevation4dp);
+  z-index: 1;
+}
+
+.three-admin-toolbar {
+  position: absolute;
+  top: 0;
+  left: 200px;
+  right: 0;
+  height: 90px;
+  background: var(--ux-swatch--grey-p200);
+  box-shadow: var(--aurelia-ux--design-elevation4dp);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.three-admin-bottombar {
+  position: absolute;
+  left: 200px;
+  right: 0;
+  height: 30px;
+  bottom: 0;
+  background: var(--ux-swatch--grey-p900);
+  color: var(--ux-swatch--grey-p200);
+  display: flex;
+  align-items: center;
+  align-content: center;
+}
+
+.three-admin-bottombar > span {
+  font-size: 11px;
+  padding: 4px 16px;
+}
+
+.three-admin-viewer {
+  position: absolute;
+  left: 200px;
+  top: 90px;
+  bottom: 30px;
+  right: 0;
+}
+
+.three-admin-toolbar--categories {
+  padding: 8px 16px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.three-admin-toolbar__category {
+  padding: 2px 11px;
+  border-radius: 20px;
+  background: var(--ux-swatch--grey-p300);
+  color: var(--ux-swatch--grey-p800);
+  border: 1px solid var(--ux-swatch--grey-p800);
+  font-size: 12px;
+  cursor: pointer;
+}
+.three-admin-toolbar__category--selected {
+  background: var(--aurelia-ux--design-primary);
+  color: var(--aurelia-ux--design-primary-foreground);
+}
+
+.three-admin-toolbar--buttons {
+  padding: 8px 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+
+.three-admin-toolbar--buttons button:disabled {
+  border-color: var(--ux-swatch--grey-p500);
+  color: var(--ux-swatch--grey-p500); 
+}
+
+/** for MD screens **/
+@media (min-width: 960px) {
+  .three-admin-menu {
+    width: 300px;
+  }
+  
+  .three-admin-toolbar {
+    left: 300px;
+  }
+  
+  .three-admin-bottombar {
+    left: 300px;
+  }
+
+  .three-admin-viewer {
+    left: 300px;
+  }
+}
+
+/** for LG screens **/
+@media (min-width: 1280px) {
+  .three-admin-menu {
+    width: 350px;
+  }
+  
+  .three-admin-toolbar {
+    left: 350px;
+  }
+  
+  .three-admin-bottombar {
+    left: 350px;
+  }
+
+  .three-admin-viewer {
+    left: 350px;
+  }
+}
+
+/** for SM screens **/
+@media (max-width: 768px) {
+  .three-admin-menu {
+    display: none;
+  }
+  .three-admin-menu-button-container {
+    position: absolute;
+    top: 16px;
+    background: #aaa;
+    color: #fff;
+    border-radius: 3px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .three-admin-open-menu {
+    display: flex;
+    left: 16px;
+    z-index: 1;
+  }
+  .three-admin-show-menu .three-admin-open-menu {
+    display: none;
+  }
+  .three-admin-close-menu {
+    display: none;
+    right: 16px;
+    z-index: 3;
+  }
+  .three-admin-show-menu .three-admin-close-menu {
+    display: flex;
+  }
+  .three-admin-toolbar {
+    left: 0;
+    padding-left: 50px;
+  }
+  .three-admin-viewer {
+    left: 0;
+  }
+  .three-admin-bottombar {
+    left: 0;
+  }
+
+  .three-admin-show-menu .three-admin-menu {
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    display: block;
+    z-index: 2;
+  }
+}
+
+.three-admin-fake-slots {
+  display: none;
+}

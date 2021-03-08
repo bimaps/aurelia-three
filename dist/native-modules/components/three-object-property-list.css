@@ -1,0 +1,17 @@
+/* Styles for page ThreeObjectPropertyList */
+three-object-property-list {
+  display: block;
+}
+
+three-object-property-list ux-list-item {
+  font-size: 14px;
+}
+
+.three-object-property-list__user-data-list {
+  background: #fff;
+  margin-top: 8px;
+}
+
+three-object-property-list ux-list-item ux-input {
+  margin-bottom: 4px;
+}

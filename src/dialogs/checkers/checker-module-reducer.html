@@ -1,0 +1,32 @@
+<template bindable="module">
+  <div class="module__head">
+    <ux-icon icon="vertical_align_bottom" click.delegate="toggle()"></ux-icon>
+    <div>
+      <ux-input value.bind="module.name" variant="outline" label="${'three.Reducer module name (optional)' | t}"></ux-input>
+    </div>
+    <ux-icon icon="drag_handle" class="handler"></ux-icon>
+  </div>
+  <div class="module__body" if.bind="opened">
+    <ux-field>
+      <select-control value.bind="module.inputVarName" options.bind="inputOptions" label="${'three.Input Variable Name' | t}">
+        <ux-icon icon="input" slot="leading-icon"></ux-icon>
+      </select-control>
+    </ux-field>
+
+    <ux-chip-list ux-choice-container.bind="module.operation">
+      <ux-chip ux-choice="min" click.delegate="triggerChange()" t="three.Min"></ux-chip>
+      <ux-chip ux-choice="max" click.delegate="triggerChange()" t="three.Max"></ux-chip>
+      <ux-chip ux-choice="sum" click.delegate="triggerChange()" t="three.Sum"></ux-chip>
+      <ux-chip ux-choice="average" click.delegate="triggerChange()" t="three.Average"></ux-chip>
+      <ux-chip ux-choice="count" click.delegate="triggerChange()" t="three.Count"></ux-chip>
+    </ux-chip-list>
+    
+  </div>
+  <div class="module__foot">
+    <ux-field>
+      <ux-input value.bind="module.outputVarName" label="${'three.Output Variable Name' | t}">
+        <ux-icon icon="navigate_next" slot="leading-icon"></ux-icon>
+      </ux-input>
+    </ux-field>
+  </div>
+</template>

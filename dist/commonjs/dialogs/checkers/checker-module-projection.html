@@ -1,0 +1,30 @@
+<template bindable="module">
+  <div class="module__head">
+    <ux-icon icon="network_cell" click.delegate="toggle()"></ux-icon>
+    <div>
+      <ux-input value.bind="module.name" variant="outline" label="${'three.Projection module name (optional)' | t}"></ux-input>
+    </div>
+    <ux-icon icon="drag_handle" class="handler"></ux-icon>
+  </div>
+  <div class="module__body" if.bind="opened">
+    <ux-field>
+      <select-control value.bind="module.inputVarName" options.bind="inputOptions" label="${'three.Input Variable Name' | t}">
+        <ux-icon icon="input" slot="leading-icon"></ux-icon>
+      </select-control>
+    </ux-field>
+
+    <ux-chip-list ux-choice-container.bind="module.projectionOnAxis" click.delegate="triggerChange()">
+      <ux-chip ux-choice="x"><span t="three.X axis"></span></ux-chip>
+      <ux-chip ux-choice="y"><span t="three.Y axis"></span></ux-chip>
+      <ux-chip ux-choice="z"><span t="three.Z axis"></span></ux-chip>
+    </ux-chip-list>
+    
+  </div>
+  <div class="module__foot">
+    <ux-field>
+      <ux-input value.bind="module.outputVarName" label="${'three.Output Variable Name' | t}">
+        <ux-icon icon="navigate_next" slot="leading-icon"></ux-icon>
+      </ux-input>
+    </ux-field>
+  </div>
+</template>

@@ -1,0 +1,34 @@
+import { ThreeTool } from './three-tool';
+import { CursorPlanesIntersects } from '../components/three';
+export declare class ThreeRotationTool extends ThreeTool {
+    name: string;
+    rotating: boolean;
+    axisConstraint: 'X' | 'Y' | 'Z';
+    rotationAngle: number | null;
+    private rotationCentroid;
+    private rotationStart;
+    private objectsOriginalMatrixes;
+    private objectsOriginalPositions;
+    private objectsOriginalRotations;
+    private overlayTool;
+    private subscriptions;
+    private log;
+    private select;
+    rotate90Ground(): void;
+    rotate(angle: number, plane: 'X' | 'Y' | 'Z', unit?: 'degree' | 'radian'): void;
+    private rotateObjectAroundPoint;
+    activeRotationTool(): void;
+    canRegister(): boolean;
+    onActivate(): void;
+    onDeactivate(): void;
+    toggleRotationTool(): void;
+    private setConstraint;
+    handlePlanesIntersects(data: CursorPlanesIntersects): void;
+    private updateGhostRotation;
+    private displayRotateOverlayTool;
+    private hideRotateOverlayTool;
+    private createOverlayTool;
+    private adjustOverlayToolPosition;
+    private adjustOverlayToolZoom;
+    private adjustActiveTool;
+}

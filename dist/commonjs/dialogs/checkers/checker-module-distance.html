@@ -1,0 +1,25 @@
+<template bindable="module">
+  <div class="module__head">
+    <ux-icon icon="help" click.delegate="toggle()"></ux-icon>
+    <div>
+      <span>${module.moduleType}</span>
+      <span class="muted">${module.name || 'Click to add a name'}</span>
+    </div>
+    <ux-icon icon="drag_handle" class="handler"></ux-icon>
+  </div>
+  <div class="module__body" if.bind="opened">
+    <ux-field>
+      <select-control value.bind="module.inputVarName" options.bind="inputOptions" label="${'three.Input Variable Name' | t}">
+        <ux-icon icon="input" slot="leading-icon"></ux-icon>
+      </select-control>
+    </ux-field>
+    
+  </div>
+  <div class="module__foot">
+    <ux-field>
+      <ux-input value.bind="module.outputVarName" label="${'three.Output Variable Name' | t}">
+        <ux-icon icon="navigate_next" slot="leading-icon"></ux-icon>
+      </ux-input>
+    </ux-field>
+  </div>
+</template>

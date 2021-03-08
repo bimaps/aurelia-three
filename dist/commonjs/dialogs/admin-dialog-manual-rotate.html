@@ -1,0 +1,28 @@
+<template>
+  <require from="./admin-dialog-manual-rotate.css"></require>
+  <ux-form>
+    <ux-field>
+      <label t="three.Constraint"></label>
+      <div class="form-row">
+        <label>
+          <ux-radio checked.bind="value.constraint" model.bind="'X'"></ux-radio><span t="three.X axis"></span></label>
+        <label>
+          <ux-radio checked.bind="value.constraint" model.bind="'Y'"></ux-radio><span t="three.Y axis"></span></label>
+        <label>
+          <ux-radio checked.bind="value.constraint" model.bind="'Z'"></ux-radio><span t="three.Z axis"></span></label>
+      </div>
+    </ux-field>
+    <ux-field>
+      <label t="three.Unit"></label>
+      <div class="form-row">
+        <label>
+          <ux-radio checked.bind="value.unit" model.bind="'degree'"></ux-radio><span t="three.Degree"></span></label>
+        <label>
+          <ux-radio checked.bind="value.unit" model.bind="'radian'"></ux-radio><span t="three.Radian"></span></label>
+      </div>
+    </ux-field>
+    <ux-field>
+      <ux-input type="number" value.bind="value.angle" label="${'three.Angle' | t}"></ux-input>
+    </ux-field>
+  </ux-form>
+</template>

@@ -1,0 +1,16 @@
+/* Styles for page SidebarButtons */
+.sidebar-buttons {
+  display: block;
+  display: flex;
+  align-content: center;
+  align-items: center;
+  padding: 8px 16px;
+  justify-content: space-around;
+  --aurelia-ux-icon-size: 18px;
+}
+
+.sidebar-buttons .ux-button--outline,
+.sidebar-buttons .ux-button--text,
+.sidebar-buttons .ux-button--raised {
+  min-width: auto;
+}

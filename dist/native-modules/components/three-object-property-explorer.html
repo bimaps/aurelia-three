@@ -1,0 +1,11 @@
+<template class="three-object-property-explorer">
+  <require from="./three-object-property-explorer.css"></require>
+  <ux-list if.bind="ready">
+    <ux-list-item repeat.for="prop of props" if.bind="value(prop) !== undefined && value(prop) !== null && value(prop) !== ''">
+      <div class="ux-list-item__content">
+        <div class="ux-list-item__secondary-content">${label(prop)}</div>
+        ${value(prop)}
+      </div>
+    </ux-list-item>
+  </ux-list>
+</template>

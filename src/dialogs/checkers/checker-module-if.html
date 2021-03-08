@@ -1,0 +1,94 @@
+<template bindable="module">
+  <div class="module__head">
+    <ux-icon icon="call_split" click.delegate="toggle()"></ux-icon>
+    <div>
+      <ux-input value.bind="module.name" variant="outline" label="${'three.IF module name (optional)' | t}"></ux-input>
+    </div>
+    <ux-icon icon="drag_handle" class="handler"></ux-icon>
+  </div>
+  <div class="module__body" if.bind="opened">
+    <ux-field>
+      <select-control value.bind="module.inputVarName" options.bind="inputOptions" label="${'three.Input Variable Name' | t}">
+        <ux-icon icon="input" slot="leading-icon"></ux-icon>
+      </select-control>
+    </ux-field>
+
+    <ux-field>
+      <ux-input value.bind="module.defaultOutputValue" label="${'three.Default Output Value' | t}"></ux-input>
+      <ux-input-info t="three.This value will be returned if no operation is matched below"></ux-input-info>
+    </ux-field>
+
+    <ux-field>
+      <label t="three.Default Output Style"></label>
+      <ux-chip-list ux-choice-container.bind="module.defaultOutputStyle">
+        <ux-chip ux-choice="default"><span t="three.Default"></span></ux-chip>
+        <ux-chip ux-choice="correct"><span t="three.Correct"></span></ux-chip>
+        <ux-chip ux-choice="incorrect"><span t="three.Incorrect"></span></ux-chip>
+        <ux-chip ux-choice="danger"><span t="three.Danger"></span></ux-chip>
+        <ux-chip ux-choice="info"><span t="three.Info"></span></ux-chip>
+      </ux-chip-list>
+    </ux-field>
+
+    <div class="module__if__operation" repeat.for="operation of module.operations || []">
+
+      <p t="three.Conditions"></p>
+
+      <div class="module__if__condition" repeat.for="condition of operation.conditions || []">
+        <div class="module__if__condition__line-type">
+          <ux-button type="${condition.operation === '<' ? 'raised':'outline'}" size="small" click.delegate="setConditionType(condition, '<')" ignore-dico>&lt;</ux-button>
+          <ux-button type="${condition.operation === '*' ? 'raised':'outline'}" size="small" click.delegate="setConditionType(condition, '*')" ignore-dico>*</ux-button>
+          <ux-button type="${condition.operation === '=' ? 'raised':'outline'}" size="small" click.delegate="setConditionType(condition, '=')" ignore-dico>=</ux-button>
+          <ux-button type="${condition.operation === '!=' ? 'raised':'outline'}" size="small" click.delegate="setConditionType(condition, '!=')" ignore-dico>!=</ux-button>
+          <ux-button type="${condition.operation === '>' ? 'raised':'outline'}" size="small" click.delegate="setConditionType(condition, '>')" ignore-dico>&gt;</ux-button>
+        </div>
+        <ux-input value.bind="condition.value" label="${'three.Value' | t}"></ux-input>
+        <span class="module__if__condition__remove-button" click.delegate="removeCondition($parent.$index, $index)" t="three.Remove Condition"></span>
+      </div>
+
+      <p class="muted" if.bind="operation.conditions.length === 0" t="three.This operation doesn't yet have any condition"></p>
+  
+      <div class="center" style="margin: 16px;">
+        <ux-button type="text" click.delegate="addCondition($index)"><span t="three.Add Condition"></span></ux-button>
+      </div>
+
+      <ux-field>
+        <label t="three.Condition Operator"></label>
+        <ux-chip-list ux-choice-container.bind="operation.conditionsOperator">
+          <ux-chip ux-choice="and" click.delegate="triggerChange()"><span t="three.AND"></span></ux-chip>
+          <ux-chip ux-choice="or" click.delegate="triggerChange()"><span t="three.OR"></span></ux-chip>
+        </ux-chip-list>
+      </ux-field>
+
+      <ux-field>
+        <ux-input value.bind="operation.outputValue" label="${'three.Output Value' | t}"></ux-input>
+      </ux-field>
+
+      <ux-field>
+        <label t="three.Default Output Style"></label>
+        <ux-chip-list ux-choice-container.bind="operation.outputStyle">
+          <ux-chip ux-choice="default"><span t="three.Default"></span></ux-chip>
+          <ux-chip ux-choice="correct"><span t="three.Correct"></span></ux-chip>
+          <ux-chip ux-choice="incorrect"><span t="three.Incorrect"></span></ux-chip>
+          <ux-chip ux-choice="danger"><span t="three.Danger"></span></ux-chip>
+          <ux-chip ux-choice="info"><span t="three.Info"></span></ux-chip>
+        </ux-chip-list>
+      </ux-field>
+
+      <span class="module__if__operation__remove-button" click.delegate="removeOperation($index)" t="three.Remove Operation"></span>
+    </div>
+    
+    <p class="muted" if.bind="module.operations.length === 0" t="three.This module doesn't yet have any operation"></p>
+  
+    <div class="center" style="margin: 16px;">
+      <ux-button type="text" click.delegate="addOperation()"><span t="three.Add Operation"></span></ux-button>
+    </div>
+    
+  </div>
+  <div class="module__foot">
+    <ux-field>
+      <ux-input value.bind="module.outputVarName" label="${'three.Output Variable Name' | t}">
+        <ux-icon icon="navigate_next" slot="leading-icon"></ux-icon>
+      </ux-input>
+    </ux-field>
+  </div>
+</template>

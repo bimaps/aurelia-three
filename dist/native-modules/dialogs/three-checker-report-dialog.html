@@ -1,0 +1,60 @@
+<template>
+  <require from="./three-checker-report-dialog.css"></require>
+  <ux-card>
+    <ux-card-header>
+      <ux-icon icon="clear" dismiss-modal></ux-icon>
+      <h2 if.bind="mode === 'create'" t="three.Add New Report"></h2>
+      <h2 if.bind="mode === 'edit'" t="three.Edit Report"></h2>
+    </ux-card-header>
+    <ux-card-separator class="ux-card__separator--no-margin"></ux-card-separator>
+    <ux-card-content>
+      <ux-form>
+        <ux-field>
+          <ux-input value.bind="report.name" label="${'three.Report Name' | t}"></ux-input>
+          <ux-input-info></ux-input-info>
+        </ux-field>
+        <ux-field>
+          <ux-textarea value.bind="report.description" label="${'three.Report Description' | t}"></ux-textarea>
+          <ux-input-info></ux-input-info>
+        </ux-field>
+        <!-- <ux-card-separator></ux-card-separator>
+        <p t="three.Included Flows"></p>
+
+        <ux-list class="ux-list--border">
+          <ux-list-item repeat.for="flow of includedFlows">
+            <div class="ux-list-item__detail">
+              <ux-icon icon="drag_handle"></ux-icon>
+            </div>
+            <div class="ux-list-item__content">${flow.name}</div>
+            <div class="ux-list-item__action-item">
+              <ux-icon icon="delete" click.delegate="removeFlow($index)"></ux-icon>
+            </div>
+          </ux-list-item>
+        </ux-list>
+
+        <template if.bind="availableFlows.length > 0">
+          <p t="three.Available Flows"></p>
+          <ux-list class="ux-list--border">
+            <ux-list-item repeat.for="flow of availableFlows">
+              <div class="ux-list-item__detail">
+                <ux-icon icon="check"></ux-icon>
+              </div>
+              <div class="ux-list-item__content">${flow.name}</div>
+              <div class="ux-list-item__action-item">
+                <ux-icon icon="add" click.delegate="addFlow(flow)"></ux-icon>
+              </div>
+            </ux-list-item>
+          </ux-list>
+        </template> -->
+
+      </ux-form>
+    </ux-card-content>
+    <ux-card-separator class="ux-card__separator--no-margin"></ux-card-separator>
+    <ux-card-footer>
+      <ux-button if.bind="mode === 'edit'" type="text" ok-modal="remove" style="margin-right: auto; --aurelia-ux--button-background: var(--aurelia-ux--design-error);"><span t="Remove"></span></ux-button>
+      <ux-button type="text" dismiss-modal><span t="Cancel"></span></ux-button>
+      <ux-button type="raised" ok-modal><span t="Save"></span></ux-button>
+    </ux-card-footer>
+  </ux-card>
+</template>
+    

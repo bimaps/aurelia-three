@@ -1,0 +1,6 @@
+<template class="sidebar-header">
+  <require from="./sidebar-header.css"></require>
+  <ux-icon icon="chevron_left" if.bind="prev" ar-prev="${prev}" class="sidebar-header__back"></ux-icon>
+  <ux-icon icon="chevron_left" if.bind="back" ar-back="sidebar-menu" class="sidebar-header__back"></ux-icon>
+  <ux-icon icon="${icon}" if.bind="icon" class="sidebar-header__icon"></ux-icon> <slot></slot>
+</template>

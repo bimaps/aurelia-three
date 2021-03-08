@@ -1,0 +1,32 @@
+
+.three-checker-config-dialog__condition {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+
+.three-checker-config-dialog__line-type {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: space-between;
+  margin: 12px 0;
+}
+
+
+.three-checker-config-dialog__line-type .ux-button--raised,
+.three-checker-config-dialog__line-type .ux-button--outline {
+  min-width: auto;
+}
+.three-checker-config-dialog__remove-button {
+  font-size: 12px;
+  padding: 8px;
+  color: var(--ux-swatch--grey-p800);
+  margin-bottom: 24px;
+  cursor: pointer;
+}
+.three-checker-config-dialog__spacer {
+  display: block;
+  height: 60px;
+}

@@ -1,0 +1,43 @@
+<template bindable="module">
+  <div class="module__head">
+    <ux-icon icon="vertical_align_bottom" click.delegate="toggle()"></ux-icon>
+    <div>
+      <ux-input value.bind="module.name" variant="outline" label="${'three.Output module name (optional)' | t}"></ux-input>
+    </div>
+    <ux-icon icon="drag_handle" class="handler"></ux-icon>
+  </div>
+  <div class="module__body" if.bind="opened">
+
+    <div class="module__output__output" repeat.for="output of module.outputs || []">
+      <ux-input value.bind="output.prefix" label="${'three.Prefix' | t}"></ux-input>
+
+      <select-control value.bind="output.varName" options.bind="inputOptions" label="${'three.Input Variable Name' | t}">
+        <ux-icon icon="input" slot="leading-icon"></ux-icon>
+      </select-control>
+
+      <ux-field>
+        <label>Display</label>
+        <ux-chips-list ux-choice-container.bind="output.display">
+          <ux-chip ux-choice="paragraph" click.delegate="triggerChange()">Paragraph</ux-chip>
+          <ux-chip ux-choice="blocks" click.delegate="triggerChange()">Blocks</ux-chip>
+        </ux-chips-list>
+      </ux-field>
+      <ux-input value.bind="output.suffix" label="${'three.Suffix' | t}"></ux-input>
+      
+      <span class="module__output__output__remove-button" click.delegate="removeOutput($index)" t="three.Remove Output"></span>
+    </div>
+
+    <p class="muted" if.bind="module.outputs.length === 0" t="three.This module doesn't yet have any output"></p>
+
+
+
+    <div class="center" style="margin: 16px;">
+
+      <ux-button type="text" click.delegate="addOutput()"><span t="three.Add Output"></span></ux-button>
+    </div>
+    
+  </div>
+  <div class="module__foot">
+    
+  </div>
+</template>

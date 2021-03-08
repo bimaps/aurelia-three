@@ -1,0 +1,10 @@
+/* Styles for page ThreeStyleEditor */
+three-style-editor {
+  display: block;
+}
+.three-theme-rule__style-add {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
+}

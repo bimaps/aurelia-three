@@ -1,0 +1,5 @@
+<template class="sidebar-section-header ${opened ? 'opened':'closed'}" click.delegate="toggle()">
+  <require from="./sidebar-section-header.css"></require>
+  <slot></slot>
+  <ux-icon style="margin-left: auto;" icon="${opened ? 'keyboard_arrow_down':'chevron_right'}"></ux-icon>
+</template>

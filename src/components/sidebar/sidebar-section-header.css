@@ -1,0 +1,13 @@
+/* Styles for page SidebarSectionHeader */
+.sidebar-section-header {
+  display: flex;
+  background: var(--ux-swatch--grey-p400);
+  padding: 4px 16px;
+  color: var(--ux-swatch--white);
+  align-items: center;
+  align-content: center;
+  cursor: pointer;
+}
+.sidebar-section-header.closed ~ .sidebar-section-content {
+  display: none;
+}

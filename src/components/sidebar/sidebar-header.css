@@ -1,0 +1,23 @@
+/* Styles for page SidebarHeader */
+sidebar-header {
+  display: block;
+}
+.sidebar-header {
+  display: flex;
+  background: var(--ux-swatch--grey-p500);
+  box-shadow: var(--aurelia-ux--design-elevation2dp);
+  padding: 20px;
+  color: var(--ux-swatch--white);
+  align-content: center;
+  align-items: center;
+}
+.sidebar-header__back {
+  color: var(--ux-swatch--grey-p900);
+  margin-right: 4px;
+  cursor: pointer;
+  --aurelia-ux--icon-size: 20px;
+  margin-left: -8px;
+}
+.sidebar-header__icon {
+  margin-right: 4px;
+}

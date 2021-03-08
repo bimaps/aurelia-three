@@ -1,0 +1,10 @@
+/* Styles for page SidebarSection */
+.sidebar-section {
+  display: block;
+  border-left: 4px solid var(--ux-swatch--grey-p400);
+  border-bottom: 2px solid var(--ux-swatch--grey-p400);
+  border-right: 2px solid var(--ux-swatch--grey-p400);
+  margin-top: 8px;
+  margin-bottom: 16px;
+  box-shadow: var(--aurelia-ux--design-elevation2dp);
+}

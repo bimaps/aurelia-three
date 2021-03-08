@@ -1,0 +1,59 @@
+.three-cube-view {
+  position: absolute;
+  top: 16px;
+  right: 120px;
+}
+
+.three-cube-view__element {
+	font-family: sans-serif;
+	position: absolute;
+	z-index: 1;
+	transform: scaleY(-1);
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.three-cube-view__element > .three-cube-view__box {
+	position: relative;
+	transform-style: preserve-3d;
+}
+
+.three-cube-view__element > .three-cube-view__box > .face {
+	cursor: grab;
+	background-color: #dadee9;
+	position: absolute;
+	box-shadow: inset 0 0 0 2px #747883;
+	font-weight: bold;
+	color: #747883;
+	text-align: center;
+}
+
+.three-cube-view__element > .three-cube-view__box > .face:hover {
+	background-color: #a8acba;
+}
+
+.three-cube-view__element > .three-cube-view__box > .ring {
+	pointer-events: none;
+	position: absolute;
+	border-radius: 100%;
+	box-shadow: inset 0 0 0 3px #747883, 0 0 0 10px #dadee92e;
+}
+
+.three-cube-view__element > .three-cube-view__box > .ring > div {
+	color: #747883;
+	position: absolute;
+	font-weight: bold;
+}
+.three-cube-view__home {
+  position: relative;
+  z-index:1;
+  color: #dadee9;
+  transform: translate(-11px, 0);
+}
+.three-cube-view__home:hover {
+  color: #a8acba;
+}

@@ -1,0 +1,440 @@
+<template class="three-admin ${showMenu ? 'three-admin-show-menu':''}">
+  <require from="./three-admin.css"></require>
+  <require from="./three-admin-menu.css"></require>
+  <require from="./three-admin-viewer.css"></require>
+  <div class="three-admin-fake-slots" ref="fakeSlots">
+    <slot name="main-buttons"></slot>
+  </div>
+  <div class="three-admin-open-menu three-admin-menu-button-container" click.delegate="showMenu = true">
+    <ux-icon icon="menu"></ux-icon>
+  </div>
+  <div class="three-admin-close-menu three-admin-menu-button-container" click.delegate="showMenu = false">
+    <ux-icon icon="clear"></ux-icon>
+  </div>
+  <div class="three-admin-menu">
+    <ar-next style="height: 100%;" view-model.ref="arNextMenu" id="sidebar-menu" theme.bind="{animationDuration: '150ms'}">
+      <ar-next-item id="sites">
+        <sidebar-header icon="location_on" t="three.Sites"></sidebar-header>
+        <sidebar-content>
+          <ux-list class="border">
+            <ux-list-item repeat.for="site of sites" class="click ${currentSite.id === site.id ? 'active':''}" click.delegate="selectSite(site)">
+              <div class="ux-list-item__detail"><ux-icon icon="map"></ux-icon></div>
+              <div class="ux-list-item__content">${site.name}</div>
+              <div class="ux-list-item__action-item"><ux-icon icon="chevron_right"></ux-icon></div>
+            </ux-list-item>
+          </ux-list>
+          <sidebar-buttons>
+            <ux-button type="text" click.delegate="createSite()"><ux-icon icon="add"></ux-icon><span t="three.Add New Site"></span></ux-button>
+          </sidebar-buttons>
+        </sidebar-content>
+        
+        <sidebar-footer>
+          <sidebar-buttons ref="mainButtonsContainer">
+          </sidebar-buttons>
+        </sidebar-footer>
+      </ar-next-item>
+      <ar-next-item id="main-site">
+        <sidebar-header prev="sites" icon="map">${currentSite.name}</sidebar-header>
+        <sidebar-content>
+          <ux-list class="border">
+            <ux-list-item click.delegate="arNextMenu.nextTo('lights-camera')" class="click">
+              <div class="ux-list-item__detail"><ux-icon icon="camera"></ux-icon></div>
+              <div class="ux-list-item__content" t="three.Lights and Camera"></div>
+              <div class="ux-list-item__action-item"><ux-icon icon="chevron_right"></ux-icon></div>
+            </ux-list-item>
+            <ux-list-item click.delegate="arNextMenu.nextTo('site-themes')" class="click">
+              <div class="ux-list-item__detail"><ux-icon icon="list"></ux-icon></div>
+              <div class="ux-list-item__content" t="three.Themes"></div>
+              <div class="ux-list-item__action-item"><ux-icon icon="chevron_right"></ux-icon></div>
+            </ux-list-item>
+            <ux-list-item click.delegate="arNextMenu.nextTo('styles')" class="click">
+              <div class="ux-list-item__detail"><ux-icon icon="style"></ux-icon></div>
+              <div class="ux-list-item__content" t="three.Styles"></div>
+              <div class="ux-list-item__action-item"><ux-icon icon="chevron_right"></ux-icon></div>
+            </ux-list-item>
+            <ux-list-item click.delegate="arNextMenu.nextTo('site-settings')" class="click">
+              <div class="ux-list-item__detail"><ux-icon icon="settings"></ux-icon></div>
+              <div class="ux-list-item__content" t="three.Settings"></div>
+              <div class="ux-list-item__action-item"><ux-icon icon="chevron_right"></ux-icon></div>
+            </ux-list-item>
+            <ux-list-item click.delegate="arNextMenu.nextTo('site-checkers')" class="click">
+              <div class="ux-list-item__detail"><ux-icon icon="check"></ux-icon></div>
+              <div class="ux-list-item__content"><span t="three.Checkers"></span></div>
+              <div class="ux-list-item__action-item"><ux-icon icon="chevron_right"></ux-icon></div>
+            </ux-list-item>
+            <ux-list-item click.delegate="arNextMenu.nextTo('site-reports')" class="click">
+              <div class="ux-list-item__detail"><ux-icon icon="library_books"></ux-icon></div>
+              <div class="ux-list-item__content"><span t="three.Reports"></span></div>
+              <div class="ux-list-item__action-item"><ux-icon icon="chevron_right"></ux-icon></div>
+            </ux-list-item>
+            <ux-list-item click.delegate="arNextMenu.nextTo('site-scene')" class="click">
+              <div class="ux-list-item__detail"><ux-icon icon="fullscreen"></ux-icon></div>
+              <div class="ux-list-item__content" t="three.Scene"></div>
+              <div class="ux-list-item__action-item"><ux-icon icon="chevron_right"></ux-icon></div>
+            </ux-list-item>
+            <ux-list-item click.delegate="arNextMenu.nextTo('api')" class="click">
+              <div class="ux-list-item__detail"><ux-icon icon="cloud"></ux-icon></div>
+              <div class="ux-list-item__content" t="three.API"></div>
+              <div class="ux-list-item__action-item"><ux-icon icon="chevron_right"></ux-icon></div>
+            </ux-list-item>
+          </ux-list>
+          <sidebar-section if.bind="selectedObjects.length">
+            <sidebar-section-header opened.one-time="true">${selectedObjects.length ? 'Selected ':''}Objects (${selectedObjects.length})</sidebar-section-header>
+            <div class="sidebar-section-content">
+              <ar-search-input value.bind="objectQ"></ar-search-input>
+              <three-object-list limit.bind="3" q.bind="objectQ" objects.bind="selectedObjects" select-object.delegate="selectObject($event)"></three-object-list>
+            </div>
+          </sidebar-section>
+          <sidebar-section if.bind="three && three.objects && three.objects.rootObjects.length">
+            <sidebar-section-header opened.one-time="false" t="three.All Objects"></sidebar-section-header>
+            <div class="sidebar-section-content">
+              <ar-search-input value.bind="objectQ"></ar-search-input>
+              <three-object-list limit.bind="3" q.bind="objectQ" objects.bind="three.objects.rootObjects" select-object.delegate="selectObject($event)"></three-object-list>
+            </div>
+          </sidebar-section>
+          <sidebar-section if.bind="points.length">
+            <sidebar-section-header opened.one-time="true">Point Clouds (${points.length})</sidebar-section-header>
+            <div class="sidebar-section-content">
+              <ar-search-input value.bind="objectQ"></ar-search-input>
+              <three-object-list limit.bind="3" q.bind="objectQ" objects.bind="points" select-object.delegate="selectObject($event)"></three-object-list>
+            </div>
+          </sidebar-section>
+        </sidebar-content>
+      </ar-next-item>
+      <ar-next-item id="site-settings">
+        <sidebar-header icon="settings" prev="main-site"><span t="three.Settings"></span></sidebar-header>
+        <sidebar-content>
+          <div class="sidebar-section-content" style="padding: 8px;">
+            <ux-field>
+              <ux-input disabled value.bind="currentSite.id" label="${'three.Site Id' | t}"></ux-input>
+            </ux-field>
+            <ux-field>
+              <ux-input value.bind="currentSite.name" label="${'three.Site Name' | t}"></ux-input>
+            </ux-field>
+          </div>
+          
+          <div class="sidebar-section-content" style="padding: 8px;">
+            <ux-button type="text" click.delegate="importSettings()"><span t="Import"></span></ux-button>
+            <ux-button type="text" click.delegate="exportSettings()"><span t="Export"></span></ux-button>
+          </div>
+          <div class="sidebar-section-content" style="padding: 8px;">
+            <ux-button type="outline" click.delegate="openViewer()"><span t="three.Open in Viewer"></span></ux-button>
+          </div>
+        </sidebar-content>
+        <sidebar-footer>
+          <sidebar-buttons>
+            <ux-button type="outline" click.delegate="deleteSite(currentSite)"><span t="three.Delete Site"></span></ux-button>
+            <ux-button click.delegate="saveSiteSettings(currentSite)"><span t="Save"></span></ux-button>
+          </sidebar-buttons>
+        </sidebar-footer>
+      </ar-next-item>
+      <ar-next-item id="site-checkers">
+        <sidebar-header icon="checkers" prev="main-site"><span t="three.Checkers"></span></sidebar-header>
+        <sidebar-content>
+          <div class="sidebar-section-content" style="padding: 8px;">
+            <ux-list>
+              <ux-list-item repeat.for="flow of flows" click.delegate="editFlow(flow)">
+                <div class="ux-list-item__content">${flow.name}</div>
+                <div class="ux-list-item__action-item click">
+                  <!-- <ux-icon icon="file_download" click.delegate="runChecker($event, currentSite.id, checker.id, true)"></ux-icon> -->
+                  <!-- <ux-icon icon="play_arrow" click.delegate="runChecker($event, currentSite.id, checker.id)"></ux-icon> -->
+                </div>
+              </ux-list-item>
+            </ux-list>
+            <!-- <ux-list>
+              <ux-list-item repeat.for="checker of checkers" click.delegate="editChecker(checker)">
+                <div class="ux-list-item__content">${checker.name}</div>
+                <div class="ux-list-item__action-item click">
+                  <ux-icon icon="file_download" click.delegate="runChecker($event, currentSite.id, checker.id, true)"></ux-icon>
+                </div>
+              </ux-list-item>
+            </ux-list> -->
+          </div>
+          <div class="sidebar-section-content" style="padding: 8px;">
+          
+          </div>
+        </sidebar-content>
+        <sidebar-footer>
+          <sidebar-buttons>
+            <ux-button click.delegate="createNewFlow(currentSite)"><span t="three.New Flow"></span></ux-button>
+          </sidebar-buttons>
+        </sidebar-footer>
+      </ar-next-item>
+      <ar-next-item id="site-reports">
+        <sidebar-header icon="reports" prev="main-site"><span t="three.Reports"></span></sidebar-header>
+        <sidebar-content>
+          <div class="sidebar-section-content" style="padding: 8px;">
+            <ux-list>
+              <ux-list-item repeat.for="report of reports" click.delegate="editReport(report)">
+                <div class="ux-list-item__content">${report.name}</div>
+                <div class="ux-list-item__action-item click">
+                  <ux-icon icon="file_download" click.delegate="runReport($event, currentSite.id, report.id, true)"></ux-icon>
+                  <!-- <ux-icon icon="play_arrow" click.delegate="runReport($event, currentSite.id, report.id)"></ux-icon> -->
+                </div>
+              </ux-list-item>
+            </ux-list>
+          </div>
+          <div class="sidebar-section-content" style="padding: 8px;">
+          
+          </div>
+        </sidebar-content>
+        <sidebar-footer>
+          <sidebar-buttons>
+            <ux-button click.delegate="createNewReport(currentSite)"><span t="three.New Report"></span></ux-button>
+          </sidebar-buttons>
+        </sidebar-footer>
+      </ar-next-item>
+      <ar-next-item id="site-scene">
+        <sidebar-header icon="fullscreen" prev="main-site"><span t="three.Scene"></span></sidebar-header>
+        <sidebar-content>
+          <sidebar-buttons>
+            <ux-button type="text" click.delegate="three.objects.clearScene()"><span t="three.Clear Objects"></span></ux-button>
+            <ux-button type="raised" click.delegate="loadFile()" if.bind="loadingFiles === 0"><span t="three.Load Objects"></span></ux-button>
+            <span else>Loading Files (${loadingFiles})</span>
+          </sidebar-buttons>
+          <label t="three.Generate"></label>
+          <sidebar-buttons>
+            <ux-button type="text" click.delegate="generate('cube')"><span t="three.Cube"></span></ux-button>
+            <ux-button type="text" click.delegate="generate('groundAnd3Cubes')"><span t="three.Ground and 3 cubes"></span></ux-button>
+          </sidebar-buttons>
+          <sidebar-buttons>
+            <ux-button type="text" click.delegate="generate('testAllGeometries')"><span t="three.All Geometries"></span></ux-button>
+          </sidebar-buttons>
+          <sidebar-buttons>
+            <ux-button type="text" click.delegate="three.points.clearScene()"><span t="three.Clear Points"></span></ux-button>
+            <ux-button type="raised" click.delegate="loadPoints()" disabled.bind="currentOperation !== ''"><span t="three.Load Points"></span></ux-button>
+          </sidebar-buttons>
+        </sidebar-content>
+        <sidebar-footer>
+          <sidebar-buttons>
+            <ux-button type="outline" click.delegate="deleteSite(currentSite)"><span t="three.Delete Site"></span></ux-button>
+            <ux-button click.delegate="saveSiteSettings(currentSite)"><span t="Save"></span></ux-button>
+          </sidebar-buttons>
+        </sidebar-footer>
+      </ar-next-item>
+      <ar-next-item id="api">
+        <sidebar-header icon="cloud" prev="main-site"><span t="three.API"></span></sidebar-header>
+        <sidebar-content>
+          <sidebar-buttons>
+            <ux-button type="outline" click.delegate="loadSite(currentSite.id)" disabled.bind="currentOperation !== '' || uploadingFile"><span t="three.Download Objects"></span></ux-button>
+          </sidebar-buttons>
+          <sidebar-buttons>
+            <ux-button type="outline" click.delegate="saveSceneIntoSite()" disabled.bind="currentOperation !== '' || uploadingFile"><span t="three.Upload Objects"></span></ux-button>
+          </sidebar-buttons>
+          <sidebar-buttons>
+            <ux-button type="outline" click.delegate="uploadDataFromFile()" disabled.bind="currentOperation !== '' || uploadingFile"><span t="three.Upload Data From File"></span></ux-button>
+          </sidebar-buttons>
+          <sidebar-buttons>
+            <ux-button type="outline" click.delegate="clearSiteData(currentSite.id)" disabled.bind="currentOperation !== '' || uploadingFile"><span t="three.Delete Data"></span></ux-button>
+          </sidebar-buttons>
+          <p class="center" if.bind="uploadingFile">
+            <small t="three.Upload in progress"></small>
+            <ar-spinner-line style="width: 80%"></ar-spinner-line>
+          </p>
+          <sidebar-buttons>
+            <ux-button type="outline" click.delegate="runChecker(currentSite.id)" disabled.bind="currentOperation !== '' || uploadingFile"><span t="three.Run Checker"></span></ux-button>
+          </sidebar-buttons>
+        </sidebar-content>
+        <sidebar-footer>
+          <sidebar-buttons>
+            <ux-button type="outline" click.delegate="deleteSite(currentSite)"><span t="three.Delete Site"></span></ux-button>
+            <ux-button click.delegate="saveSiteSettings(currentSite)"><span t="three.Delete Site"></span></ux-button>
+          </sidebar-buttons>
+        </sidebar-footer>
+      </ar-next-item>
+      <ar-next-item id="lights-camera">
+        <sidebar-header icon="camera" prev="main-site"><span t="three.Lights and Camera"></span></sidebar-header>
+
+        <sidebar-section if.bind="three && three.objects && three.objects.lights">
+          <sidebar-section-header opened.one-time="true"><ux-icon icon="lightbulb_outline"></ux-icon><span t="three.Lights"></span></sidebar-section-header>
+            <three-object-list class="sidebar-section-content" limit.bind="3" objects.bind="three.objects.lights" select-object.delegate="selectObject($event)"></three-object-list>
+            <div class="three-admin-menu__buttons-row sidebar-section-content">
+              <ux-button type="text" size="small" click.delegate="clearAllLights()"><span t="three.Clear Lighting"></span></ux-button>
+              <ux-button type="text" size="small" click.delegate="addLight()"><span t="three.Add Light"></span></ux-button>
+            </div>
+        </sidebar-section>
+        
+        <sidebar-section if.bind="cameras && cameras.length">
+          <sidebar-section-header opened.one-time="true"><ux-icon icon="videocam"></ux-icon><span t="three.Camera"></span></sidebar-section-header>
+          <three-object-list class="sidebar-section-content" limit.bind="3" objects.bind="cameras" select-object.delegate="selectObject($event)"></three-object-list>
+          <div class="three-admin-menu__buttons-row sidebar-section-content"><ux-slider value.bind="three.cameraFrustrumFactor" style="width: 150px; flex-shrink:0" min="-5" max="20" step="0.1"></ux-slider>
+            ${three.cameraFrustrumFactor | round:1}
+          <span t="three.Frustrum"></span></div>
+          <div class="three-admin-menu__buttons-row sidebar-section-content"><ux-slider value.bind="three.cameraZoom" style="width: 150px" min="-5" max="20" step="0.1"></ux-slider>
+            ${three.cameraZoom | round:1}
+          <span t="three.Zoom"></span></div>
+          <div class="three-admin-menu__buttons-row sidebar-section-content">
+            <ux-button type="text" size="small" click.delegate="three.navigation.toggleObservation()"><span t="three.Toggle Observation"></span></ux-button>
+          </div>
+        </sidebar-section>
+      </ar-next-item>
+      <ar-next-item id="object-detail">
+        <sidebar-header back.bind="true" icon="">${selectedObject.name || selectedObject.uuid}</sidebar-header>
+        <sidebar-content>
+          <three-object-property-list object.bind="selectedObject" editable.bind="true"></three-object-property-list>
+        </sidebar-content>
+        <sidebar-footer>
+          <sidebar-buttons>
+            <ux-checkbox checked.bind="selectedObject.visible"></ux-checkbox>
+            <ux-button type="text" click.delegate="removeSelectedObject()"><ux-icon icon="delete"></ux-icon></ux-button>
+            <ux-button type="text" click.delegate="saveObjectProperties(selectedObject)" disabled.bind="!selectedObject.userData || !selectedObject.userData.id"><ux-icon icon="save"></ux-icon></ux-button>
+          </sidebar-buttons>
+        </sidebar-footer>
+      </ar-next-item>
+      <ar-next-item id="site-themes">
+        <sidebar-header prev="main-site" icon="list"><span t="three.Themes"></span></sidebar-header>
+        <sidebar-content>
+          <ux-list class="border">
+            <ux-list-item click.delegate="selectTheme(theme)" class="click" repeat.for="theme of themes">
+              <div class="ux-list-item__detail"><ux-icon icon="settings_input_svideo"></ux-icon></div>
+              <div class="ux-list-item__content">${theme.name}</div>
+              <div class="ux-list-item__action-item"><ux-icon icon="chevron_right"></ux-icon></div>
+            </ux-list-item>
+          </ux-list>
+        </sidebar-content>
+        <sidebar-footer>
+          <sidebar-buttons>
+            <ux-button type="text" click.delegate="createNewTheme()"><ux-icon icon="add"></ux-icon><span t="three.New Theme"></span></ux-button>
+          </sidebar-buttons>
+        </sidebar-footer>
+      </ar-next-item>
+      <ar-next-item id="theme-editor" ref="arNextThemeEditor">
+        <sidebar-header prev="site-themes" icon="settings_input_svideo">${currentTheme.name}</sidebar-header>
+        <sidebar-content>
+
+          <div class="sidebar-content-header" t="three.Rules"></div>
+
+          <ux-list class="border">
+            <ux-list-item click.delegate="selectRule(rule)" class="click" repeat.for="rule of currentTheme.rules">
+              <ux-icon icon="reorder" class="ux-list-item__detail"></ux-icon>
+              <div class="ux-list-item__content">
+                ${rule.name}
+              </div>
+              <ux-icon icon="chevron_right"></ux-icon>
+            </ux-list-item>
+          </ux-list>
+
+          <div class="three-admin-menu__buttons-row">
+            <ux-button click.delegate="addRule(currentTheme)"><span t="three.Add Rule"></span></ux-button>
+          </div>
+
+
+          <!-- <three-theme-editor theme.bind="currentTheme" three.bind="three" theme-updated.delegate="themeModified(currentTheme)" styles.bind="styles" editable.bind="true"></three-theme-editor> -->
+        </sidebar-content>
+        <sidebar-footer>
+          <sidebar-buttons>
+            <ux-button type="text" click.delegate="deleteTheme(currentTheme)"><ux-icon icon="delete"></ux-icon></ux-button>
+            <ux-button type="text" click.delegate="editThemeName(currentTheme)"><ux-icon icon="edit"></ux-icon></ux-button>
+            <ux-button type="text" click.delegate="saveTheme(currentTheme)" disabled.bind="!currentThemeHasModifications"><ux-icon icon="save"></ux-icon></ux-button>
+          </sidebar-buttons>
+        </sidebar-footer>
+      </ar-next-item>
+      <ar-next-item id="rule-editor">
+        <sidebar-header back.bind="true">${currentRule.name}</sidebar-header>
+        <sidebar-content>
+          <three-rule-editor if.bind="currentRule" rule.bind="currentRule" three.bind="three" rule-updated.delegate="themeModified(currentTheme)" styles.bind="styles"></three-rule-editor>
+        </sidebar-content>
+        <sidebar-footer>
+          <sidebar-buttons>
+            <ux-button type="text" click.delegate="deleteRule(currentTheme, currentRule)"><ux-icon icon="delete"></ux-icon></ux-button>
+            <ux-button type="text" click.delegate="editRuleName(currentTheme, currentRule)"><ux-icon icon="edit"></ux-icon></ux-button>
+            <!-- <ux-button type="text" click.delegate="saveTheme(currentTheme)" disabled.bind="!currentThemeHasModifications"><ux-icon icon="save"></ux-icon></ux-button> -->
+          </sidebar-buttons>
+        </sidebar-footer>
+      </ar-next-item>
+      <ar-next-item id="styles">
+        <sidebar-header back.bind="true" icon="style"><span t="three.Styles"></span></sidebar-header>
+        <sidebar-content>
+          <ux-list class="border">
+            <ux-list-item click.delegate="selectStyle(style)" class="click" repeat.for="style of styles">
+              <ux-icon icon="style" class="ux-list-item__detail"></ux-icon>
+              <div class="ux-list-item__content">
+                ${style.name}
+              </div>
+              <ux-icon icon="chevron_right"></ux-icon>
+            </ux-list-item>
+          </ux-list>
+        </sidebar-content>
+        <sidebar-footer>
+          <sidebar-buttons>
+            <ux-button type="text" click.delegate="createNewStyle()"><ux-icon icon="add"></ux-icon><span t="three.New Style"></span></ux-button>
+          </sidebar-buttons>
+        </sidebar-footer>
+      </ar-next-item>
+      <ar-next-item id="style-editor">
+        <sidebar-header prev="styles">${currentStyle.name}</sidebar-header>
+        <sidebar-content>
+          <three-style-editor if.bind="currentStyle" _style.bind="currentStyle"></three-style-editor>
+        </sidebar-content>
+        <sidebar-footer>
+          <sidebar-buttons>
+            <ux-button type="text" click.delegate="deleteStyle(currentStyle)"><ux-icon icon="delete"></ux-icon></ux-button>
+            <ux-button type="text" click.delegate="saveStyle(currentStyle)"><ux-icon icon="save"></ux-icon></ux-button>
+          </sidebar-buttons>
+        </sidebar-footer>
+      </ar-next-item>
+    </ar-next>
+
+
+    
+  </div>
+  <div class="three-admin-toolbar">
+    <template if.bind="currentSite">
+      <div class="three-admin-toolbar--categories">
+        <span class="three-admin-toolbar__category ${toolbarCategory === 'navigation' ? 'three-admin-toolbar__category--selected':''}" click.delegate="toolbarCategory = 'navigation'" t="three.Navigation"></span>
+        <span class="three-admin-toolbar__category ${toolbarCategory === 'selection' ? 'three-admin-toolbar__category--selected':''}" click.delegate="toolbarCategory = 'selection'" t="three.Selection"></span>
+        <span class="three-admin-toolbar__category ${toolbarCategory === 'transform' ? 'three-admin-toolbar__category--selected':''}" click.delegate="toolbarCategory = 'transform'" t="three.Transform"></span>
+        <span class="three-admin-toolbar__category ${toolbarCategory === 'display' ? 'three-admin-toolbar__category--selected':''}" click.delegate="toolbarCategory = 'display'" t="three.Display"></span>
+      </div>
+      <div class="three-admin-toolbar--buttons" show.bind="toolbarCategory === 'navigation'">
+        <ux-button type="outline" click.delegate="three.navigation.zoomOnScene(1)"><span t="three.Zoom 3D"></span></ux-button>
+        <ux-button type="outline" click.delegate="three.navigation.zoomOnScene(1, 'top')"><span t="three.Zoom Top"></span></ux-button>
+      </div>
+      <div class="three-admin-toolbar--buttons" show.bind="toolbarCategory === 'selection'">
+        <ux-button type="outline" click.delegate="select.all()"><span t="All"></span></ux-button>
+        <ux-button type="outline" click.delegate="select.none()" disabled.bind="!select.hasSelection && select.isRoot"><span t="Clear"></span></ux-button>
+        <ux-button type="${activeToolName === 'select' && select.type === 'add' ? 'raised':'outline'}" click.delegate="select.toggleType('add')"><span t="Add"></span></ux-button>
+        <ux-button type="${activeToolName === 'select' && select.type === 'remove' ? 'raised':'outline'}" click.delegate="select.toggleType('remove')"><span t="Remove"></span></ux-button>
+
+        <span t="three.Style"></span>
+        <ar-select value.bind="selectStyle" change.delegate="setSelectStyle()" style="display: inline-block; width: 200px;">
+          <ar-option value="default" label="${'three.Default' | t}"></ar-option>
+          <ar-option value="light" label="${'three.Light' | t}"></ar-option>
+          <ar-option value="wireframe" label="${'three.Wireframe' | t}"></ar-option>
+        </ar-select>
+
+        <ux-button type="outline" click.delegate="select.selectChildren()" show.bind="select.selectionHasChildren"><span t="three.Children"></span></ux-button>
+      </div>
+      <div class="three-admin-toolbar--buttons" show.bind="toolbarCategory === 'transform'">
+
+        <ux-button type="${activeToolName === 'translate' ? 'raised':'outline'}" click.delegate="translate.toggleTranslationTool()" disabled.bind="!select.hasSelection"><span t="three.Translate"></span></ux-button>
+        <ux-button type="${activeToolName === 'rotate' ? 'raised':'outline'}" click.delegate="rotate.toggleRotationTool()" disabled.bind="!select.hasSelection"><span t="three.Rotate"></span></ux-button>
+
+        <ux-button type="text" if.bind="activeToolName === 'rotate'" click.delegate="manualRotate()"><span t="three.Manual"></span></ux-button>
+
+      </div>
+      <div class="three-admin-toolbar--buttons" show.bind="toolbarCategory === 'display'">
+        <ux-button type="text" click.delegate="stylingService.clearTheme()"><span t="three.No Theme"></span></ux-button>
+        <ux-button type="${themeService.currentTheme.id === theme.id ? 'raised':'text'}" click.delegate="displayTheme(theme)" repeat.for="theme of themes">${theme.name}</ux-button>
+      </div>
+    </template>
+  </div>
+  <div class="three-admin-viewer" mouseenter.trigger="mouseEnter($event)" mouseleave.trigger="mouseLeave($event)" mousemove.delegate="mouseMove($event)">
+    <three class="three-admin-viewer--element" view-model.ref="three"></three>
+  </div>
+  <div class="three-admin-bottombar">
+    <span if.bind="mouseOnViewer">[${mouseX}, ${mouseY}]</span>
+    <span if.bind="currentOperation">${currentOperation}</span>
+    <span if.bind="nbObjectsUnderMouse">Hover: ${nbObjectsUnderMouse} objects</span>
+    <span if.bind="selectedObjects.length">Selected: ${selectedObjects.length} objects</span>
+    <span>
+      <span t="three.Tool"></span>: ${activeToolName}
+      <template if.bind="activeToolName === 'select' && (select.type === 'add' || select.type === 'remove')">(${select.type})</template>
+      <template if.bind="activeToolName === 'translate' && translate.axisConstraint">(${translate.axisConstraint})</template>
+      <template if.bind="activeToolName === 'rotate' && rotate.axisConstraint">(${rotate.axisConstraint})</template>
+    </span>
+    <span if.bind="translate.translating">
+      Translation: [${translate.translateVector.x | round:2}, ${translate.translateVector.y | round:2}, ${translate.translateVector.z | round:2}]
+    </span>
+  </div>
+</template>

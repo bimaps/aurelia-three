@@ -1,0 +1,37 @@
+import * as THREE from 'three';
+export declare class ThreeStyleDefinition {
+    display?: boolean;
+    material?: THREE.Material | THREE.Material[];
+    geometry?: THREE.Geometry | THREE.BufferGeometry;
+    displayLabel?: boolean;
+    labelKey?: string;
+    labelTemplate?: string;
+    labelBackgroundColor: string;
+    labelTextColor: string;
+    labelScale: number;
+    labelCentroidMethod: string;
+    labelPosition?: THREE.Vector3;
+    labelOpacity?: number;
+    icon?: boolean;
+    iconKey?: string;
+    iconDefault?: string;
+    iconText?: string;
+    iconBackground: string;
+    iconForeground: string;
+    iconScale: number;
+    iconCentroidMethod: string;
+    iconPosition?: THREE.Vector3;
+    iconOpacity?: number;
+    iconTexture?: THREE.Texture;
+    replaceGeometry?: boolean;
+    geometryShape?: string;
+    geometryScale: number;
+    geometryCentroidMethod: string;
+    geometryPosition?: THREE.Vector3;
+    geometryRotation?: THREE.Vector3;
+    edgesDisplay: boolean;
+    clone(): ThreeStyleDefinition;
+    setWithProperties(definition: ThreeStyleDefinition): void;
+    augment(definition: ThreeStyleDefinition): void;
+    clear(): void;
+}

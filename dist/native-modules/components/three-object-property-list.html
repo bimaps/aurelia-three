@@ -1,0 +1,48 @@
+<template>
+  <require from="./three-object-property-list.css"></require>
+  <ux-list class="border three-object-property-list">
+    <ux-list-item repeat.for="prop of properties" if.bind="object[prop] !== undefined || prop === 'name'" click.delegate="propClick(prop)">
+      <div class="ux-list-item__content">
+        <div class="ux-list-item__secondary-content">
+          ${prop}
+        </div>
+        <!-- EDIT -->
+        <ux-input if.bind="editable && prop === 'name'" value.bind="object[prop]"></ux-input>
+        <ux-slider if.bind="editable && prop === 'intensity'" value.bind="object[prop]" style="width: 100%;" min="1" max="10" step="0.1"></ux-slider>
+        <ux-slider if.bind="editable && prop === 'zoom'" value.bind="object[prop]" style="width: 100%;" min="1" max="10" step="0.5"></ux-slider>
+        <ux-slider if.bind="editable && prop === 'near'" value.bind="object[prop]" style="width: 100%;" min="-50" max.bind="-1" step="1"></ux-slider>
+        <ux-slider if.bind="editable && prop === 'far'" value.bind="object[prop]" style="width: 100%;" min.bind="1" max="50" step="1"></ux-slider>
+        <template if.bind="editable && edit3d(prop)">
+          <ux-input type="number" value.bind="object[prop].x" label="${'three.X' | t}"></ux-input>
+          <ux-input type="number" value.bind="object[prop].y" label="${'three.Y' | t}"></ux-input>
+          <ux-input type="number" value.bind="object[prop].z" label="${'three.Z' | t}"></ux-input>
+        </template>
+        <template if.bind="editable && edit4d(prop)">
+          <ux-input type="number" value.bind="object[prop].w" label="${'three.W' | t}"></ux-input>
+          <ux-input type="number" value.bind="object[prop].x" label="${'three.X' | t}"></ux-input>
+          <ux-input type="number" value.bind="object[prop].y" label="${'three.Y' | t}"></ux-input>
+          <ux-input type="number" value.bind="object[prop].z" label="${'three.Z' | t}"></ux-input>
+        </template>
+        <template if.bind="editable && editNumber(prop)">
+          <ux-input value.bind="object[prop]" type="number"></ux-input>
+        </template>
+        <template if.bind="editable && editBoolean(prop)">
+          <ux-checkbox checked.bind="object[prop]"></ux-checkbox>
+        </template>
+        <!-- VALUE (not userData) -->
+        <span innerhtml="${object[prop] | threeProperty:prop}" if.bind="prop !== 'userData' && !hidePropDueToEdit(prop)"></span>
+        <!-- USERDATA -->
+        <ux-list class="border three-object-property-list__user-data-list" if.bind="prop === 'userData'">
+          <ux-list-item repeat.for="key of userData">
+            <div class="ux-list-item__content">
+              <div class="ux-list-item__secondary-content">
+                ${key}
+              </div>
+              <span innerhtml="${object.userData[key] | threeProperty:key}"></span>
+            </div>
+          </ux-list-item>
+        </ux-list>
+      </div>
+    </ux-list-item>
+  </ux-list>
+</template>

@@ -1,0 +1,163 @@
+<template class="three-style-editor three-admin-editor">
+  <!-- <require from="./three-card-editor.css"></require> -->
+  <require from="./three-rule-editor.css"></require>
+  <require from="./three-style-editor.css"></require>
+  
+  <ux-input type="text" value.bind="_style.name" change.trigger="styleModif('name')" label="${'three.Style Name' | t}"></ux-input>
+  <div class="three-admin-editor__separator"></div>
+  <p><strong t="three.Object"></strong></p>
+  <ux-field>
+    <label t="three.Display Object"></label>
+    <div class="ux-field__form-row">
+      <label>
+        <ux-radio checked.bind="_style.display" model.bind="undefined" change.trigger="styleModif('display') & debounce:100"></ux-radio><span t="three.Inherit"></span></label>
+      <label>
+        <ux-radio checked.bind="_style.display" model.bind="true" change.trigger="styleModif('display') & debounce:100"></ux-radio><span t="three.Show"></span></label>
+      <label>
+        <ux-radio checked.bind="_style.display" model.bind="false" change.trigger="styleModif('display') & debounce:100"></ux-radio><span t="three.Hide"></span></label>
+    </div>
+  </ux-field>
+  <template if.bind="_style.display !== false">
+    <ux-field label="${'three.Material Type' | t}">
+      <ux-select value.bind="_style.material" change.trigger="styleModif('material')">
+        <ux-option value="original" t="three.Original"></ux-option>
+        <ux-option value="basic" t="three.Basic"></ux-option>
+        <ux-option value="phong" t="three.Phong"></ux-option>
+        <ux-option value="texture" disabled t="three.Texture"></ux-option>
+      </ux-select>
+    </ux-field>
+    <ux-field>
+      <label t="three.Material Color"></label>
+
+      <!-- <ux-input type="color" if.bind="_style.material === 'basic' || _style.material === 'phong'" value.bind="_style.color" label="Material Color" change.trigger="styleModif('color')"></ux-input> -->
+      <div style="display: flex; align-items: center; align-content: center; justify-content: flex-start; margin-top: 5px;">
+        <input type="color" change.trigger="styleModif('color') & debounce:100" value.bind="_style.color" > &nbsp;&nbsp; ${_style.color}
+      </div>
+    </ux-field>
+    <deco-field instance.bind="style" property="image" if.bind="_style.material === 'texture'"></deco-field>
+    <ux-field if.bind="_style.material !== 'original'">
+      <label><ux-slider style="width: 100%;" value.bind="_style.opacity" min="0" max="1" step="0.1" mouseup.trigger="styleModif('opacity')" mousedown.trigger="styleModif('opacity')"></ux-slider>
+      <span t="three.Opacity"></span></label>
+    </ux-field>
+    <ux-field>
+      <ux-input type="number" min="0" max="10" step="1" value.bind="_style.renderOrder" change.trigger="styleModif('renderOrder')" label="${'three.Render Order' | t}"></ux-input>
+      <ux-input-info t="three.Leave empty for auto"></ux-input-info>
+    </ux-field>
+  </template>
+  <div class="three-admin-editor__separator"></div>
+  <p><strong t="three.Label"></strong></p>
+  <ux-field>
+    <div class="ux-field__form-row">
+      <label>
+        <ux-checkbox checked.bind="_style.displayLabel" change.trigger="styleModif('displayLabel') & debounce:100"></ux-checkbox><span t="three.Display Label"></span></label>
+    </div>
+  </ux-field>
+  <template if.bind="_style.displayLabel">
+    <ux-field>
+      <ux-input value.bind="_style.labelKey" change.trigger="styleModif('labelKey')" label="${'three.Label Key' | t}"></ux-input>
+    </ux-field>
+    <ux-field>
+      <ux-textarea value.bind="_style.labelTemplate" change.trigger="styleModif('labelTemplate')" label="${'three.Label Template' | t}"></ux-textarea>
+    </ux-field>
+    <ux-field>
+      <ux-input value.bind="_style.labelBackgroundColor" label="Background Color" change.trigger="styleModif('labelBackgroundColor')" label="${'three.Background Color' | t}"></ux-input>
+    </ux-field>
+    <ux-field>
+      <ux-input value.bind="_style.labelTextColor" change.trigger="styleModif('labelTextColor')" label="${'three.Text Color' | t}"></ux-input>
+    </ux-field>
+    <ux-field>
+      <ux-input type="number" min="0" max="100" step="0.1" value.bind="_style.labelScale" change.trigger="styleModif('labelScale')" label="${'three.Label Scale' | t}"></ux-input>
+    </ux-field>
+    <ux-field>
+      <label t="three.Centroid Method"></label>
+      <ux-select value.bind="_style.labelCentroidMethod" change.trigger="styleModif('labelCentroidMethod')">
+        <ux-option value="auto" t="three.Auto"></ux-option>
+        <ux-option value="bbox" t="three.Bbox"></ux-option>
+        <ux-option value="polylabel" t="three.Polylabel"></ux-option>
+      </ux-select>
+    </ux-field>
+    <ux-field><ux-input type="number" value.bind="_style.labelPosition.x" change.trigger="styleModif('labelPosition')" label="${'three.X' | t}"></ux-input></ux-field>
+    <ux-field><ux-input type="number" value.bind="_style.labelPosition.y" change.trigger="styleModif('labelPosition')" label="${'three.Y' | t}"></ux-input></ux-field>
+    <ux-field><ux-input type="number" value.bind="_style.labelPosition.z" change.trigger="styleModif('labelPosition')" label="${'three.Z' | t}"></ux-input></ux-field>
+
+    <ux-field>
+      <label><ux-slider style="width: 100%;" value.bind="_style.labelOpacity" min="0" max="1" step="0.1" mouseup.trigger="styleModif('labelOpacity')" mousedown.trigger="styleModif('labelOpacity')"></ux-slider>
+      <span t="three.Label Opacity"></span></label>
+    </ux-field>
+  </template>
+
+  <div class="three-admin-editor__separator"></div>
+  <p><strong t="three.Icon"></strong></p>
+
+  <ux-field>
+    <div class="ux-field__form-row">
+      <label>
+        <ux-checkbox checked.bind="_style.icon" change.trigger="styleModif('icon') & debounce:100"></ux-checkbox><span t="three.Display Icon"></span></label>
+    </div>
+  </ux-field>
+  <template if.bind="_style.icon">
+    <ux-field>
+      <ux-input value.bind="_style.iconKey" change.trigger="styleModif('iconKey')" label="${'three.Icon Key' | t}"></ux-input>
+    </ux-field>
+    <ux-field>
+      <ux-input value.bind="_style.iconDefault" change.trigger="styleModif('iconDefault')" label="${'three.Icon Default' | t}"></ux-input>
+    </ux-field>
+    <ux-field>
+      <ux-input value.bind="_style.iconBackground" change.trigger="styleModif('iconBackground')" label="${'three.Background Color' | t}"></ux-input>
+    </ux-field>
+    <ux-field>
+      <ux-input value.bind="_style.iconForeground" change.trigger="styleModif('iconForeground')" label="${'three.Foreground Color' | t}"></ux-input>
+    </ux-field>
+    <ux-field>
+      <ux-input type="number" min="0" max="100" step="0.1" value.bind="_style.iconScale" change.trigger="styleModif('iconScale')" label="${'three.Icon Scale' | t}"></ux-input>
+    </ux-field>
+    <ux-field>
+      <label t="three.Centroid Method"></label>
+      <ux-select value.bind="_style.iconCentroidMethod" change.trigger="styleModif('iconCentroidMethod')">
+        <ux-option value="auto" t="three.Auto"></ux-option>
+        <ux-option value="bbox" t="three.Bbox"></ux-option>
+        <ux-option value="polylabel" t="three.Polylabel"></ux-option>
+      </ux-select>
+    </ux-field>
+    <ux-field><ux-input type="number" value.bind="_style.iconPosition.x" change.trigger="styleModif('iconPosition')" label="${'three.X' | t}"></ux-input></ux-field>
+    <ux-field><ux-input type="number" value.bind="_style.iconPosition.y" change.trigger="styleModif('iconPosition')" label="${'three.Y' | t}"></ux-input></ux-field>
+    <ux-field><ux-input type="number" value.bind="_style.iconPosition.z" change.trigger="styleModif('iconPosition')" label="${'three.Z' | t}"></ux-input></ux-field>
+
+    <ux-field>
+      <label><ux-slider style="width: 100%;" value.bind="_style.iconOpacity" min="0" max="1" step="0.1" mouseup.trigger="styleModif('iconOpacity')" mousedown.trigger="styleModif('iconOpacity')"></ux-slider>
+      <span t="three.Icon Opacity"></span></label>
+    </ux-field>
+  </template>
+  <div class="three-admin-editor__separator"></div>
+  <p><strong t="three.Geometry"></strong></p>
+  <ux-field>
+    <div class="ux-field__form-row">
+      <label>
+        <ux-checkbox checked.bind="_style.replaceGeometry" change.trigger="styleModif('replaceGeometry') & debounce:100"></ux-checkbox><span t="three.Replace Geometry"></span></label>
+    </div>
+  </ux-field>
+  <template if.bind="_style.replaceGeometry">
+    <ux-field>
+      <label t="three.Geometry Shape"></label>
+      <ux-select value.bind="_style.geometryShape" change.trigger="styleModif('geometryShape') & debounce:100">
+        <ux-option value="cone" t="three.Cone"></ux-option>
+        <ux-option value="sphere" t="three.Sphere"></ux-option>
+        <ux-option value="cube" t="three.Cube"></ux-option>
+        <ux-option value="cylinder" t="three.Cylinder"></ux-option>
+      </ux-select>
+    </ux-field>
+    
+    <ux-field>
+      <ux-input type="number" min="0" max="100" step="0.1" value.bind="_style.geometryScale" change.trigger="styleModif('geometryScale')" label="${'three.Geometry Scale' | t}"></ux-input>
+    </ux-field>
+
+    <ux-field><ux-input type="number" value.bind="_style.geometryPosition.x" change.trigger="styleModif('geometryPosition')" label="${'three.Position x' | t}"></ux-input></ux-field>
+    <ux-field><ux-input type="number" value.bind="_style.geometryPosition.y" change.trigger="styleModif('geometryPosition')" label="${'three.Position y' | t}"></ux-input></ux-field>
+    <ux-field><ux-input type="number" value.bind="_style.geometryPosition.z" change.trigger="styleModif('geometryPosition')" label="${'three.Position z' | t}"></ux-input></ux-field>
+
+    <ux-field><ux-input type="number" value.bind="_style.geometryRotation.x" change.trigger="styleModif('geometryRotation')" label="${'three.Rotation x' | t}"></ux-input></ux-field>
+    <ux-field><ux-input type="number" value.bind="_style.geometryRotation.y" change.trigger="styleModif('geometryRotation')" label="${'three.Rotation y' | t}"></ux-input></ux-field>
+    <ux-field><ux-input type="number" value.bind="_style.geometryRotation.z" change.trigger="styleModif('geometryRotation')" label="${'three.Rotation z' | t}"></ux-input></ux-field>
+  </template>
+
+</template>

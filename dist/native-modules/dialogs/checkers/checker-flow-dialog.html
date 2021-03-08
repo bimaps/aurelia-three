@@ -1,0 +1,79 @@
+<template>
+  <require from="./checker-flow-dialog.css"></require>
+  <require from="./checker-module-filter"></require>
+  <require from="./checker-module-extract"></require>
+  <require from="./checker-module-math"></require>
+  <require from="./checker-module-normal-distance"></require>
+  <require from="./checker-module-distance"></require>
+  <require from="./checker-module-output"></require>
+  <require from="./checker-module-projection"></require>
+  <require from="./checker-module-if"></require>
+  <require from="./checker-module-reducer"></require>
+  <ux-card>
+    <ux-card-header>
+      <ux-icon icon="clear" dismiss-modal></ux-icon>
+      <h2 if.bind="mode === 'create'" t="three.Add New Checker Flow"></h2>
+      <h2 if.bind="mode === 'edit'" t="three.Edit Checker Flow"></h2>
+    </ux-card-header>
+    <ux-card-separator class="ux-card__separator--no-margin"></ux-card-separator>
+    <ux-card-content>
+      <ux-form>
+        <ux-field>
+          <ux-input value.bind="flow.name" label="${'three.Flow Name' | t}"></ux-input>
+          <ux-input-info></ux-input-info>
+        </ux-field>
+        <ux-field>
+          <ux-textarea value.bind="flow.description" label="${'three.Flow Description' | t}"></ux-textarea>
+          <ux-input-info></ux-input-info>
+        </ux-field>
+        <ux-card-separator if.bind="mode === 'edit'"></ux-card-separator>
+        <div class="modules-container" if.bind="modules.length">
+          <div reorderable-repeat.for="module of modules" reorderable-dnd-handler-selector=".handler" reorderable-after-reordering="moduleOrderChanged">
+            <div class="module-container">
+              <checker-module-filter opened.bind="module.__opened" if.bind="module.moduleType === 'filter'" module.bind="module" input-options.bind="inputOptions.slice(0, $index + 1)" key-values.bind="keyValues" change.delegate="saveModule(module) & debounce:800"></checker-module-filter>
+              <checker-module-extract opened.bind="module.__opened" if.bind="module.moduleType === 'extract'" module.bind="module" input-options.bind="inputOptions.slice(0, $index + 1)" key-values.bind="keyValues" change.delegate="saveModule(module) & debounce:800"></checker-module-extract>
+              <checker-module-math opened.bind="module.__opened" if.bind="module.moduleType === 'math'" module.bind="module" input-options.bind="inputOptions.slice(0, $index + 1)" change.delegate="saveModule(module) & debounce:800"></checker-module-math>
+              <checker-module-if opened.bind="module.__opened" if.bind="module.moduleType === 'if'" module.bind="module" input-options.bind="inputOptions.slice(0, $index + 1)" change.delegate="saveModule(module) & debounce:800"></checker-module-if>
+              <checker-module-reducer opened.bind="module.__opened" if.bind="module.moduleType === 'reducer'" module.bind="module" input-options.bind="inputOptions.slice(0, $index + 1)" change.delegate="saveModule(module) & debounce:800"></checker-module-reducer>
+              <checker-module-distance opened.bind="module.__opened" if.bind="module.moduleType === 'distance'" module.bind="module" input-options.bind="inputOptions.slice(0, $index + 1)" change.delegate="saveModule(module) & debounce:800"></checker-module-distance>
+              <checker-module-normal-distance opened.bind="module.__opened" if.bind="module.moduleType === 'normal-distance'" module.bind="module" input-options.bind="inputOptions.slice(0, $index + 1)" change.delegate="saveModule(module) & debounce:800"></checker-module-normal-distance>
+              <checker-module-projection opened.bind="module.__opened" if.bind="module.moduleType === 'projection'" module.bind="module" input-options.bind="inputOptions.slice(0, $index + 1)" change.delegate="saveModule(module) & debounce:800"></checker-module-projection>
+              <checker-module-output opened.bind="module.__opened" if.bind="module.moduleType === 'output'" module.bind="module" input-options.bind="inputOptions.slice(0, $index + 1)" change.delegate="saveModule(module) & debounce:800"></checker-module-output>
+
+              <template if.bind="module.outputSummary && module.__opened">
+                <p><span t="three.Output"></span><br><span class="muted">${module.outputSummary}</span></p>
+              </template>
+
+              <span if.bind="module.__opened" class="module__filter__condition__remove-button" click.delegate="removeModule($index)" t="three.Remove Module"></span>
+              
+            </div>
+            <div class="center">
+              <ux-icon if.bind="!$last" icon="keyboard_arrow_down"></ux-icon>
+            </div>
+          </div>
+          
+        </div>
+
+        <div class="center" if.bind="mode === 'edit'">
+          <ux-button type="fab" size="small" click.delegate="addModule()"><ux-icon icon="add"></ux-icon></ux-button>
+        </div>
+
+        <div class="center" if.bind="mode === 'edit'" style="margin-top: 16px;">
+          <ux-button if.bind="!flowIsRunning && modules.length > 0" type="outline" size="small" click.delegate="testFlow()"><ux-icon icon="play_arrow"></ux-icon><span t="three.Test the flow"></span></ux-button>
+          <template if.bind="flowIsRunning"><ar-spinner-line></ar-spinner-line>
+          <span t="three.Run in progress"></span></template>
+        </div>
+
+        <ux-button type="text" click.delegate="duplicate()" if.bind="mode === 'edit'"><span t="Duplicate"></span></ux-button>
+        
+      </ux-form>
+    </ux-card-content>
+    <ux-card-separator class="ux-card__separator--no-margin"></ux-card-separator>
+    <ux-card-footer>
+      <ux-button if.bind="mode === 'edit'" type="text" ok-modal="remove" style="margin-right: auto; --aurelia-ux--button-background: var(--aurelia-ux--design-error);"><span t="Remove"></span></ux-button>
+      <ux-button type="text" click.delegate="saveFlow()"><span t="Save"></span></ux-button>
+      <ux-button type="raised" ok-modal><span t="Save and Close"></span></ux-button>
+    </ux-card-footer>
+  </ux-card>
+</template>
+    

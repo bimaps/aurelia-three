@@ -1,0 +1,59 @@
+/* Styles for page ThreeObjectList */
+.three-object-list {
+  display: block;
+  border-top: 1px solid var(--ux-swatch--grey-p300);
+}
+.three-object-list-item {
+  border-bottom: 1px solid var(--ux-swatch--grey-p300);
+}
+.three-object-list-item__main-row {
+  display: flex;
+  width: 100%;
+  align-content: center;
+  align-items: center;
+  justify-content: space-between;
+}
+.three-object-list-item__settings {
+  padding: 16px;
+  flex-shrink: 0;
+}
+.three-object-list-item__content {
+  padding: 16px 0px;
+  flex-grow: 1;
+}
+.three-object-list-item__type {
+  color: var(--ux-swatch--grey-p500);
+  font-size: 12px;
+}
+.three-object-list-item__name{
+  font-size: 14px;
+}
+.three-object-list-item__badge{
+  display: inline-block;
+  min-width: 1em; /* em unit */
+  padding: .3em .32em; /* em unit */
+  border-radius: 50%;
+  text-align: center;
+  background: var(--ux-swatch--grey-p600);
+  color: var(--ux-swatch--white);
+  font-size: 12px;
+  margin-left: 8px;
+}
+.three-object-list-item__tools{
+  font-size: 10px;
+  --aurelia-ux--icon-size: 16px;
+}
+.three-object-list-item__tools > span {
+  margin-right: 16px;
+}
+.three-object-list-item__action {
+  padding: 16px;
+  flex-shrink: 0;
+}
+.three-object-list-item__children {
+  margin: 0 0 16px 16px;
+  border-left: 1px solid var(--ux-swatch--grey-p300);
+}
+.three-object-list-show-all {
+  text-align: center;
+}

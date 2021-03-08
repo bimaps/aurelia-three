@@ -1,0 +1,18 @@
+<template>
+  <require from="./three-admin-dialog-load-data-api.css"></require>
+  <ux-form>
+    <ux-field>
+      <label>
+        <ux-checkbox checked.bind="value.replaceLightsIfAny"></ux-checkbox><span t="three.Would you like to replace the current lights if the loaded data contains some ?"></span></label>
+    </ux-field>
+    <ux-field>
+      <label>
+        <ux-checkbox checked.bind="value.emptySceneBeforeLoad"></ux-checkbox><span t="three.Would you like to remove all scene objects before loading ?"></span></label>
+    </ux-field>
+    <ux-field>
+      <label>
+        <ux-checkbox checked.bind="value.zoomOnScene"></ux-checkbox><span t="three.Would you like to zoom on the scene after loading ?"></span></label>
+    </ux-field>
+  </ux-form>
+</template>
+    

@@ -1,0 +1,64 @@
+<template class="three-rule-editor three-admin-editor">
+  <!-- <require from="./three-card-editor.css"></require> -->
+  <require from="./three-admin-editor.css"></require>
+  <require from="./three-rule-editor.css"></require>
+  <ux-input value.bind="rule.name" change.delegate="notifyModification()" label="${'three.Rule Name' | t}"></ux-input>
+  <div class="three-admin-editor__separator"></div>
+  <p><strong t="three.Context"></strong></p>
+  <p class="small muted" t="three.Coming soon, Will be linked with site context and here you will be able to select from the available site contexts"></p>
+  <div class="three-admin-editor__separator"></div>
+  <p><strong t="three.Conditions"></strong></p>
+  <p class="small muted" t="three.The rule will apply when all the following conditions are met"></p>
+  <div class="three-rule-conditions">
+    <div class="three-rule-condition__line" repeat.for="condition of rule.conditions">
+      <div class="three-rule-condition__line-key">
+        <ux-icon icon="list" click.delegate="conditionKeyHelpList(condition)"></ux-icon>
+        <ux-input type="text" value.bind="condition.key" change.delegate="notifyModification()"></ux-input>
+      </div>
+      <div class="three-rule-condition__line-type">
+        <ux-button type="${condition.type === '<' ? 'raised':'outline'}" size="small" click.delegate="setConditionType(condition, '<')" ignore-dico>&lt;</ux-button>
+        <ux-button type="${condition.type === '*' ? 'raised':'outline'}" size="small" click.delegate="setConditionType(condition, '*')" ignore-dico>*</ux-button>
+        <ux-button type="${condition.type === '=' ? 'raised':'outline'}" size="small" click.delegate="setConditionType(condition, '=')" ignore-dico>=</ux-button>
+        <ux-button type="${condition.type === '!=' ? 'raised':'outline'}" size="small" click.delegate="setConditionType(condition, '!=')" ignore-dico>!=</ux-button>
+        <ux-button type="${condition.type === '>' ? 'raised':'outline'}" size="small" click.delegate="setConditionType(condition, '>')" ignore-dico>&gt;</ux-button>
+      </div>
+      <div class="three-rule-condition__line-value">
+        <ux-icon icon="list" click.delegate="conditionValueHelpList(condition)"></ux-icon>
+        <ux-input type="text" value.bind="condition.value" change.delegate="notifyModification()"></ux-input>
+      </div>
+      <span class="three-rule-condition__remove-button" click.delegate="removeConditionFromRule($index)" t="three.Remove Condition"></span>
+    </div>
+    <ux-icon icon="add" click.delegate="addConditionToRule()"></ux-icon>
+  </div>
+  <div class="three-admin-editor__separator"></div>
+  <p><strong t="three.Styles"></strong></p>
+  <p class="small muted" t="three.When the rule is applied, it will affet the objects according to the following styles"></p>
+  <div class="three-rule__styles">
+    <div class="three-rule__styles-line" repeat.for="styleId of rule.styles">
+      <ux-chip>${styleNameFromId(styleId)}</ux-chip>
+      <ux-icon icon="clear" click.delegate="removeStyleFromRule(styleId)"></ux-icon>
+    </div>
+  </div>
+  <div class="three-rule__style-add">
+    <ux-button type="text" click.delegate="addStyleToRule2()"><ux-icon icon="add"></ux-icon><span t="three.Add Style"></span></ux-button>
+  </div>
+  <div class="three-admin-editor__separator"></div>
+  <p><strong t="three.Settings"></strong></p>
+  <ux-input type="number" min="0" max="10" step="1" value.bind="rule.priority" change.delegate="notifyModification() & debounce:1000" label="${'three.Priority' | t}"></ux-input>
+  <ux-field>
+    <label>
+      <ux-checkbox checked.bind="rule.exclusive" change.delegate="notifyModification()"></ux-checkbox><span t="three.Exclusive"></span></label>
+  </ux-field>
+  <ux-field>
+    <label>
+      <ux-checkbox checked.bind="rule.last" change.delegate="notifyModification()"></ux-checkbox><span t="three.Last"></span></label>
+  </ux-field>
+  <ux-field>
+    <label>
+      <ux-checkbox checked.bind="rule.applyToChildren" change.delegate="notifyModification()"></ux-checkbox><span t="three.Apply to children"></span></label>
+  </ux-field>
+  <ux-field>
+    <label>
+      <ux-checkbox checked.bind="rule.active" change.delegate="notifyModification()"></ux-checkbox><span t="three.Active"></span></label>
+  </ux-field>
+</template>

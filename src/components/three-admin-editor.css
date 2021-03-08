@@ -1,0 +1,10 @@
+.three-admin-editor {
+  display: block;
+  padding: 16px;
+}
+.three-admin-editor__separator {
+  margin-top: 32px;
+  margin-bottom: 32px;
+  height: 1px;
+  background-color: var(--ux-swatch--grey-p300);
+}

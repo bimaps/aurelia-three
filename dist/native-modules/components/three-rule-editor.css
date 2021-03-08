@@ -1,0 +1,32 @@
+/* Styles for page ThreeThemeEditor */
+
+.three-rule-condition__line {
+  margin-bottom: 32px;
+  padding: 8px 0 8px 8px;
+  border-left: 5px solid var(--ux-swatch--grey-p300);
+}
+.three-rule-condition__line-key,
+.three-rule-condition__line-type,
+.three-rule-condition__line-value {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: space-between;
+  margin: 12px 0;
+}
+.three-rule-condition__line-key ux-input,
+.three-rule-condition__line-value ux-input {
+  height: 40px;
+}
+.three-rule-condition__line-type {
+  padding-left: 32px;
+}
+.three-rule-condition__line-type .ux-button--raised,
+.three-rule-condition__line-type .ux-button--outline {
+  min-width: auto;
+}
+.three-rule-condition__remove-button {
+  font-size: 12px;
+  padding: 8px;
+  color: var(--ux-swatch--grey-p800);
+}

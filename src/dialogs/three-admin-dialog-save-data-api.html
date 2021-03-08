@@ -1,0 +1,18 @@
+<template>
+    <require from="./three-admin-dialog-save-data-api.css"></require>
+    <ux-form>
+      <ux-field>
+        <label>
+          <ux-checkbox checked.bind="value.saveLights"></ux-checkbox><span t="three.Would you like to save the light ?"></span></label>
+      </ux-field>
+      <ux-field>
+        <label>
+          <ux-checkbox checked.bind="value.clearApiDataBeforeSaving"></ux-checkbox><span t="three.Would you like to delete data for this site on the API before saving the scene ?"></span></label>
+      </ux-field>
+      <ux-field>
+        <ux-input value.bind="value.importId" label="${'three.Import ID' | t}"></ux-input>
+        <ux-input-info t="three.Leave empty for auto importId"></ux-input-info>
+      </ux-field>
+    </ux-form>
+  </template>
+      

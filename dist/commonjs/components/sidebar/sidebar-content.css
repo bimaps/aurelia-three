@@ -1,0 +1,9 @@
+/* Styles for page SidebarContent */
+sidebar-content {
+  display: block;
+  overflow-y: auto;
+}
+.sidebar-content-header {
+  padding: 16px;
+  font-size: 18px;
+}

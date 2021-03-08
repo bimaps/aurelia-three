@@ -1,0 +1,70 @@
+.module-container {
+  box-shadow: var(--aurelia-ux--design-elevation2dp);
+  padding: 8px;
+  margin-top: 32px;
+  margin-bottom: 32px;
+  background: #eaeaea;
+  --aurelia-ux--design-control-background: white;
+  --aurelia-ux--input-background-hover: #fafafa;
+    --aurelia-ux--select-control-background-hover: #fafafa;
+}
+.module__head {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 16px;
+  align-items: center;
+  padding-bottom: 8px;
+}
+.module__head > div {
+  display: flex;
+  flex-direction: column;
+}
+.module__head ux-input {
+  
+}
+
+.module__foot { 
+  padding-top: 8px;
+}
+
+
+.module__filter__condition {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  margin: 32px 0 0;
+}
+.module__filter__condition__line-type {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: space-between;
+  margin: 12px 0;
+}
+.module__filter__condition__remove-button {
+  font-size: 12px;
+  padding: 8px;
+  color: var(--ux-swatch--grey-p800);
+  cursor: pointer;
+}
+
+.module__if__condition {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  margin: 32px 0 0;
+}
+.module__if__condition__line-type {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: space-between;
+  margin: 12px 0;
+}
+.module__if__condition__remove-button,
+.module__if__operation__remove-button {
+  font-size: 12px;
+  padding: 8px;
+  color: var(--ux-swatch--grey-p800);
+  cursor: pointer;
+}

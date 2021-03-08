@@ -1,0 +1,30 @@
+<template bindable="module">
+  <div class="module__head">
+    <ux-icon icon="computer" click.delegate="toggle()"></ux-icon>
+    <div>
+      <ux-input value.bind="module.name" variant="outline" label="${'three.Math module name (optional)' | t}"></ux-input>
+    </div>
+    <ux-icon icon="drag_handle" class="handler"></ux-icon>
+  </div>
+  <div class="module__body" if.bind="opened">
+
+    <ux-field>
+      <ux-textarea value.bind="module.expression" label="${'three.Mathematical Expression' | t}"></ux-textarea>
+    </ux-field>
+
+    <ux-field>
+      <label t="three.Possible variables"></label>
+      <ux-chip-list>
+        <ux-chip if.bind="input !== 'scene'" repeat.for="input of inputOptions">${input}</ux-chip>
+      </ux-chip-list>
+    </ux-field>
+
+  </div>
+  <div class="module__foot">
+    <ux-field>
+      <ux-input value.bind="module.outputVarName" label="${'three.Output Variable Name' | t}">
+        <ux-icon icon="navigate_next" slot="leading-icon"></ux-icon>
+      </ux-input>
+    </ux-field>
+  </div>
+</template>

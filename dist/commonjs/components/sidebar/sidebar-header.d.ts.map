@@ -1,0 +1,1 @@
+{"version":3,"sources":["components/sidebar/sidebar-header.ts"],"names":[],"mappings":"AAIA,qBACa,aAAa;IAOZ,OAAO,CAAC,OAAO;IAL3B,OAAO,CAAC,GAAG,CAAS;IACV,IAAI,EAAE,MAAM,CAAC;IACb,IAAI,EAAE,OAAO,CAAC;IACd,IAAI,EAAE,MAAM,CAAC;gBAEH,OAAO,EAAE,OAAO;CASrC","file":"sidebar-header.d.ts","sourceRoot":"../../../../src/"}

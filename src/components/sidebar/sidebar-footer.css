@@ -1,0 +1,6 @@
+/* Styles for page SidebarFooter */
+.sidebar-footer {
+  display: flex;
+  background: var(--ux-swatch--grey-p200);
+  box-shadow: var(--aurelia-ux--design-elevation2dp);
+}
