@@ -106,7 +106,7 @@
     "@pnext/three-loader": "0.1.8",
     "@tweenjs/tween.js": "^18.5.0",
     "@types/geojson": "^7946.0.7",
-    "aurelia-swissdata": "git+https://git.mintello.com/platform5/aurelia-swissdata.git#455e247c6a485208f7e8ef6e9e4fb619eaf12690",
+    "aurelia-deco": "git+https://github.com/platform5/aurelia-deco.git#572f9d4b9e7ceae7530c85243992269fc14d15f4",
     "canvg": "^3.0.4",
     "file-saver": "^2.0.2",
     "node-html-parser": "^1.2.20",
