@@ -3,7 +3,7 @@ import { CheckerModuleFilterModel, CheckerModuleExtractModel, CheckerModuleMathM
 import { CheckerModuleIORef, CheckerModuleReducerModel, CheckerModuleIfModel, CheckerModuleProjectionModel } from './checker-internals';
 import { CheckerModuleDistanceModel, CheckerModuleNormalDistanceModel, CheckerModuleOutputModel } from './checker-internals';
 import { Model } from 'aurelia-deco';
-import { SwissdataGlobal } from 'aurelia-swissdata';
+import { SwissdataGlobal } from 'aurelia-deco';
 import { Container } from 'aurelia-framework';
 
 export type CheckerAnyModule = 
