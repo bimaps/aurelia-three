@@ -15,6 +15,8 @@ else
   sed -i -E "s/${search}/${replace}/g" "package.json"
 fi
 sleep 1
+echo "Remove ref to 'aurelia-resources' in 'package-lock.json'"
+echo "`jq 'del(.dependencies."aurelia-resources")' package-lock.json`" > package-lock.json
 echo "Remove ref to 'aurelia-deco' in 'package-lock.json'"
 echo "`jq 'del(.dependencies."aurelia-deco")' package-lock.json`" > package-lock.json
 echo "Remove 'aurelia-resources' in node_modules"
