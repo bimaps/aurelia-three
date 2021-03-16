@@ -15,10 +15,13 @@ else
   sed -i -E "s/${search}/${replace}/g" "package.json"
 fi
 sleep 1
-echo "npm install to pull in the latest version of aurelia-deco"
+echo "Remove ref to 'aurelia-deco' in 'package-lock.json'"
+echo "`jq 'del(.dependencies."aurelia-deco")' package-lock.json`" > package-lock.json
+echo "Remove 'aurelia-resources' in node_modules"
 rm -rf node_modules/aurelia-resources
+echo "Remove 'aurelia-deco' in node_modules"
 rm -rf node_modules/aurelia-deco
-rm package-lock.json
+echo "npm install to pull in the latest version of aurelia-deco"
 npm install
 git add package.json package-lock.json
 git commit -m "Bump aurelia-deco dependency"
