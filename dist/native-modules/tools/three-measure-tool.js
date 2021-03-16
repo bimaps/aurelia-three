@@ -2,10 +2,12 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -360,7 +362,6 @@ var ThreeMeasureTool = (function (_super) {
             dir = dir.normalize().multiplyScalar(len * -0.5);
             var spritePosition = measure.coords[0].clone().add(dir);
             sprite.position.set(spritePosition.x, spritePosition.y, spritePosition.z);
-            sprite.name = name;
             sprite.userData._type = '__measure_current-measure-label__';
             sprite.material.depthTest = false;
             sprite.renderOrder = 10;
@@ -414,7 +415,6 @@ var ThreeMeasureTool = (function (_super) {
             dir = dir.normalize().multiplyScalar(len * -0.5);
             var spritePosition = measure.coords[0].clone().add(dir);
             sprite.position.set(spritePosition.x, spritePosition.y, spritePosition.z);
-            sprite.name = name;
             sprite.userData._type = '__measure_current-measure-label__';
             sprite.material.depthTest = false;
             sprite.renderOrder = 10;
@@ -458,7 +458,6 @@ var ThreeMeasureTool = (function (_super) {
             var centroid = ThreeUtils.centroidFromObject(surfaceMesh);
             var spritePosition = centroid;
             sprite.position.set(spritePosition.x, spritePosition.y, spritePosition.z);
-            sprite.name = name;
             sprite.userData._type = '__measure_current-measure-label__';
             sprite.material.depthTest = false;
             sprite.renderOrder = 10;
@@ -517,7 +516,6 @@ var ThreeMeasureTool = (function (_super) {
             var centroid = ThreeUtils.centroidFromObject(volumeMesh);
             var spritePosition = centroid;
             sprite.position.set(spritePosition.x, spritePosition.y, spritePosition.z);
-            sprite.name = name;
             sprite.userData._type = '__measure_current-measure-label__';
             sprite.material.depthTest = false;
             sprite.renderOrder = 10;

@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import { bindable, TaskQueue, inject } from 'aurelia-framework';
 import * as resolvePath from 'object-resolve-path';
 import { getLogger } from 'aurelia-logging';
+import * as THREE from 'three';
 var log = getLogger('three-object-property-explorer');
 var ThreeObjectPropertyExplorer = (function () {
     function ThreeObjectPropertyExplorer(taskQueue) {

@@ -593,6 +593,7 @@ export class ThreeCustomElement {
 
 export class MainScene extends THREE.Scene {
 
+  // public name: string; // TODO: add this here because it became absent from THREE.Scene definition
   private three: ThreeCustomElement;
 
   constructor(three: ThreeCustomElement) {

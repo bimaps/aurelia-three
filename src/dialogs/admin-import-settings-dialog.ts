@@ -1,11 +1,9 @@
-import { CheckerFlow } from './../models/checkers/checker-interfaces';
 import { ThreeStyleModel } from './../models/style.model';
 import { ThreeThemeModel } from './../models/theme.model';
-import { ThreeCheckerConfigModel } from './../models/checker-config.model';
 import { ThreeCheckerReportModel } from './../models/checker-report.model';
 import { UxModalService, UxModalServiceResult} from '@aurelia-ux/modal'
-import { errorify, notify, ConfirmDialog } from 'aurelia-resources';
-import { inject, computedFrom } from 'aurelia-framework';
+import { errorify, notify } from 'aurelia-resources';
+import { inject } from 'aurelia-framework';
 import { getLogger } from 'aurelia-logging';
 import { CheckerFlowModel } from '../models/checkers/checker-internals';
 import { CheckerModuleFilterModel, CheckerModuleExtractModel, CheckerModuleMathModel } from '../models/checkers/checker-internals';
@@ -82,7 +80,7 @@ export class AdminImportSettingsDialog {
             this.styles = (json.styles as Array<any>) || [];
             this.reports = (json.reports as Array<any>) || [];
             this.flows = (json.flows as Array<any>) || [];
-            resolve();
+            resolve(null);
           } catch (error) {
             reject(error);
           }

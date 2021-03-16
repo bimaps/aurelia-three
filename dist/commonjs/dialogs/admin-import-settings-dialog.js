@@ -143,7 +143,7 @@ var AdminImportSettingsDialog = (function () {
                                             this.styles = json.styles || [];
                                             this.reports = json.reports || [];
                                             this.flows = json.flows || [];
-                                            resolve();
+                                            resolve(null);
                                         }
                                         catch (error) {
                                             reject(error);

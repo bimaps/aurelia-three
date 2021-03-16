@@ -383,7 +383,7 @@ export class ThreeMeasureTool extends ThreeTool {
       const spritePosition = measure.coords[0].clone().add(dir);
       
       sprite.position.set(spritePosition.x, spritePosition.y, spritePosition.z);
-      sprite.name = name;
+      // sprite.name = name;
       sprite.userData._type = '__measure_current-measure-label__';
       sprite.material.depthTest = false;
       sprite.renderOrder = 10;
@@ -442,7 +442,7 @@ export class ThreeMeasureTool extends ThreeTool {
       const spritePosition = measure.coords[0].clone().add(dir);
       
       sprite.position.set(spritePosition.x, spritePosition.y, spritePosition.z);
-      sprite.name = name;
+      // sprite.name = name;
       sprite.userData._type = '__measure_current-measure-label__';
       sprite.material.depthTest = false;
       sprite.renderOrder = 10;
@@ -489,7 +489,7 @@ export class ThreeMeasureTool extends ThreeTool {
       const spritePosition = centroid;
       
       sprite.position.set(spritePosition.x, spritePosition.y, spritePosition.z);
-      sprite.name = name;
+      // sprite.name = name;
       sprite.userData._type = '__measure_current-measure-label__';
       sprite.material.depthTest = false;
       sprite.renderOrder = 10;
@@ -555,7 +555,7 @@ export class ThreeMeasureTool extends ThreeTool {
       const spritePosition = centroid;
       
       sprite.position.set(spritePosition.x, spritePosition.y, spritePosition.z);
-      sprite.name = name;
+      // sprite.name = name;
       sprite.userData._type = '__measure_current-measure-label__';
       sprite.material.depthTest = false;
       sprite.renderOrder = 10;

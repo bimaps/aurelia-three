@@ -1,4 +1,5 @@
 import { TaskQueue } from 'aurelia-framework';
+import * as THREE from 'three';
 declare type PropertiesCallback = (object: THREE.Object3D) => Array<string>;
 export declare class ThreeObjectPropertyExplorer {
     private taskQueue;

@@ -13,6 +13,7 @@ exports.ThreeObjectPropertyExplorer = void 0;
 var aurelia_framework_1 = require("aurelia-framework");
 var resolvePath = require("object-resolve-path");
 var aurelia_logging_1 = require("aurelia-logging");
+var THREE = require("three");
 var log = aurelia_logging_1.getLogger('three-object-property-explorer');
 var ThreeObjectPropertyExplorer = (function () {
     function ThreeObjectPropertyExplorer(taskQueue) {

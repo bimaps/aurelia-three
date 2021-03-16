@@ -50,7 +50,7 @@ export interface CheckerValueCondition {
 }
 
 export abstract class CheckerModule {
-    public abstract async process(): Promise<void>;
+    public abstract process(): Promise<void>;
 }
 
 

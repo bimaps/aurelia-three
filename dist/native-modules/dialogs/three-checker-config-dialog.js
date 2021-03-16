@@ -217,8 +217,8 @@ var ThreeCheckerConfigDialog = (function () {
                                             userDataKeys2_1[key] = [];
                                         }
                                         var newKeys2 = Object.keys(obj.userData[key]).filter(function (i) { return !userDataKeys2_1[key].includes(i); });
-                                        for (var _i = 0, newKeys2_1 = newKeys2; _i < newKeys2_1.length; _i++) {
-                                            var key2 = newKeys2_1[_i];
+                                        for (var _a = 0, newKeys2_1 = newKeys2; _a < newKeys2_1.length; _a++) {
+                                            var key2 = newKeys2_1[_a];
                                             var value2 = obj.userData[key][key2];
                                             if (typeof value2 === 'string' || typeof value2 === 'number') {
                                                 userDataKeys2_1[key].push(key2);
