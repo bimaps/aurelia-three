@@ -107,7 +107,7 @@
     "@pnext/three-loader": "0.1.8",
     "@tweenjs/tween.js": "^18.6.4",
     "@types/geojson": "^7946.0.7",
-    "aurelia-deco": "git+https://github.com/platform5/aurelia-deco.git#5b9b2dcbd719c4c69a9cbef445e63e230a612717",
+    "aurelia-deco": "git+https://github.com/platform5/aurelia-deco.git#b783651fede29705988afc63af8b68ca45f1f583",
     "canvg": "^3.0.7",
     "file-saver": "^2.0.5",
     "node-html-parser": "^3.1.0",
