@@ -110,7 +110,7 @@
 <<<<<<< HEAD
     "aurelia-deco": "git+https://github.com/platform5/aurelia-deco.git#49173cf6935da18b225658fc3396466f5beb5ca9",
 =======
-    "aurelia-deco": "git+https://github.com/platform5/aurelia-deco.git#f17ffdb41c52bd79c1e6322e3548b1de715f2a66",
+    "aurelia-deco": "git+https://github.com/platform5/aurelia-deco.git#49173cf6935da18b225658fc3396466f5beb5ca9",
 >>>>>>> 737894bc376dc36d0c7d405e1798a482fb239308
     "canvg": "^3.0.7",
     "file-saver": "^2.0.5",
