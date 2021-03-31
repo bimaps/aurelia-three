@@ -1,0 +1,8 @@
+{
+    "out": "docs/",
+    "json": "docs/docs.json",
+    "name": "Aurelia Three Documentation",
+    "excludeExternals": true,
+    "includeVersion": true,
+    "entryPoints": ["src/index.ts"]
+}

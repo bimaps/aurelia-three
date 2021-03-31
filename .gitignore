@@ -35,3 +35,6 @@ node_modules
 #/dist
 /test/coverage-jest
 /test/coverage-karma
+
+# Documentation
+docs
