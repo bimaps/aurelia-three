@@ -1,12 +1,31 @@
 {
   "name": "aurelia-three",
   "description": "An Aurelia plugin project.",
-  "version": "0.1.0",
-  "repository": {
-    "type": "???",
-    "url": "???"
+  "version": "1.0.0",
+  "scripts": {
+    "build": "au build-plugin",
+    "start": "au run",
+    "watch": "au build-plugin --watch",
+    "xprepare": "npm run build",
+    "pretest": "au lint",
+    "preversion": "au test",
+    "test": "au test",
+    "dico": "ts-node --project dico-tool/tsconfig.json dico-tool/parse.ts",
+    "dico:send": "ts-node --project dico-tool/tsconfig.json dico-tool/send.ts"
   },
-  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bimaps/aurelia-three"
+  },
+  "author": "platform5",
+  "license": "AGPL-3.0-or-later",
+  "keywords": [
+    "aurelia",
+    "plugin",
+    "IFC",
+    "BIM",
+    "ThreeJS"
+  ],
   "devDependencies": {
     "@types/jest": "^26.0.20",
     "@types/node": "^14.14.35",
@@ -42,17 +61,6 @@
     "tslint": "^5.20.1",
     "typescript": "^4.2.3",
     "vinyl-fs": "^3.0.3"
-  },
-  "scripts": {
-    "build": "au build-plugin",
-    "start": "au run",
-    "watch": "au build-plugin --watch",
-    "xprepare": "npm run build",
-    "pretest": "au lint",
-    "preversion": "au test",
-    "test": "au test",
-    "dico": "ts-node --project dico-tool/tsconfig.json dico-tool/parse.ts",
-    "dico:send": "ts-node --project dico-tool/tsconfig.json dico-tool/send.ts"
   },
   "engines": {
     "node": ">=8.9.0"
@@ -107,7 +115,7 @@
     "@pnext/three-loader": "0.1.8",
     "@tweenjs/tween.js": "^18.6.4",
     "@types/geojson": "^7946.0.7",
-    "aurelia-deco": "git+https://github.com/platform5/aurelia-deco.git#57bc73dd57b6508a09b558c138e61896b4d78b0f",
+    "aurelia-deco": "^2.0.6",
     "canvg": "^3.0.7",
     "file-saver": "^2.0.5",
     "node-html-parser": "^3.1.0",

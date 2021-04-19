@@ -1,0 +1,18 @@
+/node_modules
+
+# Documentation
+/docs
+typedoc.json
+
+# Source
+/aurelia_project
+/config
+/dev-app
+/dico-tool
+/src
+/test
+install-last-deco.sh
+index.html
+tsconfig.json
+tslint.json
+webpack.dev.js
