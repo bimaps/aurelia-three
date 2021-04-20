@@ -15,4 +15,3 @@ install-last-deco.sh
 index.html
 tsconfig.json
 tslint.json
-webpack.dev.js
