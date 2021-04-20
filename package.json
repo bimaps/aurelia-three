@@ -67,11 +67,6 @@
   },
   "main": "dist/commonjs/index.js",
   "module": "dist/native-modules/index.js",
-  "files": [
-    "dist",
-    "src",
-    "webpack.dev.js"
-  ],
   "jest": {
     "moduleNameMapper": {
       "^aurelia-binding$": "<rootDir>/node_modules/aurelia-binding"
