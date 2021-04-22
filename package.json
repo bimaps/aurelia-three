@@ -8,7 +8,7 @@
     "watch": "au build-plugin --watch",
     "xprepare": "npm run build",
     "pretest": "au lint",
-    "preversion": "au test",
+    "x": "au test",
     "test": "au test",
     "dico": "ts-node --project dico-tool/tsconfig.json dico-tool/parse.ts",
     "dico:send": "ts-node --project dico-tool/tsconfig.json dico-tool/send.ts"
