@@ -82,7 +82,12 @@ export class ThreeSiteModel extends Model {
 
   @type.metadata
   public metadata: Array<Metadata>;
-
+  
+  @type.string
+  public business: string;
+  
+  @type.array({type: 'string'})
+  public authorizedBusinesses: Array<string> = [];
 
   static clearData(siteId: string, models: Array<string> = [
     'material',
