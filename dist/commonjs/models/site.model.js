@@ -79,6 +79,7 @@ var ThreeSiteModel = (function (_super) {
         _this.buildings = [];
         _this.storeys = [];
         _this.spaces = [];
+        _this.authorizedBusinesses = [];
         return _this;
     }
     ThreeSiteModel_1 = ThreeSiteModel;
@@ -287,6 +288,14 @@ var ThreeSiteModel = (function (_super) {
         aurelia_deco_1.type.metadata,
         __metadata("design:type", Array)
     ], ThreeSiteModel.prototype, "metadata", void 0);
+    __decorate([
+        aurelia_deco_1.type.string,
+        __metadata("design:type", String)
+    ], ThreeSiteModel.prototype, "business", void 0);
+    __decorate([
+        aurelia_deco_1.type.array({ type: 'string' }),
+        __metadata("design:type", Array)
+    ], ThreeSiteModel.prototype, "authorizedBusinesses", void 0);
     ThreeSiteModel = ThreeSiteModel_1 = __decorate([
         aurelia_deco_1.model('/three/site')
     ], ThreeSiteModel);

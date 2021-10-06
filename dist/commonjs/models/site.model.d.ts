@@ -56,6 +56,8 @@ export declare class ThreeSiteModel extends Model {
     storeys: Array<ThreeStorey>;
     spaces: Array<ThreeSpace>;
     metadata: Array<Metadata>;
+    business: string;
+    authorizedBusinesses: Array<string>;
     static clearData(siteId: string, models?: Array<string>): Promise<any>;
     static clearImport(siteId: string, importId: string): Promise<any>;
     static downloadJsonData(json: any, filename?: string): void;
