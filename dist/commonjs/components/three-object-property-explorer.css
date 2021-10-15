@@ -1,3 +1,23 @@
 .three-object-property-explorer .ux-list-item {
   padding: 8px 0;
 }
+.three-object-property-explorer__document {
+  display: grid;
+  grid-template-columns: 30px 1fr 30px;
+  grid-gap: 16px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+.three-object-property-explorer__document-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.three-object-property-explorer__document-preview-ext {
+  text-transform: uppercase;
+  color: var(--ux-swatch--grey-500);
+  font-weight: bold;
+  font-size: 10px;
+  line-height: 10px;
+}

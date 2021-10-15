@@ -1,10 +1,35 @@
 <template class="three-object-property-explorer">
   <require from="./three-object-property-explorer.css"></require>
   <ux-list if.bind="ready">
-    <ux-list-item repeat.for="prop of props" if.bind="value(prop) !== undefined && value(prop) !== null && value(prop) !== ''">
+    <ux-list-item repeat.for="prop of props" if.bind="value(prop) !== undefined && value(prop) !== null && value(prop) !== ''">
       <div class="ux-list-item__content">
         <div class="ux-list-item__secondary-content">${label(prop)}</div>
-        ${value(prop)}
+        <template if.bind="prop === 'documents'">
+          <template if.bind="editDocuments">
+            <deco-field instance.bind="$parent.instance" property="documents"></deco-field>
+            <deco-update instance.bind="$parent.instance" updated.delegate="documentsUpdated()">Update</deco-update>
+          </template>
+          <template else>
+            <div class="three-object-property-explorer__document" repeat.for="document of $parent.instance.documents" click.delegate="downloadDocument(document)">
+              <div class="three-object-property-explorer__document-preview">
+                <img src="${document.preview}" if.bind="document.preview" width="30" height="30">
+                <span class="three-object-property-explorer__document-preview-ext" if.bind="document.type === 'application/pdf'">PDF</span>
+              </div>
+              <div class="three-object-property-explorer__document-name">
+                ${document.name}
+              </div>
+              <div class="three-object-property-explorer__document-action">
+                <ux-icon icon="file_download"></ux-icon>
+              </div>
+            </div>
+            <div>
+              <ux-button if.bind="canEdit" click.delegate="editDocuments = true">Edit files</ux-button>
+            </div>
+          </template>
+        </template>
+        <template else>
+          ${value(prop)}
+        </template>
       </div>
     </ux-list-item>
   </ux-list>
