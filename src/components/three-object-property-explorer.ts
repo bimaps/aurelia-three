@@ -1,3 +1,4 @@
+import { ThreeObjectModel } from './../models/object.model';
 import { bindable, TaskQueue, inject } from 'aurelia-framework';
 import * as resolvePath from 'object-resolve-path';
 import { getLogger } from 'aurelia-logging';
@@ -10,6 +11,10 @@ type PropertiesCallback = (object: THREE.Object3D) => Array<string>;
 export class ThreeObjectPropertyExplorer {
   @bindable object: THREE.Object3D;
   @bindable properties: Array<string> | PropertiesCallback = [];
+  @bindable canEdit = false;
+
+  private instance: ThreeObjectModel;
+  private editDocuments = false;
 
   private ready: boolean = false;
   private props: Array<string> = [];
@@ -29,6 +34,23 @@ export class ThreeObjectPropertyExplorer {
       this.ready = true;
     });
     log.debug('object', this.object);
+    
+    this.getDocuments();
+  }
+
+  public async getDocuments() {
+    this.instance = await ThreeObjectModel.getOneWithId(this.object.userData.id);
+    for (const document of this.instance.documents || []) {
+      if (document.type.indexOf('image/') === 0) {
+        const preview = await this.instance.getFilePreviewUrl('documents', '30:30', {fileId: document.filename});
+        document.preview = preview;
+      }
+    }
+  }
+
+  public documentsUpdated() {
+    this.getDocuments();
+    this.editDocuments = false;
   }
 
   public propertiesChanged() {
@@ -67,6 +89,17 @@ export class ThreeObjectPropertyExplorer {
 
   public label(prop: string) {
     return prop.replace('["', '.').replace('"]', '').split('.').join(' ');
+  }
+
+  public async downloadDocument(document: any) {
+    const preview = await this.instance.getFilePreview('documents', 'original', {fileId: document.filename});
+
+    const response = await this.instance.api.get(`${this.instance.getOneRoute(this.instance.id)}?download=documents&fileId=${document.filename}`, {etag: document.filename});
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+
+    window.open(url, '_blank');
+
   }
 
 
