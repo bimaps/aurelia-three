@@ -23,6 +23,7 @@ export declare class ThreeObjectModel extends Model {
     parentId: string;
     _min: THREE.Vector3;
     _max: THREE.Vector3;
+    documents: Array<any>;
     static prepareFilters(options: ThreeObjectPrepareFiltersOptions): string;
     static getAll<T extends typeof Model>(this: T, suffix?: string, options?: GetAllOptions, flat?: boolean): Promise<Array<InstanceType<T>>>;
     static addChildren(object: ThreeObjectModel, hObjects: StringTMap<ThreeObjectModel>): void;

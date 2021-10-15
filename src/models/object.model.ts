@@ -2,7 +2,7 @@ import { ThreeSiteModel } from './site.model';
 import { model, Model, type, validate, Metadata, GetAllOptions } from 'aurelia-deco';
 import * as THREE from 'three';
 import { StringTMap } from 'aurelia-resources';
-import { Logger, getLogger } from 'aurelia-logging';
+import { Logger, getLogger } from 'aurelia-logging';
 const log: Logger = getLogger('three-object-model');
 
 @model('/three/object')
@@ -43,10 +43,10 @@ export class ThreeObjectModel extends Model {
   public matrix: Array<number>;
 
   @type.any()
-  public material: string | Array<string>;
+  public material: string | Array<string>;
 
   @type.any()
-  public geometry: string | Array<string>;
+  public geometry: string | Array<string>;
 
   @type.object({allowOtherKeys: true})
   public userData: {[key: string]: any;};
@@ -73,6 +73,9 @@ export class ThreeObjectModel extends Model {
     z: {type: 'float', required: true},
   }, allowOtherKeys: true})
   public _max: THREE.Vector3;
+
+  @type.files({accepted: 'image/*,application/pdf'})
+  public documents: Array<any> = [];
 
 
   // let box = new THREE.Box3;
@@ -161,7 +164,7 @@ export class ThreeObjectModel extends Model {
       for (let element of elements) {
         if (element instanceof ThreeObjectModel) {
           hObjects[element.id] = element;
-          if (!element.parentId || allIds.indexOf(element.parentId) === -1) rObjects.push(element);
+          if (!element.parentId || allIds.indexOf(element.parentId) === -1) rObjects.push(element);
           if (element.type.indexOf('Light') !== -1) containsLighting = true;
           if (!element.userData) element.userData = {};
           element.userData.id = element.id;
@@ -191,7 +194,7 @@ export class ThreeObjectModel extends Model {
 
   static addChildren(object: ThreeObjectModel, hObjects: StringTMap<ThreeObjectModel>) {
     let children: Array<ThreeObjectModel> = [];
-    for (let childId of object.childrenIds || []) {
+    for (let childId of object.childrenIds || []) {
       if (hObjects[childId]) {
         let child = hObjects[childId];
         ThreeObjectModel.addChildren(child, hObjects);
@@ -252,12 +255,12 @@ export class ThreeObjectModel extends Model {
 export interface ThreeObjectPrepareFiltersOptions {
   insideBbox?: THREE.Box3;
   touchBbox?: THREE.Box3;
-  uuid?: string | Array<string>;
-  name?: string | Array<string>;
-  geometry?: string | Array<string>;
-  material?: string | Array<string>;
-  parentId?: string | Array<string>;
-  type?: string | Array<string>;
+  uuid?: string | Array<string>;
+  name?: string | Array<string>;
+  geometry?: string | Array<string>;
+  material?: string | Array<string>;
+  parentId?: string | Array<string>;
+  type?: string | Array<string>;
   userData?: {[key: string]: any;};
   globalFilters?: Array<string>;
 }

@@ -30,7 +30,9 @@ var log = getLogger('three-object-model');
 var ThreeObjectModel = (function (_super) {
     __extends(ThreeObjectModel, _super);
     function ThreeObjectModel() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.documents = [];
+        return _this;
     }
     ThreeObjectModel_1 = ThreeObjectModel;
     ThreeObjectModel.prepareFilters = function (options) {
@@ -267,6 +269,10 @@ var ThreeObjectModel = (function (_super) {
             }, allowOtherKeys: true }),
         __metadata("design:type", THREE.Vector3)
     ], ThreeObjectModel.prototype, "_max", void 0);
+    __decorate([
+        type.files({ accepted: 'image/*,application/pdf' }),
+        __metadata("design:type", Array)
+    ], ThreeObjectModel.prototype, "documents", void 0);
     ThreeObjectModel = ThreeObjectModel_1 = __decorate([
         model('/three/object')
     ], ThreeObjectModel);
