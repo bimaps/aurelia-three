@@ -1,7 +1,7 @@
 {
   "name": "aurelia-three",
   "description": "An Aurelia plugin project.",
-  "version": "1.0.5",
+  "version": "2.0.0",
   "scripts": {
     "build": "au build-plugin",
     "start": "au run",
