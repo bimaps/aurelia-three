@@ -1,6 +1,5 @@
 import { ThreeGeometry } from './three-geometry';
 import { ThreeUtils } from './../helpers/three-utils';
-import { ThreeGenerator } from './../helpers/three-generator';
 import { ThreeCustomElement } from '../components/three';
 import { StringTMap, Parser } from "aurelia-resources";
 import * as THREE from 'three';
@@ -10,7 +9,7 @@ import { computedFrom } from 'aurelia-binding';
 import { ThreeTheme } from './three-theme';
 import { ThreeThemeRule } from './three-theme-rule';
 import { ThreeStyleDefinition } from './three-style-definition';
-import { Logger, getLogger } from 'aurelia-logging';
+import { Logger, getLogger } from 'aurelia-logging';
 import { SpriteText2D, textAlign } from 'three-text2d';
 import { ThreeIcon } from './three-icon';
 
@@ -79,7 +78,7 @@ export class ThreeStylingService {
    * @param context 
    * @param options 
    */
-  public applyTheme(objects: Array<THREE.Object3D> | THREE.Object3D, theme: ThreeTheme, context: Array<string> = [], options: ApplyThemeOptions = {}) {
+  public applyTheme(objects: Array<THREE.Object3D> | THREE.Object3D, theme: ThreeTheme, context: Array<string> = [], options: ApplyThemeOptions = {}) {
     if (objects instanceof THREE.Object3D) objects = [objects];
 
     let rules = theme.rules.filter((rule) => {
@@ -178,7 +177,7 @@ export class ThreeStylingService {
     return true;
   }
 
-  private makeNumerIfPossible(input: string | any): number | any {
+  private makeNumerIfPossible(input: string | any): number | any {
     if (typeof input !== 'string') {
       return input;
     }
@@ -327,7 +326,7 @@ export class ThreeStylingService {
     if (definition.labelTemplate) {
       text = Parser.parseTemplate(definition.labelTemplate, {object});
     } else {
-      text = resolvePath(object, definition.labelKey || 'userData.label');
+      text = resolvePath(object, definition.labelKey || 'userData.label');
     }
 
     if (!text) return;
@@ -422,7 +421,7 @@ export class ThreeStylingService {
 
 
     let iconName = definition.iconDefault;
-    let iconValue = resolvePath(object, definition.iconKey || 'userData.icon');
+    let iconValue = resolvePath(object, definition.iconKey || 'userData.icon');
     if (iconValue) {
       iconName = iconValue;
     }
