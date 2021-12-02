@@ -19,7 +19,7 @@ import { CheckerModuleProjectionModel } from './checker-module-projection.model'
 import { CheckerModuleDistanceModel } from './checker-module-distance.model';
 import { CheckerModuleNormalDistanceModel } from './checker-module-normal-distance.model';
 import { CheckerModuleOutputModel } from './checker-module-output.model';
-export var modelsByType = {
+export const modelsByType = {
     filter: CheckerModuleFilterModel,
     extract: CheckerModuleExtractModel,
     math: CheckerModuleMathModel,

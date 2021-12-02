@@ -1,32 +1,27 @@
-var SlicePathComposer = (function () {
-    function SlicePathComposer() {
+export class SlicePathComposer {
+    constructor() {
         this.openPaths = [];
         this.closedPaths = [];
     }
-    Object.defineProperty(SlicePathComposer.prototype, "paths", {
-        get: function () {
-            return this.closedPaths;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    SlicePathComposer.prototype.idFromPoints = function (p1, p2) {
-        var onefirst = false;
+    get paths() {
+        return this.closedPaths;
+    }
+    idFromPoints(p1, p2) {
+        let onefirst = false;
         if (p1.x < p2.x
             || p1.x === p2.x && p1.y < p2.y
             || p1.x === p2.x && p1.y === p2.y && p1.z < p2.z) {
             onefirst = true;
         }
         return onefirst
-            ? p1.x + "," + p1.y + "," + p1.z + ":" + p2.x + "," + p2.y + "," + p2.z
-            : p2.x + "," + p2.y + "," + p2.z + ":" + p1.x + "," + p1.y + "," + p1.z;
-    };
-    SlicePathComposer.prototype.addDoublePoints = function (pointA, A1, A2, pointB, B1, B2) {
-        var idA = this.idFromPoints(A1, A2);
-        var idB = this.idFromPoints(B1, B2);
-        var addedToPath = null;
-        for (var _i = 0, _a = this.openPaths; _i < _a.length; _i++) {
-            var path = _a[_i];
+            ? `${p1.x},${p1.y},${p1.z}:${p2.x},${p2.y},${p2.z}`
+            : `${p2.x},${p2.y},${p2.z}:${p1.x},${p1.y},${p1.z}`;
+    }
+    addDoublePoints(pointA, A1, A2, pointB, B1, B2) {
+        const idA = this.idFromPoints(A1, A2);
+        const idB = this.idFromPoints(B1, B2);
+        let addedToPath = null;
+        for (let path of this.openPaths) {
             if (path.idA === idA) {
                 this.addToPath(path, pointB, 'A', idB);
                 addedToPath = path;
@@ -49,18 +44,18 @@ var SlicePathComposer = (function () {
             }
         }
         if (addedToPath === null) {
-            var newPath = {
+            const newPath = {
                 points: [pointA, pointB],
-                idA: idA,
-                idB: idB
+                idA,
+                idB
             };
             this.openPaths.push(newPath);
         }
         else {
             this.tryToClosePath(addedToPath);
         }
-    };
-    SlicePathComposer.prototype.addToPath = function (path, point, position, newId) {
+    }
+    addToPath(path, point, position, newId) {
         if (position === 'A') {
             path.points.unshift(point);
             path.idA = newId;
@@ -69,59 +64,55 @@ var SlicePathComposer = (function () {
             path.points.push(point);
             path.idB = newId;
         }
-    };
-    SlicePathComposer.prototype.tryToClosePath = function (path) {
-        var _a, _b, _c, _d;
-        var joinedToPath = null;
-        for (var _i = 0, _e = this.openPaths; _i < _e.length; _i++) {
-            var otherPath = _e[_i];
+    }
+    tryToClosePath(path) {
+        let joinedToPath = null;
+        for (let otherPath of this.openPaths) {
             if (otherPath === path) {
                 continue;
             }
-            var points = [].concat.apply([], path.points);
+            const points = [].concat(...path.points);
             if (otherPath.idA === path.idA) {
                 points.shift();
                 points.reverse();
-                (_a = otherPath.points).unshift.apply(_a, points.reverse());
+                otherPath.points.unshift(...points.reverse());
                 otherPath.idA = path.idB;
                 joinedToPath = otherPath;
             }
             else if (otherPath.idA === path.idB) {
                 points.pop();
-                (_b = otherPath.points).unshift.apply(_b, points);
+                otherPath.points.unshift(...points);
                 otherPath.idA = path.idA;
                 joinedToPath = otherPath;
             }
             else if (otherPath.idB === path.idA) {
                 points.shift();
-                (_c = otherPath.points).push.apply(_c, points);
+                otherPath.points.push(...points);
                 otherPath.idB = path.idB;
                 joinedToPath = otherPath;
             }
             else if (otherPath.idB === path.idB) {
                 points.pop();
-                (_d = otherPath.points).push.apply(_d, points.reverse());
+                otherPath.points.push(...points.reverse());
                 otherPath.idB = path.idA;
                 joinedToPath = otherPath;
             }
         }
         if (joinedToPath) {
-            var index = this.openPaths.indexOf(path);
+            const index = this.openPaths.indexOf(path);
             if (index !== -1) {
                 this.openPaths.splice(index, 1);
             }
             return this.tryToClosePath(joinedToPath);
         }
         if (path.idA === path.idB) {
-            var index = this.openPaths.indexOf(path);
+            const index = this.openPaths.indexOf(path);
             if (index !== -1) {
                 this.openPaths.splice(index, 1);
                 this.closedPaths.push(path.points);
             }
         }
-    };
-    return SlicePathComposer;
-}());
-export { SlicePathComposer };
+    }
+}
 
 //# sourceMappingURL=slice-path-composer.js.map

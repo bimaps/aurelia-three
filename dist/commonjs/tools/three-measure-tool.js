@@ -1,82 +1,63 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ThreeMeasureTool = void 0;
-var three_logger_1 = require("./../helpers/three-logger");
-var three_utils_1 = require("./../helpers/three-utils");
-var three_tool_1 = require("./three-tool");
-var aurelia_framework_1 = require("aurelia-framework");
-var aurelia_event_aggregator_1 = require("aurelia-event-aggregator");
-var aurelia_logging_1 = require("aurelia-logging");
-var THREE = require("three");
-var three_1 = require("three");
-var three_text2d_1 = require("three-text2d");
-var numeral = require("numeral");
-var log = aurelia_logging_1.getLogger('three-measure-tool');
-var logThree;
-var ThreeMeasureTool = (function (_super) {
-    __extends(ThreeMeasureTool, _super);
-    function ThreeMeasureTool(service) {
-        var _this = _super.call(this, service) || this;
-        _this.name = 'measure';
-        _this.measures = [];
-        _this.type = 'distance';
-        _this.volumeStep = 'surface';
-        _this.snapping = 'summit';
-        _this.snappingThreshold = 2;
-        _this.computedSnappingThreshold = 0.5;
-        _this.subscriptions = [];
-        _this.currentMeasureCoordinates = [];
-        _this.isMeasuring = false;
+const three_logger_1 = require("./../helpers/three-logger");
+const three_utils_1 = require("./../helpers/three-utils");
+const three_tool_1 = require("./three-tool");
+const aurelia_framework_1 = require("aurelia-framework");
+const aurelia_event_aggregator_1 = require("aurelia-event-aggregator");
+const aurelia_logging_1 = require("aurelia-logging");
+const THREE = require("three");
+const three_1 = require("three");
+const three_text2d_1 = require("three-text2d");
+const numeral = require("numeral");
+const log = aurelia_logging_1.getLogger('three-measure-tool');
+let logThree;
+class ThreeMeasureTool extends three_tool_1.ThreeTool {
+    constructor(service) {
+        super(service);
+        this.name = 'measure';
+        this.measures = [];
+        this.type = 'distance';
+        this.volumeStep = 'surface';
+        this.snapping = 'summit';
+        this.snappingThreshold = 2;
+        this.computedSnappingThreshold = 0.5;
+        this.subscriptions = [];
+        this.currentMeasureCoordinates = [];
+        this.isMeasuring = false;
         logThree = new three_logger_1.ThreeLogger(service.three);
         logThree.log = false;
-        return _this;
     }
-    ThreeMeasureTool.prototype.onActivate = function () {
-        var _this = this;
-        var ea = aurelia_framework_1.Container.instance.get(aurelia_event_aggregator_1.EventAggregator);
-        this.subscriptions.push(ea.subscribe('three-cursor:raw-processing', function (data) {
-            if (!_this.active) {
+    onActivate() {
+        let ea = aurelia_framework_1.Container.instance.get(aurelia_event_aggregator_1.EventAggregator);
+        this.subscriptions.push(ea.subscribe('three-cursor:raw-processing', (data) => {
+            if (!this.active) {
                 return;
             }
             if (data.type === 'move') {
-                _this.handleCursor(data);
+                this.handleCursor(data);
             }
-            else if (data.type === 'down' && _this.currentPoint) {
-                _this.addCoordinate(_this.currentPoint.position.clone());
+            else if (data.type === 'down' && this.currentPoint) {
+                this.addCoordinate(this.currentPoint.position.clone());
             }
         }));
-        this.subscriptions.push(ea.subscribe('three-camera:moved', function () {
-            if (!_this.active)
+        this.subscriptions.push(ea.subscribe('three-camera:moved', () => {
+            if (!this.active)
                 return;
-            _this.adjustOverlayToolZoom();
+            this.adjustOverlayToolZoom();
         }));
         this.displayMeasureOverlayTool();
-    };
-    ThreeMeasureTool.prototype.onDeactivate = function () {
-        for (var _i = 0, _a = this.subscriptions; _i < _a.length; _i++) {
-            var sub = _a[_i];
+    }
+    onDeactivate() {
+        for (let sub of this.subscriptions) {
             sub.dispose();
         }
         this.hideCurrentClosestPoint();
         this.hideCurrentMeasureCoordinates();
         this.hideMeasureOverlayTool();
-    };
-    ThreeMeasureTool.prototype.toggleMeasureTool = function (toggleWith) {
+    }
+    toggleMeasureTool(toggleWith) {
         if (this.active) {
             if (toggleWith) {
                 this.service.activate(toggleWith);
@@ -88,8 +69,8 @@ var ThreeMeasureTool = (function (_super) {
         else {
             this.service.activate(this);
         }
-    };
-    ThreeMeasureTool.prototype.setType = function (type) {
+    }
+    setType(type) {
         if (!this.active)
             this.service.activate(this);
         this.clearMeasuring();
@@ -97,24 +78,24 @@ var ThreeMeasureTool = (function (_super) {
         if (this.type === 'volume') {
             this.volumeStep = 'surface';
         }
-    };
-    ThreeMeasureTool.prototype.volumeNextStep = function () {
+    }
+    volumeNextStep() {
         if (this.type === 'volume' && this.volumeStep === 'surface') {
             this.volumeStep = 'height';
         }
-    };
-    ThreeMeasureTool.prototype.handleCursor = function (data) {
+    }
+    handleCursor(data) {
         if (!this.active)
             return;
         this.findClosestSummit(data.type, data.mouse, data.camera);
-    };
-    ThreeMeasureTool.prototype.findClosestSummit = function (type, mouse, camera) {
-        var distance = undefined;
-        var closestPoint = undefined;
-        var pixelH = (1 / this.three.getRenderer().domElement.clientWidth) * 10;
-        var pixelV = (1 / this.three.getRenderer().domElement.clientHeight) * 10;
-        var raycaster = new THREE.Raycaster();
-        var raypoints = [
+    }
+    findClosestSummit(type, mouse, camera) {
+        let distance = undefined;
+        let closestPoint = undefined;
+        const pixelH = (1 / this.three.getRenderer().domElement.clientWidth) * 10;
+        const pixelV = (1 / this.three.getRenderer().domElement.clientHeight) * 10;
+        const raycaster = new THREE.Raycaster();
+        const raypoints = [
             mouse,
             mouse.clone().add(new THREE.Vector2(pixelH, pixelV)),
             mouse.clone().add(new THREE.Vector2(0, pixelV)),
@@ -125,72 +106,46 @@ var ThreeMeasureTool = (function (_super) {
             mouse.clone().add(new THREE.Vector2(pixelH, -pixelV)),
             mouse.clone().add(new THREE.Vector2(pixelH, 0))
         ];
-        for (var _i = 0, raypoints_1 = raypoints; _i < raypoints_1.length; _i++) {
-            var raypoint = raypoints_1[_i];
+        for (let raypoint of raypoints) {
             raycaster.setFromCamera(raypoint, camera);
-            var clippingDistance = 0;
-            var plane = null;
-            var direction = void 0;
-            var intersections = raycaster.intersectObjects(this.three.getScene().children, true);
+            let clippingDistance = 0;
+            let plane = null;
+            let direction;
+            let intersections = raycaster.intersectObjects(this.three.getScene().children, true);
             if (typeof this.filterObjects === 'function') {
                 intersections = this.filterObjects(type, intersections);
             }
             if (intersections.length === 0) {
                 continue;
             }
-            for (var _a = 0, intersections_1 = intersections; _a < intersections_1.length; _a++) {
-                var intersection = intersections_1[_a];
-                var object = intersection.object;
-                var coordinates = [];
+            for (let intersection of intersections) {
+                const object = intersection.object;
+                const coordinates = [];
                 if (object instanceof THREE.Mesh && intersection.face) {
-                    var geometry = object.geometry;
-                    var face = intersection.face;
+                    const geometry = object.geometry;
+                    const face = intersection.face;
                     if (this.snapping === 'summit') {
-                        if (geometry instanceof THREE.Geometry) {
-                            coordinates.push(geometry.vertices[face.a]);
-                            coordinates.push(geometry.vertices[face.b]);
-                            coordinates.push(geometry.vertices[face.c]);
-                        }
-                        else if (geometry instanceof THREE.BufferGeometry) {
-                            coordinates.push(new THREE.Vector3().fromBufferAttribute(geometry.attributes.position, face.a));
-                            coordinates.push(new THREE.Vector3().fromBufferAttribute(geometry.attributes.position, face.b));
-                            coordinates.push(new THREE.Vector3().fromBufferAttribute(geometry.attributes.position, face.c));
-                        }
+                        coordinates.push(new THREE.Vector3().fromBufferAttribute(geometry.attributes.position, face.a));
+                        coordinates.push(new THREE.Vector3().fromBufferAttribute(geometry.attributes.position, face.b));
+                        coordinates.push(new THREE.Vector3().fromBufferAttribute(geometry.attributes.position, face.c));
                     }
                     else if (this.snapping === 'edge') {
-                        if (geometry instanceof THREE.Geometry) {
-                            var lineA = new three_1.Line3(geometry.vertices[face.a], geometry.vertices[face.b]);
-                            var lineB = new three_1.Line3(geometry.vertices[face.a], geometry.vertices[face.c]);
-                            var lineC = new three_1.Line3(geometry.vertices[face.b], geometry.vertices[face.c]);
-                            var vA = new THREE.Vector3();
-                            var vB = new THREE.Vector3();
-                            var vC = new THREE.Vector3();
-                            lineA.closestPointToPoint(intersection.point, true, vA);
-                            lineB.closestPointToPoint(intersection.point, true, vB);
-                            lineC.closestPointToPoint(intersection.point, true, vC);
-                            coordinates.push(vA);
-                            coordinates.push(vB);
-                            coordinates.push(vC);
-                        }
-                        else if (geometry instanceof THREE.BufferGeometry) {
-                            var lineA = new three_1.Line3(new THREE.Vector3().fromBufferAttribute(geometry.attributes.position, face.a), new THREE.Vector3().fromBufferAttribute(geometry.attributes.position, face.b));
-                            var lineB = new three_1.Line3(new THREE.Vector3().fromBufferAttribute(geometry.attributes.position, face.a), new THREE.Vector3().fromBufferAttribute(geometry.attributes.position, face.c));
-                            var lineC = new three_1.Line3(new THREE.Vector3().fromBufferAttribute(geometry.attributes.position, face.b), new THREE.Vector3().fromBufferAttribute(geometry.attributes.position, face.c));
-                            var vA = new THREE.Vector3();
-                            var vB = new THREE.Vector3();
-                            var vC = new THREE.Vector3();
-                            lineA.closestPointToPoint(intersection.point, true, vA);
-                            lineB.closestPointToPoint(intersection.point, true, vB);
-                            lineC.closestPointToPoint(intersection.point, true, vC);
-                            coordinates.push(vA);
-                            coordinates.push(vB);
-                            coordinates.push(vC);
-                        }
+                        const lineA = new three_1.Line3(new THREE.Vector3().fromBufferAttribute(geometry.attributes.position, face.a), new THREE.Vector3().fromBufferAttribute(geometry.attributes.position, face.b));
+                        const lineB = new three_1.Line3(new THREE.Vector3().fromBufferAttribute(geometry.attributes.position, face.a), new THREE.Vector3().fromBufferAttribute(geometry.attributes.position, face.c));
+                        const lineC = new three_1.Line3(new THREE.Vector3().fromBufferAttribute(geometry.attributes.position, face.b), new THREE.Vector3().fromBufferAttribute(geometry.attributes.position, face.c));
+                        const vA = new THREE.Vector3();
+                        const vB = new THREE.Vector3();
+                        const vC = new THREE.Vector3();
+                        lineA.closestPointToPoint(intersection.point, true, vA);
+                        lineB.closestPointToPoint(intersection.point, true, vB);
+                        lineC.closestPointToPoint(intersection.point, true, vC);
+                        coordinates.push(vA);
+                        coordinates.push(vB);
+                        coordinates.push(vC);
                     }
                 }
-                for (var _b = 0, coordinates_1 = coordinates; _b < coordinates_1.length; _b++) {
-                    var coordinate = coordinates_1[_b];
-                    var currentDistance = coordinate.distanceTo(intersection.point);
+                for (let coordinate of coordinates) {
+                    const currentDistance = coordinate.distanceTo(intersection.point);
                     if (clippingDistance && plane) {
                         if (direction === 'BACK' && intersection.distance > clippingDistance) {
                             continue;
@@ -216,11 +171,11 @@ var ThreeMeasureTool = (function (_super) {
         else {
             this.hideCurrentClosestPoint();
         }
-    };
-    ThreeMeasureTool.prototype.displayCurrentClosestPoint = function (point) {
+    }
+    displayCurrentClosestPoint(point) {
         if (!this.currentPoint) {
-            var currentPointGeometry = new THREE.SphereBufferGeometry(0.1);
-            var currentPointMaterial = new THREE.MeshBasicMaterial({ color: 'red', opacity: 0.5, transparent: true });
+            const currentPointGeometry = new THREE.SphereBufferGeometry(0.1);
+            const currentPointMaterial = new THREE.MeshBasicMaterial({ color: 'red', opacity: 0.5, transparent: true });
             this.currentPoint = new THREE.Mesh(currentPointGeometry, currentPointMaterial);
             this.currentPoint.name = '__measure_current-point__';
             this.currentPoint.material.depthTest = false;
@@ -230,24 +185,23 @@ var ThreeMeasureTool = (function (_super) {
         this.three.getScene('overlay').remove(this.currentPoint);
         this.currentPoint.position.set(point.x, point.y, point.z);
         this.three.getScene('overlay').add(this.currentPoint);
-    };
-    ThreeMeasureTool.prototype.hideCurrentClosestPoint = function () {
+    }
+    hideCurrentClosestPoint() {
         if (this.currentPoint) {
             this.three.getScene('overlay').remove(this.currentPoint);
             delete this.currentPoint;
         }
-    };
-    ThreeMeasureTool.prototype.displayCurrentMeasureCoordinates = function () {
+    }
+    displayCurrentMeasureCoordinates() {
         this.hideCurrentMeasureCoordinates();
         this.currentMeasureCoordinates = [];
         if (!this.currentMeasure) {
             return;
         }
-        for (var _i = 0, _a = this.currentMeasure.coords; _i < _a.length; _i++) {
-            var coord = _a[_i];
-            var geometry = new THREE.SphereBufferGeometry(0.1);
-            var material = new THREE.MeshBasicMaterial({ color: 'green', opacity: 0.5, transparent: true });
-            var mesh = new THREE.Mesh(geometry, material);
+        for (let coord of this.currentMeasure.coords) {
+            const geometry = new THREE.SphereBufferGeometry(0.1);
+            const material = new THREE.MeshBasicMaterial({ color: 'green', opacity: 0.5, transparent: true });
+            const mesh = new THREE.Mesh(geometry, material);
             mesh.position.set(coord.x, coord.y, coord.z);
             mesh.name = '__measure_current-measure-coordinate__';
             mesh.material.depthTest = false;
@@ -256,70 +210,61 @@ var ThreeMeasureTool = (function (_super) {
             this.three.getScene('overlay').add(mesh);
         }
         if ((this.type === 'surface' || this.type === 'volume') && this.currentMeasure.coords.length > 2) {
-            var surfaceShape = new THREE.Shape();
-            var points = this.currentMeasure.coords.map(function (c) { return new THREE.Vector2(c.x, c.z); });
+            const surfaceShape = new THREE.Shape();
+            const points = this.currentMeasure.coords.map(c => new THREE.Vector2(c.x, c.z));
             surfaceShape.setFromPoints(points);
-            var shapeGeometry = new THREE.ShapeGeometry(surfaceShape);
-            var shapeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide, depthTest: false, opacity: 0.2, transparent: true });
-            var surfaceMesh = new THREE.Mesh(shapeGeometry, shapeMaterial);
+            const shapeGeometry = new THREE.ShapeGeometry(surfaceShape);
+            const shapeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide, depthTest: false, opacity: 0.2, transparent: true });
+            const surfaceMesh = new THREE.Mesh(shapeGeometry, shapeMaterial);
             surfaceMesh.name = '__measure_current-measure-surface__';
             surfaceMesh.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
             surfaceMesh.renderOrder = 10;
-            surfaceMesh.position.setY(Math.max.apply(Math, this.currentMeasure.coords.map(function (c) { return c.y; })));
+            surfaceMesh.position.setY(Math.max(...this.currentMeasure.coords.map(c => c.y)));
             this.currentMeasureCoordinates.push(surfaceMesh);
             this.three.getScene('overlay').add(surfaceMesh);
         }
         this.adjustOverlayToolZoom();
-    };
-    ThreeMeasureTool.prototype.hideCurrentMeasureCoordinates = function () {
-        for (var _i = 0, _a = this.currentMeasureCoordinates; _i < _a.length; _i++) {
-            var mesh = _a[_i];
+    }
+    hideCurrentMeasureCoordinates() {
+        for (let mesh of this.currentMeasureCoordinates) {
             this.three.getScene('overlay').remove(mesh);
         }
-    };
-    ThreeMeasureTool.prototype.displayMeasures = function () {
-        for (var _i = 0, _a = this.measures; _i < _a.length; _i++) {
-            var measure = _a[_i];
+    }
+    displayMeasures() {
+        for (let measure of this.measures) {
             if (!measure.display) {
                 this.generateMeasureObject(measure);
             }
             if (measure.display) {
-                for (var _b = 0, _c = measure.display.points; _b < _c.length; _b++) {
-                    var mesh = _c[_b];
+                for (let mesh of measure.display.points) {
                     mesh.visible = true;
                 }
-                for (var _d = 0, _e = measure.display.lines; _d < _e.length; _d++) {
-                    var line = _e[_d];
+                for (let line of measure.display.lines) {
                     line.visible = true;
                 }
-                for (var _f = 0, _g = measure.display.labels; _f < _g.length; _f++) {
-                    var label = _g[_f];
+                for (let label of measure.display.labels) {
                     label.visible = true;
                 }
             }
         }
         this.adjustOverlayToolZoom();
-    };
-    ThreeMeasureTool.prototype.hideMeasures = function () {
-        for (var _i = 0, _a = this.measures; _i < _a.length; _i++) {
-            var measure = _a[_i];
+    }
+    hideMeasures() {
+        for (let measure of this.measures) {
             if (measure.display) {
-                for (var _b = 0, _c = measure.display.points; _b < _c.length; _b++) {
-                    var mesh = _c[_b];
+                for (let mesh of measure.display.points) {
                     mesh.visible = false;
                 }
-                for (var _d = 0, _e = measure.display.lines; _d < _e.length; _d++) {
-                    var line = _e[_d];
+                for (let line of measure.display.lines) {
                     line.visible = false;
                 }
-                for (var _f = 0, _g = measure.display.labels; _f < _g.length; _f++) {
-                    var label = _g[_f];
+                for (let label of measure.display.labels) {
                     label.visible = false;
                 }
             }
         }
-    };
-    ThreeMeasureTool.prototype.generateMeasureObject = function (measure) {
+    }
+    generateMeasureObject(measure) {
         if (!measure.display) {
             measure.display = {
                 points: [],
@@ -328,10 +273,10 @@ var ThreeMeasureTool = (function (_super) {
             };
         }
         if (measure.type === 'distance') {
-            var geometry = new THREE.SphereBufferGeometry(0.1);
-            var material = new THREE.MeshBasicMaterial({ color: 'black', opacity: 0.5, transparent: true });
-            var point1 = new THREE.Mesh(geometry, material);
-            var point2 = point1.clone();
+            const geometry = new THREE.SphereBufferGeometry(0.1);
+            const material = new THREE.MeshBasicMaterial({ color: 'black', opacity: 0.5, transparent: true });
+            const point1 = new THREE.Mesh(geometry, material);
+            const point2 = point1.clone();
             point1.name = '__measure_current-measure-point__';
             point2.name = '__measure_current-measure-point__';
             point1.material.depthTest = false;
@@ -342,16 +287,18 @@ var ThreeMeasureTool = (function (_super) {
             point2.position.set(measure.coords[1].x, measure.coords[1].y, measure.coords[1].z);
             measure.display.points.push(point1, point2);
             this.three.getScene('overlay').add(point1, point2);
-            var lineGeometry = new THREE.Geometry();
-            lineGeometry.vertices.push(measure.coords[0], measure.coords[1]);
-            var line = new THREE.Line(lineGeometry, new THREE.LineBasicMaterial({ color: 'black', opacity: 1, side: THREE.DoubleSide }));
+            const points = [];
+            points.push(measure.coords[0]);
+            points.push(measure.coords[1]);
+            const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+            let line = new THREE.Line(lineGeometry, new THREE.LineBasicMaterial({ color: 'black', opacity: 1, side: THREE.DoubleSide }));
             line.name = '__measure_current-measure-line__';
             line.material.depthTest = false;
             line.renderOrder = 10;
             measure.display.lines.push(line);
             this.three.getScene('overlay').add(line);
-            var value = numeral(measure.value).format('0.00');
-            var sprite = new three_text2d_1.SpriteText2D(value.toString(), {
+            const value = numeral(measure.value).format('0.00');
+            const sprite = new three_text2d_1.SpriteText2D(value.toString(), {
                 align: three_text2d_1.textAlign.center,
                 font: '20px Arial',
                 fillStyle: '#000000',
@@ -363,7 +310,7 @@ var ThreeMeasureTool = (function (_super) {
             var dir = measure.coords[0].clone().sub(measure.coords[1]);
             var len = dir.length();
             dir = dir.normalize().multiplyScalar(len * -0.5);
-            var spritePosition = measure.coords[0].clone().add(dir);
+            const spritePosition = measure.coords[0].clone().add(dir);
             sprite.position.set(spritePosition.x, spritePosition.y, spritePosition.z);
             sprite.userData._type = '__measure_current-measure-label__';
             sprite.material.depthTest = false;
@@ -372,39 +319,37 @@ var ThreeMeasureTool = (function (_super) {
             this.three.getScene('overlay').add(sprite);
         }
         else if (measure.type === 'horizontal') {
-            var geometry = new THREE.SphereBufferGeometry(0.1);
-            var material = new THREE.MeshBasicMaterial({ color: 'black', opacity: 0.5, transparent: true });
-            var point1 = new THREE.Mesh(geometry, material);
-            var point2 = point1.clone();
+            const geometry = new THREE.SphereBufferGeometry(0.1);
+            const material = new THREE.MeshBasicMaterial({ color: 'black', opacity: 0.5, transparent: true });
+            const point1 = new THREE.Mesh(geometry, material);
+            const point2 = point1.clone();
             point1.name = '__measure_current-measure-point__';
             point2.name = '__measure_current-measure-point__';
             point1.material.depthTest = false;
             point1.renderOrder = 10;
             point2.material.depthTest = false;
             point2.renderOrder = 10;
-            var projectedCoord = measure.coords[1].clone().setY(measure.coords[0].y);
+            const projectedCoord = measure.coords[1].clone().setY(measure.coords[0].y);
             point1.position.set(measure.coords[0].x, measure.coords[0].y, measure.coords[0].z);
             point2.position.set(projectedCoord.x, projectedCoord.y, projectedCoord.z);
             measure.display.points.push(point1, point2);
             this.three.getScene('overlay').add(point1, point2);
-            var lineGeometry = new THREE.Geometry();
-            lineGeometry.vertices.push(measure.coords[0], projectedCoord);
-            var line = new THREE.Line(lineGeometry, new THREE.LineBasicMaterial({ color: 'black', opacity: 1, side: THREE.DoubleSide }));
+            const lineGeometry = new THREE.BufferGeometry().setFromPoints([measure.coords[0], projectedCoord]);
+            let line = new THREE.Line(lineGeometry, new THREE.LineBasicMaterial({ color: 'black', opacity: 1, side: THREE.DoubleSide }));
             line.name = '__measure_current-measure-line__';
             line.material.depthTest = false;
             line.renderOrder = 10;
             measure.display.lines.push(line);
             this.three.getScene('overlay').add(line);
-            var projectedLineGeometry = new THREE.Geometry();
-            projectedLineGeometry.vertices.push(measure.coords[1], projectedCoord);
-            var projectedLine = new THREE.Line(projectedLineGeometry, new THREE.LineBasicMaterial({ color: '#fff', opacity: 1, side: THREE.DoubleSide }));
+            const projectedLineGeometry = new THREE.BufferGeometry().setFromPoints([measure.coords[1], projectedCoord]);
+            let projectedLine = new THREE.Line(projectedLineGeometry, new THREE.LineBasicMaterial({ color: '#fff', opacity: 1, side: THREE.DoubleSide }));
             projectedLine.name = '__measure_current-measure-line__';
             projectedLine.material.depthTest = false;
             projectedLine.renderOrder = 10;
             measure.display.lines.push(projectedLine);
             this.three.getScene('overlay').add(projectedLine);
-            var value = Math.round(measure.value * 100) / 100;
-            var sprite = new three_text2d_1.SpriteText2D(value.toString(), {
+            const value = Math.round(measure.value * 100) / 100;
+            const sprite = new three_text2d_1.SpriteText2D(value.toString(), {
                 align: three_text2d_1.textAlign.center,
                 font: '20px Arial',
                 fillStyle: '#000000',
@@ -416,7 +361,7 @@ var ThreeMeasureTool = (function (_super) {
             var dir = measure.coords[0].clone().sub(measure.coords[1]);
             var len = dir.length();
             dir = dir.normalize().multiplyScalar(len * -0.5);
-            var spritePosition = measure.coords[0].clone().add(dir);
+            const spritePosition = measure.coords[0].clone().add(dir);
             sprite.position.set(spritePosition.x, spritePosition.y, spritePosition.z);
             sprite.userData._type = '__measure_current-measure-label__';
             sprite.material.depthTest = false;
@@ -425,31 +370,30 @@ var ThreeMeasureTool = (function (_super) {
             this.three.getScene('overlay').add(sprite);
         }
         else if (measure.type === 'surface') {
-            var geometry = new THREE.SphereBufferGeometry(0.1);
-            var material = new THREE.MeshBasicMaterial({ color: 'black', opacity: 0.5, transparent: true, depthTest: false });
-            var originalPoint = new THREE.Mesh(geometry, material);
+            const geometry = new THREE.SphereBufferGeometry(0.1);
+            const material = new THREE.MeshBasicMaterial({ color: 'black', opacity: 0.5, transparent: true, depthTest: false });
+            const originalPoint = new THREE.Mesh(geometry, material);
             originalPoint.name = '__measure_current-measure-point__';
             originalPoint.renderOrder = 10;
-            for (var _i = 0, _a = measure.coords; _i < _a.length; _i++) {
-                var coord = _a[_i];
-                var point = originalPoint.clone();
+            for (const coord of measure.coords) {
+                const point = originalPoint.clone();
                 point.position.set(coord.x, coord.y, coord.z);
                 measure.display.points.push(point);
                 this.three.getScene('overlay').add(point);
             }
-            var surfaceShape = new THREE.Shape();
-            surfaceShape.setFromPoints(measure.coords.map(function (c) { return new THREE.Vector2(c.x, c.z); }));
-            var shapeGeometry = new THREE.ShapeGeometry(surfaceShape);
-            var shapeMaterial = new THREE.MeshBasicMaterial({ color: '#CCDDFF', side: THREE.DoubleSide, depthTest: false, opacity: 0.3, transparent: true });
-            var surfaceMesh = new THREE.Mesh(shapeGeometry, shapeMaterial);
+            const surfaceShape = new THREE.Shape();
+            surfaceShape.setFromPoints(measure.coords.map(c => new THREE.Vector2(c.x, c.z)));
+            const shapeGeometry = new THREE.ShapeGeometry(surfaceShape);
+            const shapeMaterial = new THREE.MeshBasicMaterial({ color: '#CCDDFF', side: THREE.DoubleSide, depthTest: false, opacity: 0.3, transparent: true });
+            const surfaceMesh = new THREE.Mesh(shapeGeometry, shapeMaterial);
             surfaceMesh.name = '__measure_current-measure-point__';
             surfaceMesh.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
             surfaceMesh.renderOrder = 10;
-            surfaceMesh.position.setY(Math.max.apply(Math, this.currentMeasure.coords.map(function (c) { return c.y; })));
+            surfaceMesh.position.setY(Math.max(...this.currentMeasure.coords.map(c => c.y)));
             measure.display.points.push(surfaceMesh);
             this.three.getScene('overlay').add(surfaceMesh);
-            var value = Math.round(measure.value * 100) / 100;
-            var sprite = new three_text2d_1.SpriteText2D(value.toString(), {
+            const value = Math.round(measure.value * 100) / 100;
+            const sprite = new three_text2d_1.SpriteText2D(value.toString(), {
                 align: three_text2d_1.textAlign.center,
                 font: '20px Arial',
                 fillStyle: '#000000',
@@ -458,8 +402,8 @@ var ThreeMeasureTool = (function (_super) {
                 horizontalPadding: 2,
                 antialias: false
             });
-            var centroid = three_utils_1.ThreeUtils.centroidFromObject(surfaceMesh);
-            var spritePosition = centroid;
+            const centroid = three_utils_1.ThreeUtils.centroidFromObject(surfaceMesh);
+            const spritePosition = centroid;
             sprite.position.set(spritePosition.x, spritePosition.y, spritePosition.z);
             sprite.userData._type = '__measure_current-measure-label__';
             sprite.material.depthTest = false;
@@ -468,24 +412,23 @@ var ThreeMeasureTool = (function (_super) {
             this.three.getScene('overlay').add(sprite);
         }
         else if (measure.type === 'volume') {
-            var geometry = new THREE.SphereBufferGeometry(0.1);
-            var material = new THREE.MeshBasicMaterial({ color: 'black', opacity: 0.5, transparent: true, depthTest: false });
-            var originalPoint = new THREE.Mesh(geometry, material);
+            const geometry = new THREE.SphereBufferGeometry(0.1);
+            const material = new THREE.MeshBasicMaterial({ color: 'black', opacity: 0.5, transparent: true, depthTest: false });
+            const originalPoint = new THREE.Mesh(geometry, material);
             originalPoint.name = '__measure_current-measure-point__';
             originalPoint.renderOrder = 10;
-            for (var _b = 0, _c = measure.coords; _b < _c.length; _b++) {
-                var coord = _c[_b];
-                var point = originalPoint.clone();
+            for (const coord of measure.coords) {
+                const point = originalPoint.clone();
                 point.position.set(coord.x, coord.y, coord.z);
                 measure.display.points.push(point);
                 this.three.getScene('overlay').add(point);
             }
-            var surfaceShape = new THREE.Shape();
-            surfaceShape.setFromPoints(measure.coords.map(function (c) { return new THREE.Vector2(c.x, c.z); }));
-            var depth = measure.coords[0].y - measure.volumeLastCoord.y;
+            const surfaceShape = new THREE.Shape();
+            surfaceShape.setFromPoints(measure.coords.map(c => new THREE.Vector2(c.x, c.z)));
+            const depth = measure.coords[0].y - measure.volumeLastCoord.y;
             console.log('depth', depth);
-            var invert = depth < 0;
-            var extrudeSettings = {
+            const invert = depth < 0;
+            const extrudeSettings = {
                 steps: 2,
                 depth: Math.abs(depth),
                 bevelEnabled: false,
@@ -494,20 +437,20 @@ var ThreeMeasureTool = (function (_super) {
                 bevelOffset: 0,
                 bevelSegments: 1
             };
-            var volumeGeometry = new THREE.ExtrudeGeometry(surfaceShape, extrudeSettings);
-            var volumeMaterial = new THREE.MeshBasicMaterial({ color: '#CCDDFF', side: THREE.DoubleSide, depthTest: false, opacity: 0.3, transparent: true });
-            var volumeMesh = new THREE.Mesh(volumeGeometry, volumeMaterial);
+            const volumeGeometry = new THREE.ExtrudeGeometry(surfaceShape, extrudeSettings);
+            const volumeMaterial = new THREE.MeshBasicMaterial({ color: '#CCDDFF', side: THREE.DoubleSide, depthTest: false, opacity: 0.3, transparent: true });
+            const volumeMesh = new THREE.Mesh(volumeGeometry, volumeMaterial);
             volumeMesh.name = '__measure_current-measure-point__';
             volumeMesh.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2);
             volumeMesh.renderOrder = 10;
-            volumeMesh.position.setY(Math.max.apply(Math, this.currentMeasure.coords.map(function (c) { return c.y; })));
+            volumeMesh.position.setY(Math.max(...this.currentMeasure.coords.map(c => c.y)));
             if (invert) {
                 volumeMesh.position.setY(volumeMesh.position.y - depth);
             }
             measure.display.points.push(volumeMesh);
             this.three.getScene('overlay').add(volumeMesh);
-            var value = Math.round(measure.value * 100) / 100;
-            var sprite = new three_text2d_1.SpriteText2D(value.toString(), {
+            const value = Math.round(measure.value * 100) / 100;
+            const sprite = new three_text2d_1.SpriteText2D(value.toString(), {
                 align: three_text2d_1.textAlign.center,
                 font: '20px Arial',
                 fillStyle: '#000000',
@@ -516,8 +459,8 @@ var ThreeMeasureTool = (function (_super) {
                 horizontalPadding: 2,
                 antialias: false
             });
-            var centroid = three_utils_1.ThreeUtils.centroidFromObject(volumeMesh);
-            var spritePosition = centroid;
+            const centroid = three_utils_1.ThreeUtils.centroidFromObject(volumeMesh);
+            const spritePosition = centroid;
             sprite.position.set(spritePosition.x, spritePosition.y, spritePosition.z);
             sprite.userData._type = '__measure_current-measure-label__';
             sprite.material.depthTest = false;
@@ -525,8 +468,8 @@ var ThreeMeasureTool = (function (_super) {
             measure.display.labels.push(sprite);
             this.three.getScene('overlay').add(sprite);
         }
-    };
-    ThreeMeasureTool.prototype.addCoordinate = function (coord) {
+    }
+    addCoordinate(coord) {
         this.isMeasuring = true;
         if (!this.currentMeasure) {
             this.currentMeasure = {
@@ -548,7 +491,7 @@ var ThreeMeasureTool = (function (_super) {
             this.clearMeasuring();
         }
         else if (this.currentMeasure.type === 'horizontal' && this.currentMeasure.coords.length === 2) {
-            var projectedCoord = this.currentMeasure.coords[1].clone().setY(this.currentMeasure.coords[0].y);
+            const projectedCoord = this.currentMeasure.coords[1].clone().setY(this.currentMeasure.coords[0].y);
             this.currentMeasure.value = this.currentMeasure.coords[0].distanceTo(projectedCoord);
             this.measures.push(this.currentMeasure);
             this.displayMeasures();
@@ -556,18 +499,18 @@ var ThreeMeasureTool = (function (_super) {
         }
         else if (this.currentMeasure.type === 'surface' || this.currentMeasure.type === 'volume') {
             if (this.currentMeasure.coords.length > 2) {
-                var contour = this.currentMeasure.coords.map(function (c) {
+                const contour = this.currentMeasure.coords.map(c => {
                     return {
                         x: c.x,
                         y: c.z
                     };
                 });
-                var area = three_1.ShapeUtils.area(contour);
+                const area = three_1.ShapeUtils.area(contour);
                 this.currentMeasure.value = Math.abs(area);
             }
         }
         if (this.currentMeasure.type === 'volume' && this.volumeStep === 'height') {
-            var height = Math.abs(this.currentMeasure.coords[0].y - this.currentMeasure.volumeLastCoord.y);
+            const height = Math.abs(this.currentMeasure.coords[0].y - this.currentMeasure.volumeLastCoord.y);
             this.currentMeasure.value *= height;
             this.measures.push(this.currentMeasure);
             this.displayMeasures();
@@ -575,8 +518,8 @@ var ThreeMeasureTool = (function (_super) {
             this.volumeStep = 'surface';
         }
         this.displayCurrentMeasureCoordinates();
-    };
-    ThreeMeasureTool.prototype.endMeasuring = function () {
+    }
+    endMeasuring() {
         if (this.currentMeasure.type === 'surface' && (this.currentMeasure.coords.length < 3 || !this.currentMeasure.value)) {
             this.clearMeasuring();
         }
@@ -589,39 +532,35 @@ var ThreeMeasureTool = (function (_super) {
             throw new Error('Volume measurement not yet implemented');
         }
         this.displayCurrentMeasureCoordinates();
-    };
-    ThreeMeasureTool.prototype.clearMeasuring = function () {
+    }
+    clearMeasuring() {
         this.isMeasuring = false;
         this.currentMeasure = undefined;
         this.displayCurrentMeasureCoordinates();
-    };
-    ThreeMeasureTool.prototype.clearMeasures = function () {
-        for (var _i = 0, _a = this.measures; _i < _a.length; _i++) {
-            var measure = _a[_i];
+    }
+    clearMeasures() {
+        for (let measure of this.measures) {
             if (measure.display) {
-                for (var _b = 0, _c = measure.display.points; _b < _c.length; _b++) {
-                    var object = _c[_b];
+                for (let object of measure.display.points) {
                     this.three.getScene('overlay').remove(object);
                 }
-                for (var _d = 0, _e = measure.display.lines; _d < _e.length; _d++) {
-                    var object = _e[_d];
+                for (let object of measure.display.lines) {
                     this.three.getScene('overlay').remove(object);
                 }
-                for (var _f = 0, _g = measure.display.labels; _f < _g.length; _f++) {
-                    var object = _g[_f];
+                for (let object of measure.display.labels) {
                     this.three.getScene('overlay').remove(object);
                 }
             }
         }
         this.measures = [];
-    };
-    ThreeMeasureTool.prototype.removeMeasure = function (measure) {
-        var index = this.measures.indexOf(measure);
+    }
+    removeMeasure(measure) {
+        const index = this.measures.indexOf(measure);
         if (index !== -1) {
             this.measures.splice(index, 1);
         }
-    };
-    ThreeMeasureTool.prototype.displayMeasureOverlayTool = function () {
+    }
+    displayMeasureOverlayTool() {
         if (!this.overlayTool) {
             this.createOverlayTool();
         }
@@ -632,20 +571,20 @@ var ThreeMeasureTool = (function (_super) {
         this.adjustOverlayToolPosition();
         this.adjustOverlayToolZoom();
         this.adjustActiveTool();
-    };
-    ThreeMeasureTool.prototype.hideMeasureOverlayTool = function () {
+    }
+    hideMeasureOverlayTool() {
         if (!this.overlayTool || !this.overlayTool.userData.displayed)
             return;
         this.three.getScene('tools').remove(this.overlayTool);
         this.overlayTool.userData.displayed = false;
-    };
-    ThreeMeasureTool.prototype.createOverlayTool = function () {
-        var group = new THREE.Group();
+    }
+    createOverlayTool() {
+        let group = new THREE.Group();
         group.name = '__measure-tools__';
-        var groupContainer = new THREE.Group;
+        let groupContainer = new THREE.Group;
         groupContainer.name = '__measure-tools-container__';
         groupContainer.add(group);
-        groupContainer.traverse(function (obj) {
+        groupContainer.traverse((obj) => {
             obj.renderOrder = 10;
             if ((obj instanceof THREE.Mesh || obj instanceof THREE.Line) && (obj.material instanceof THREE.MeshBasicMaterial || obj.material instanceof THREE.LineBasicMaterial)) {
                 obj.material.depthTest = false;
@@ -653,76 +592,69 @@ var ThreeMeasureTool = (function (_super) {
         });
         this.overlayTool = groupContainer;
         this.adjustOverlayToolZoom();
-    };
-    ThreeMeasureTool.prototype.adjustOverlayToolPosition = function () {
+    }
+    adjustOverlayToolPosition() {
         if (!this.overlayTool)
             return;
-    };
-    ThreeMeasureTool.prototype.adjustOverlayToolZoom = function () {
-        var camera = this.three.getCamera();
+    }
+    adjustOverlayToolZoom() {
+        let camera = this.three.getCamera();
         if (camera instanceof THREE.OrthographicCamera) {
-            var cameraZoom = camera.zoom;
+            let cameraZoom = camera.zoom;
             this.computedSnappingThreshold = this.snappingThreshold * 50 / cameraZoom;
             if (this.currentPoint) {
                 this.currentPoint.scale.setScalar(50 / cameraZoom);
             }
-            for (var _i = 0, _a = this.currentMeasureCoordinates; _i < _a.length; _i++) {
-                var mesh = _a[_i];
+            for (let mesh of this.currentMeasureCoordinates) {
                 if (mesh.geometry instanceof THREE.ShapeGeometry || mesh.geometry instanceof THREE.ExtrudeGeometry) {
                     continue;
                 }
                 mesh.scale.setScalar(50 / cameraZoom);
             }
-            for (var _b = 0, _c = this.measures; _b < _c.length; _b++) {
-                var measure = _c[_b];
+            for (let measure of this.measures) {
                 if (measure.display) {
-                    for (var _d = 0, _e = measure.display.points; _d < _e.length; _d++) {
-                        var obj = _e[_d];
+                    for (let obj of measure.display.points) {
                         if (obj.geometry instanceof THREE.ShapeGeometry || obj.geometry instanceof THREE.ExtrudeGeometry) {
                             continue;
                         }
                         obj.scale.setScalar(50 / cameraZoom);
                     }
-                    for (var _f = 0, _g = measure.display.labels; _f < _g.length; _f++) {
-                        var obj = _g[_f];
+                    for (let obj of measure.display.labels) {
                         obj.scale.setScalar(0.8 / cameraZoom);
                     }
                 }
             }
         }
-    };
-    ThreeMeasureTool.prototype.adjustActiveTool = function () {
+    }
+    adjustActiveTool() {
         if (!this.overlayTool)
             return;
-        var tool = this.overlayTool.getObjectByName('__measure-tools__');
-    };
-    ThreeMeasureTool.prototype.generateEdges = function () {
-        var _this = this;
-        this.three.getScene().traverse(function (obj) {
+        let tool = this.overlayTool.getObjectByName('__measure-tools__');
+    }
+    generateEdges() {
+        this.three.getScene().traverse((obj) => {
             if (obj instanceof THREE.Mesh) {
-                var edges = new THREE.EdgesGeometry(obj.geometry);
-                var line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: '#ccc' }));
+                const edges = new THREE.EdgesGeometry(obj.geometry);
+                const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: '#ccc' }));
                 line.name = '__measure-tools-edges__';
                 line.userData.originalObject = obj;
                 line.renderOrder = 9;
-                _this.three.getScene('overlay').add(line);
+                this.three.getScene('overlay').add(line);
             }
         });
-    };
-    ThreeMeasureTool.prototype.removeEdges = function () {
-        var objToRemove = [];
-        this.three.getScene('overlay').traverse(function (obj) {
+    }
+    removeEdges() {
+        const objToRemove = [];
+        this.three.getScene('overlay').traverse((obj) => {
             if (obj.name === '__measure-tools-edges__') {
                 objToRemove.push(obj);
             }
         });
-        for (var _i = 0, objToRemove_1 = objToRemove; _i < objToRemove_1.length; _i++) {
-            var obj = objToRemove_1[_i];
+        for (let obj of objToRemove) {
             this.three.getScene('overlay').remove(obj);
         }
-    };
-    return ThreeMeasureTool;
-}(three_tool_1.ThreeTool));
+    }
+}
 exports.ThreeMeasureTool = ThreeMeasureTool;
 
 //# sourceMappingURL=three-measure-tool.js.map

@@ -11,34 +11,33 @@ import * as THREE from 'three';
 import { bindable } from 'aurelia-framework';
 import { getLogger } from 'aurelia-logging';
 import { ThreeCustomElement } from './three';
-var log = getLogger('three-cube-view');
-var ThreeCubeView = (function () {
-    function ThreeCubeView() {
+const log = getLogger('three-cube-view');
+export class ThreeCubeView {
+    constructor() {
         this.observing = false;
     }
-    ThreeCubeView.prototype.bind = function () {
+    bind() {
         this.threeChanged();
-    };
-    ThreeCubeView.prototype.startObserving = function () {
+    }
+    startObserving() {
         if (this.observing) {
             return;
         }
         this.observing = true;
         this.update();
-    };
-    ThreeCubeView.prototype.stopObserving = function () {
+    }
+    stopObserving() {
         this.observing = false;
-    };
-    ThreeCubeView.prototype.update = function () {
-        var _this = this;
-        requestAnimationFrame(function () {
-            _this.controls.update();
-            if (_this.observing) {
-                _this.update();
+    }
+    update() {
+        requestAnimationFrame(() => {
+            this.controls.update();
+            if (this.observing) {
+                this.update();
             }
         });
-    };
-    ThreeCubeView.prototype.threeChanged = function () {
+    }
+    threeChanged() {
         if (!this.three) {
             return;
         }
@@ -56,24 +55,22 @@ var ThreeCubeView = (function () {
         this.host.append(this.controls.element);
         this.controls.element.addEventListener('click', this);
         this.startObserving();
-    };
-    ThreeCubeView.prototype.handleEvent = function (event) {
-        var id = (event.target && event.target instanceof HTMLElement) ? event.target.id : '';
+    }
+    handleEvent(event) {
+        const id = (event.target && event.target instanceof HTMLElement) ? event.target.id : '';
         if (id === 'front' || id === 'back' || id === 'top' || id === 'bottom' || id === 'left' || id === 'right') {
             this.three.navigation.zoomOnScene(1, id, true);
         }
-    };
-    ThreeCubeView.prototype.home = function () {
+    }
+    home() {
         this.three.navigation.zoomOnScene(1, '3d', true);
-    };
-    __decorate([
-        bindable,
-        __metadata("design:type", ThreeCustomElement)
-    ], ThreeCubeView.prototype, "three", void 0);
-    return ThreeCubeView;
-}());
-export { ThreeCubeView };
-var sides = {
+    }
+}
+__decorate([
+    bindable,
+    __metadata("design:type", ThreeCustomElement)
+], ThreeCubeView.prototype, "three", void 0);
+const sides = {
     front: 'rotateY(  0deg) translateZ(%SIZE)',
     right: 'rotateY( 90deg) translateZ(%SIZE)',
     back: 'rotateY(180deg) translateZ(%SIZE)',
@@ -81,15 +78,15 @@ var sides = {
     top: 'rotateX( 90deg) translateZ(%SIZE)',
     bottom: 'rotateX(-90deg) translateZ(%SIZE)'
 };
-var offsets = {
+const offsets = {
     n: [0, -1],
     e: [1, 0],
     s: [0, 1],
     w: [-1, 0]
 };
-var R = 1.7320508075688772;
-var CubeView = (function () {
-    function CubeView(camera, size, options) {
+const R = 1.7320508075688772;
+export class CubeView {
+    constructor(camera, size, options) {
         this.camera = camera;
         this.size = size;
         this.options = options;
@@ -99,7 +96,7 @@ var CubeView = (function () {
         this.options = options || {};
         this.half = size / 2;
         this.options.perspective = this.options.perspective || false;
-        var container = document.createElement('div');
+        const container = document.createElement('div');
         container.className = 'three-cube-view__element';
         container.style.width = size + this.unit;
         container.style.height = size + this.unit;
@@ -112,7 +109,7 @@ var CubeView = (function () {
         this.box.style.fontSize = (size / 6) + this.unit;
         container.appendChild(this.box);
         this.ring = document.createElement('div');
-        var s = size * R / 2;
+        const s = size * R / 2;
         this.directions = {
             n: 'translateX(' + s + this.unit + ') translateY(' + 0 + this.unit + ')',
             e: 'translateX(' + s * 2 + this.unit + ') translateY(' + s + this.unit + ')',
@@ -136,10 +133,10 @@ var CubeView = (function () {
         this.plane('Bottom');
         this.element = container;
     }
-    CubeView.prototype.direction = function (name) {
-        var e = document.createElement('div');
-        var id = name.toLowerCase();
-        var fs = this.size / 6;
+    direction(name) {
+        const e = document.createElement('div');
+        const id = name.toLowerCase();
+        const fs = this.size / 6;
         e.id = id;
         e.textContent = name;
         e.style.transform = this.directions[id];
@@ -147,10 +144,10 @@ var CubeView = (function () {
         e.style.left = (-this.size / 2 / 6 - offsets[id][0] * fs) + this.unit;
         e.style.top = (-this.size / 2 / 6 - offsets[id][1] * fs) + this.unit;
         this.ring.appendChild(e);
-    };
-    CubeView.prototype.plane = function (side) {
-        var e = document.createElement('div');
-        var id = side.toLowerCase();
+    }
+    plane(side) {
+        const e = document.createElement('div');
+        const id = side.toLowerCase();
         e.id = id;
         e.textContent = side;
         e.className = id + ' face';
@@ -160,23 +157,23 @@ var CubeView = (function () {
         e.style.lineHeight = this.size + this.unit;
         this.box.appendChild(e);
         return e;
-    };
-    CubeView.prototype.update = function () {
+    }
+    update() {
         this.matrix.copy(this.camera.matrixWorldInverse);
         this.matrix.elements[12] = this.half;
         this.matrix.elements[13] = this.half;
         this.matrix.elements[14] = 0;
-        var style = this.getObjectCSSMatrix(this.matrix);
+        const style = this.getObjectCSSMatrix(this.matrix);
         this.box.style.transform = style;
         this.element.style.perspective = ((this.options.perspective && this.camera instanceof THREE.PerspectiveCamera) ?
             (Math.pow(this.size * this.size + this.size * this.size, 0.5) / Math.tan((this.camera.fov / 2) * Math.PI / 180)) : 0) + this.unit;
-    };
-    CubeView.prototype.epsilon = function (value) {
+    }
+    epsilon(value) {
         return Math.abs(value) < 1e-10 ? 0 : value;
-    };
-    CubeView.prototype.getObjectCSSMatrix = function (matrix) {
-        var elements = matrix.elements;
-        var matrix3d = 'matrix3d(' +
+    }
+    getObjectCSSMatrix(matrix) {
+        const elements = matrix.elements;
+        const matrix3d = 'matrix3d(' +
             this.epsilon(elements[0]) + ',' +
             this.epsilon(elements[1]) + ',' +
             this.epsilon(elements[2]) + ',' +
@@ -195,9 +192,7 @@ var CubeView = (function () {
             this.epsilon(elements[15]) +
             ')';
         return 'translate(-50%,-50%)' + matrix3d;
-    };
-    return CubeView;
-}());
-export { CubeView };
+    }
+}
 
 //# sourceMappingURL=three-cube-view.js.map

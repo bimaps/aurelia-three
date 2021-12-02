@@ -11,14 +11,14 @@ import { CheckerModuleOutputModel } from './../../models/checkers/checker-intern
 import { inject, useView, bindable, customElement, bindingMode } from 'aurelia-framework';
 import { UxModalService } from '@aurelia-ux/modal';
 import { DOM } from 'aurelia-pal';
-var CheckerModuleOutputElement = (function () {
-    function CheckerModuleOutputElement(modalService, element) {
+let CheckerModuleOutputElement = class CheckerModuleOutputElement {
+    constructor(modalService, element) {
         this.modalService = modalService;
         this.element = element;
         this.inputOptions = [];
         this.opened = true;
     }
-    CheckerModuleOutputElement.prototype.addOutput = function () {
+    addOutput() {
         this.module.outputs.push({
             prefix: '',
             varName: '',
@@ -26,39 +26,38 @@ var CheckerModuleOutputElement = (function () {
             suffix: ''
         });
         this.triggerChange();
-    };
-    CheckerModuleOutputElement.prototype.removeOutput = function (index) {
-        var i = parseInt(index, 10);
+    }
+    removeOutput(index) {
+        const i = parseInt(index, 10);
         this.module.outputs.splice(i, 1);
         this.triggerChange();
-    };
-    CheckerModuleOutputElement.prototype.triggerChange = function () {
-        var customEvent = DOM.createCustomEvent('change', { bubbles: true });
+    }
+    triggerChange() {
+        const customEvent = DOM.createCustomEvent('change', { bubbles: true });
         this.element.dispatchEvent(customEvent);
-    };
-    CheckerModuleOutputElement.prototype.toggle = function () {
+    }
+    toggle() {
         this.opened = !this.opened;
-    };
-    __decorate([
-        bindable,
-        __metadata("design:type", CheckerModuleOutputModel)
-    ], CheckerModuleOutputElement.prototype, "module", void 0);
-    __decorate([
-        bindable,
-        __metadata("design:type", Array)
-    ], CheckerModuleOutputElement.prototype, "inputOptions", void 0);
-    __decorate([
-        bindable({ defaultBindingMode: bindingMode.twoWay }),
-        __metadata("design:type", Object)
-    ], CheckerModuleOutputElement.prototype, "opened", void 0);
-    CheckerModuleOutputElement = __decorate([
-        customElement('checker-module-output'),
-        useView('./checker-module-output.html'),
-        inject(UxModalService, Element),
-        __metadata("design:paramtypes", [UxModalService, HTMLElement])
-    ], CheckerModuleOutputElement);
-    return CheckerModuleOutputElement;
-}());
+    }
+};
+__decorate([
+    bindable,
+    __metadata("design:type", CheckerModuleOutputModel)
+], CheckerModuleOutputElement.prototype, "module", void 0);
+__decorate([
+    bindable,
+    __metadata("design:type", Array)
+], CheckerModuleOutputElement.prototype, "inputOptions", void 0);
+__decorate([
+    bindable({ defaultBindingMode: bindingMode.twoWay }),
+    __metadata("design:type", Object)
+], CheckerModuleOutputElement.prototype, "opened", void 0);
+CheckerModuleOutputElement = __decorate([
+    customElement('checker-module-output'),
+    useView('./checker-module-output.html'),
+    inject(UxModalService, Element),
+    __metadata("design:paramtypes", [UxModalService, HTMLElement])
+], CheckerModuleOutputElement);
 export { CheckerModuleOutputElement };
 
 //# sourceMappingURL=checker-module-output.js.map

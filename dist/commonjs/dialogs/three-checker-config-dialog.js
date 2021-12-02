@@ -17,50 +17,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ThreeCheckerConfigDialog = void 0;
-var three_1 = require("./../components/three");
-var checker_config_model_1 = require("./../models/checker-config.model");
-var modal_1 = require("@aurelia-ux/modal");
-var aurelia_resources_1 = require("aurelia-resources");
-var aurelia_framework_1 = require("aurelia-framework");
-var aurelia_logging_1 = require("aurelia-logging");
-var aurelia_resources_2 = require("aurelia-resources");
-var resolvePath = require("object-resolve-path");
-var log = aurelia_logging_1.getLogger('category-dialog');
-var ThreeCheckerConfigDialog = (function () {
-    function ThreeCheckerConfigDialog(modalService) {
+const three_1 = require("./../components/three");
+const checker_config_model_1 = require("./../models/checker-config.model");
+const modal_1 = require("@aurelia-ux/modal");
+const aurelia_resources_1 = require("aurelia-resources");
+const aurelia_framework_1 = require("aurelia-framework");
+const aurelia_logging_1 = require("aurelia-logging");
+const aurelia_resources_2 = require("aurelia-resources");
+const resolvePath = require("object-resolve-path");
+const log = aurelia_logging_1.getLogger('category-dialog');
+let ThreeCheckerConfigDialog = class ThreeCheckerConfigDialog {
+    constructor(modalService) {
         this.modalService = modalService;
         this.mode = 'create';
     }
-    ThreeCheckerConfigDialog.prototype.activate = function (params) {
+    activate(params) {
         if (params.siteId) {
             this.siteId = params.siteId;
         }
@@ -77,294 +50,219 @@ var ThreeCheckerConfigDialog = (function () {
             this.checker.siteId = this.siteId;
             this.mode = 'create';
         }
-    };
-    ThreeCheckerConfigDialog.prototype.canDeactivate = function (result) {
-        return __awaiter(this, void 0, void 0, function () {
-            var confirm_1, confirmResult, validationResult, _i, _a, result_1, category, error_1;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        if (result.wasCancelled) {
-                            return [2, true];
-                        }
-                        if (!(result.output === 'remove')) return [3, 3];
-                        return [4, this.modalService.open({
-                                viewModel: aurelia_resources_1.ConfirmDialog,
-                                model: { title: 'Are you sure ?', text: "Remove the checker " + this.checker.name + " ?" }
-                            })];
-                    case 1:
-                        confirm_1 = _b.sent();
-                        return [4, confirm_1.whenClosed()];
-                    case 2:
-                        confirmResult = _b.sent();
-                        if (!confirmResult.wasCancelled) {
-                            this.remove();
-                        }
-                        return [2];
-                    case 3: return [4, this.checker.validationController.validate()];
-                    case 4:
-                        validationResult = _b.sent();
-                        if (!validationResult.valid) {
-                            for (_i = 0, _a = validationResult.results; _i < _a.length; _i++) {
-                                result_1 = _a[_i];
-                                if (!result_1.valid) {
-                                    aurelia_resources_1.errorify(new Error(result_1.message));
-                                }
-                            }
-                            return [2, false];
-                        }
-                        _b.label = 5;
-                    case 5:
-                        _b.trys.push([5, 7, , 8]);
-                        return [4, this.save()];
-                    case 6:
-                        category = _b.sent();
-                        result.output = category;
-                        return [3, 8];
-                    case 7:
-                        error_1 = _b.sent();
-                        aurelia_resources_1.errorify(error_1);
-                        return [2, false];
-                    case 8: return [2];
+    }
+    canDeactivate(result) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (result.wasCancelled) {
+                return true;
+            }
+            if (result.output === 'remove') {
+                const confirm = yield this.modalService.open({
+                    viewModel: aurelia_resources_1.ConfirmDialog,
+                    model: { title: 'Are you sure ?', text: `Remove the checker ${this.checker.name} ?` }
+                });
+                const confirmResult = yield confirm.whenClosed();
+                if (!confirmResult.wasCancelled) {
+                    this.remove();
                 }
-            });
-        });
-    };
-    ThreeCheckerConfigDialog.prototype.save = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var checker;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (!(this.mode === 'create')) return [3, 2];
-                        return [4, this.checker.save()];
-                    case 1:
-                        checker = _a.sent();
-                        return [3, 4];
-                    case 2: return [4, this.checker.updateProperties('', Object.keys(this.checker))];
-                    case 3:
-                        checker = _a.sent();
-                        _a.label = 4;
-                    case 4: return [2, checker];
+                return;
+            }
+            const validationResult = yield this.checker.validationController.validate();
+            if (!validationResult.valid) {
+                for (let result of validationResult.results) {
+                    if (!result.valid) {
+                        aurelia_resources_1.errorify(new Error(result.message));
+                    }
                 }
-            });
+                return false;
+            }
+            try {
+                const category = yield this.save();
+                result.output = category;
+            }
+            catch (error) {
+                aurelia_resources_1.errorify(error);
+                return false;
+            }
         });
-    };
-    ThreeCheckerConfigDialog.prototype.remove = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (!(this.mode === 'edit')) return [3, 2];
-                        return [4, this.checker.remove()];
-                    case 1:
-                        _a.sent();
-                        _a.label = 2;
-                    case 2: return [2];
-                }
-            });
+    }
+    save() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let checker;
+            if (this.mode === 'create') {
+                checker = yield this.checker.save();
+            }
+            else {
+                checker = yield this.checker.updateProperties('', Object.keys(this.checker));
+            }
+            return checker;
         });
-    };
-    ThreeCheckerConfigDialog.prototype.addCondition = function () {
+    }
+    remove() {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this.mode === 'edit') {
+                yield this.checker.remove();
+            }
+        });
+    }
+    addCondition() {
         this.checker.conditions.push({
             key: '',
             operator: '=',
             value: ''
         });
-    };
-    ThreeCheckerConfigDialog.prototype.removeCondition = function (index) {
-        var i = parseInt(index, 10);
+    }
+    removeCondition(index) {
+        const i = parseInt(index, 10);
         this.checker.conditions.splice(i, 1);
-    };
-    ThreeCheckerConfigDialog.prototype.setConditionType = function (condition, operator) {
+    }
+    setConditionType(condition, operator) {
         condition.operator = operator;
-    };
-    ThreeCheckerConfigDialog.prototype.keyHelperList = function (destinationObject, destinationKey) {
-        return __awaiter(this, void 0, void 0, function () {
-            var currentValue, options, userDataKeys_2, userDataKeys2_1, _i, userDataKeys_1, key, key, _a, _b, key2, dialog, result;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
-                    case 0:
-                        currentValue = destinationObject[destinationKey];
-                        options = [];
-                        options.push({ value: 'uuid', label: 'uuid' });
-                        options.push({ value: 'name', label: 'name' });
-                        options.push({ value: 'type', label: 'type' });
-                        options.push({ value: 'parent.uuid', label: 'parent.uuid' });
-                        options.push({ value: 'parent.type', label: 'parent.type' });
-                        options.push({ value: 'parent.name', label: 'parent.name' });
-                        options.push({ value: 'position.x', label: 'position.x' });
-                        options.push({ value: 'position.y', label: 'position.y' });
-                        options.push({ value: 'position.z', label: 'position.z' });
-                        options.push({ value: 'visible', label: 'visible' });
-                        options.push({ value: 'geometry.uuid', label: 'geometry.uuid' });
-                        options.push({ value: 'geometry.type', label: 'geometry.type' });
-                        options.push({ value: 'geometry.name', label: 'geometry.name' });
-                        options.push({ value: 'material.uuid', label: 'material.uuid' });
-                        options.push({ value: 'material.type', label: 'material.type' });
-                        options.push({ value: 'material.name', label: 'material.name' });
-                        options.push({ value: '__clicked', label: '__clicked' });
-                        if (this.three && this.three instanceof three_1.ThreeCustomElement) {
-                            userDataKeys_2 = [];
-                            userDataKeys2_1 = {};
-                            this.three.getScene().traverse(function (obj) {
-                                var newKeys = Object.keys(obj.userData).filter(function (i) { return !userDataKeys_2.includes(i); });
-                                var keysToAdd = [];
-                                var _loop_1 = function (key) {
-                                    var value = obj.userData[key];
-                                    if (typeof value === 'string' || typeof value === 'number') {
-                                        keysToAdd.push(key);
-                                    }
-                                    if (typeof value === 'object' && !Array.isArray(value) && value !== undefined) {
-                                        if (!userDataKeys2_1[key]) {
-                                            userDataKeys2_1[key] = [];
-                                        }
-                                        var newKeys2 = Object.keys(obj.userData[key]).filter(function (i) { return !userDataKeys2_1[key].includes(i); });
-                                        for (var _a = 0, newKeys2_1 = newKeys2; _a < newKeys2_1.length; _a++) {
-                                            var key2 = newKeys2_1[_a];
-                                            var value2 = obj.userData[key][key2];
-                                            if (typeof value2 === 'string' || typeof value2 === 'number') {
-                                                userDataKeys2_1[key].push(key2);
-                                            }
-                                        }
-                                    }
-                                };
-                                for (var _i = 0, newKeys_1 = newKeys; _i < newKeys_1.length; _i++) {
-                                    var key = newKeys_1[_i];
-                                    _loop_1(key);
-                                }
-                                userDataKeys_2.push.apply(userDataKeys_2, keysToAdd);
-                            });
-                            for (_i = 0, userDataKeys_1 = userDataKeys_2; _i < userDataKeys_1.length; _i++) {
-                                key = userDataKeys_1[_i];
-                                options.push({ value: "userData." + key, label: "userData." + key });
+    }
+    keyHelperList(destinationObject, destinationKey) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const currentValue = destinationObject[destinationKey];
+            let options = [];
+            options.push({ value: 'uuid', label: 'uuid' });
+            options.push({ value: 'name', label: 'name' });
+            options.push({ value: 'type', label: 'type' });
+            options.push({ value: 'parent.uuid', label: 'parent.uuid' });
+            options.push({ value: 'parent.type', label: 'parent.type' });
+            options.push({ value: 'parent.name', label: 'parent.name' });
+            options.push({ value: 'position.x', label: 'position.x' });
+            options.push({ value: 'position.y', label: 'position.y' });
+            options.push({ value: 'position.z', label: 'position.z' });
+            options.push({ value: 'visible', label: 'visible' });
+            options.push({ value: 'geometry.uuid', label: 'geometry.uuid' });
+            options.push({ value: 'geometry.type', label: 'geometry.type' });
+            options.push({ value: 'geometry.name', label: 'geometry.name' });
+            options.push({ value: 'material.uuid', label: 'material.uuid' });
+            options.push({ value: 'material.type', label: 'material.type' });
+            options.push({ value: 'material.name', label: 'material.name' });
+            options.push({ value: '__clicked', label: '__clicked' });
+            if (this.three && this.three instanceof three_1.ThreeCustomElement) {
+                let userDataKeys = [];
+                let userDataKeys2 = {};
+                this.three.getScene().traverse((obj) => {
+                    let newKeys = Object.keys(obj.userData).filter(i => !userDataKeys.includes(i));
+                    let keysToAdd = [];
+                    for (let key of newKeys) {
+                        const value = obj.userData[key];
+                        if (typeof value === 'string' || typeof value === 'number') {
+                            keysToAdd.push(key);
+                        }
+                        if (typeof value === 'object' && !Array.isArray(value) && value !== undefined) {
+                            if (!userDataKeys2[key]) {
+                                userDataKeys2[key] = [];
                             }
-                            for (key in userDataKeys2_1) {
-                                for (_a = 0, _b = userDataKeys2_1[key]; _a < _b.length; _a++) {
-                                    key2 = _b[_a];
-                                    options.push({ value: "userData." + key + "." + key2, label: "userData." + key + "." + key2 });
+                            let newKeys2 = Object.keys(obj.userData[key]).filter(i => !userDataKeys2[key].includes(i));
+                            for (let key2 of newKeys2) {
+                                const value2 = obj.userData[key][key2];
+                                if (typeof value2 === 'string' || typeof value2 === 'number') {
+                                    userDataKeys2[key].push(key2);
                                 }
                             }
                         }
-                        return [4, this.modalService.open({
-                                viewModel: aurelia_resources_2.PromptSelectDialog,
-                                model: {
-                                    options: options,
-                                    autoClose: true,
-                                    required: false,
-                                    mode: 'single',
-                                    labelKey: 'label',
-                                    valueKey: 'value',
-                                    value: currentValue
-                                }
-                            })];
-                    case 1:
-                        dialog = _c.sent();
-                        return [4, dialog.whenClosed()];
-                    case 2:
-                        result = _c.sent();
-                        if (!result.wasCancelled && result.output) {
-                            destinationObject[destinationKey] = result.output;
-                        }
-                        return [2];
+                    }
+                    userDataKeys.push(...keysToAdd);
+                });
+                for (let key of userDataKeys) {
+                    options.push({ value: `userData.${key}`, label: `userData.${key}` });
+                }
+                for (let key in userDataKeys2) {
+                    for (let key2 of userDataKeys2[key]) {
+                        options.push({ value: `userData.${key}.${key2}`, label: `userData.${key}.${key2}` });
+                    }
+                }
+            }
+            const dialog = yield this.modalService.open({
+                viewModel: aurelia_resources_2.PromptSelectDialog,
+                model: {
+                    options: options,
+                    autoClose: true,
+                    required: false,
+                    mode: 'single',
+                    labelKey: 'label',
+                    valueKey: 'value',
+                    value: currentValue
                 }
             });
+            const result = yield dialog.whenClosed();
+            if (!result.wasCancelled && result.output) {
+                destinationObject[destinationKey] = result.output;
+            }
         });
-    };
-    ThreeCheckerConfigDialog.prototype.valueHelperList = function (key, destinationObject, destinationKey) {
-        return __awaiter(this, void 0, void 0, function () {
-            var currentValue, options, values_2, _i, values_1, value, dialog, result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (!key)
-                            return [2];
-                        currentValue = destinationObject[destinationKey];
-                        options = [];
-                        if (this.three && this.three instanceof three_1.ThreeCustomElement) {
-                            values_2 = [];
-                            this.three.getScene().traverse(function (obj) {
-                                var value = resolvePath(obj, key);
-                                if (values_2.indexOf(value) === -1) {
-                                    values_2.push(value);
-                                }
-                            });
-                            for (_i = 0, values_1 = values_2; _i < values_1.length; _i++) {
-                                value = values_1[_i];
-                                options.push({ value: "" + value, label: "" + value });
-                            }
-                        }
-                        return [4, this.modalService.open({
-                                viewModel: aurelia_resources_2.PromptSelectDialog,
-                                model: {
-                                    options: options,
-                                    autoClose: true,
-                                    required: false,
-                                    mode: 'single',
-                                    labelKey: 'label',
-                                    valueKey: 'value',
-                                    value: currentValue
-                                }
-                            })];
-                    case 1:
-                        dialog = _a.sent();
-                        return [4, dialog.whenClosed()];
-                    case 2:
-                        result = _a.sent();
-                        if (!result.wasCancelled && result.output) {
-                            destinationObject[destinationKey] = result.output;
-                        }
-                        return [2];
+    }
+    valueHelperList(key, destinationObject, destinationKey) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!key)
+                return;
+            const currentValue = destinationObject[destinationKey];
+            let options = [];
+            if (this.three && this.three instanceof three_1.ThreeCustomElement) {
+                let values = [];
+                this.three.getScene().traverse((obj) => {
+                    let value = resolvePath(obj, key);
+                    if (values.indexOf(value) === -1) {
+                        values.push(value);
+                    }
+                });
+                for (let value of values) {
+                    options.push({ value: `${value}`, label: `${value}` });
+                }
+            }
+            const dialog = yield this.modalService.open({
+                viewModel: aurelia_resources_2.PromptSelectDialog,
+                model: {
+                    options: options,
+                    autoClose: true,
+                    required: false,
+                    mode: 'single',
+                    labelKey: 'label',
+                    valueKey: 'value',
+                    value: currentValue
                 }
             });
+            const result = yield dialog.whenClosed();
+            if (!result.wasCancelled && result.output) {
+                destinationObject[destinationKey] = result.output;
+            }
         });
-    };
-    ThreeCheckerConfigDialog.prototype.expressionBuilder = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var options, dialog, result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        options = [
-                            { label: 'Average', value: 'average' },
-                            { label: 'Percent', value: 'percent' },
-                        ];
-                        return [4, this.modalService.open({
-                                viewModel: aurelia_resources_2.PromptSelectDialog,
-                                model: {
-                                    options: options,
-                                    autoClose: true,
-                                    required: false,
-                                    mode: 'single',
-                                    labelKey: 'label',
-                                    valueKey: 'value',
-                                    value: ''
-                                }
-                            })];
-                    case 1:
-                        dialog = _a.sent();
-                        return [4, dialog.whenClosed()];
-                    case 2:
-                        result = _a.sent();
-                        if (!result.wasCancelled && result.output) {
-                            if (result.output === 'average') {
-                                this.checker.operationSettings.expression = "value / nbItems";
-                            }
-                            else if (result.output === 'percent') {
-                                this.checker.operationSettings.expression = "value * 0.5";
-                            }
-                        }
-                        return [2];
+    }
+    expressionBuilder() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const options = [
+                { label: 'Average', value: 'average' },
+                { label: 'Percent', value: 'percent' },
+            ];
+            const dialog = yield this.modalService.open({
+                viewModel: aurelia_resources_2.PromptSelectDialog,
+                model: {
+                    options: options,
+                    autoClose: true,
+                    required: false,
+                    mode: 'single',
+                    labelKey: 'label',
+                    valueKey: 'value',
+                    value: ''
                 }
             });
+            const result = yield dialog.whenClosed();
+            if (!result.wasCancelled && result.output) {
+                if (result.output === 'average') {
+                    this.checker.operationSettings.expression = `value / nbItems`;
+                }
+                else if (result.output === 'percent') {
+                    this.checker.operationSettings.expression = `value * 0.5`;
+                }
+            }
         });
-    };
-    ThreeCheckerConfigDialog = __decorate([
-        aurelia_framework_1.inject(modal_1.UxModalService),
-        __metadata("design:paramtypes", [modal_1.UxModalService])
-    ], ThreeCheckerConfigDialog);
-    return ThreeCheckerConfigDialog;
-}());
+    }
+};
+ThreeCheckerConfigDialog = __decorate([
+    aurelia_framework_1.inject(modal_1.UxModalService),
+    __metadata("design:paramtypes", [modal_1.UxModalService])
+], ThreeCheckerConfigDialog);
 exports.ThreeCheckerConfigDialog = ThreeCheckerConfigDialog;
 
 //# sourceMappingURL=three-checker-config-dialog.js.map

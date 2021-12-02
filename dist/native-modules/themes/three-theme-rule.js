@@ -1,6 +1,6 @@
 import { ThreeStyleDefinition } from "./three-style-definition";
-var ThreeThemeRule = (function () {
-    function ThreeThemeRule() {
+export class ThreeThemeRule {
+    constructor() {
         this.active = true;
         this.context = [];
         this.conditions = [];
@@ -10,8 +10,6 @@ var ThreeThemeRule = (function () {
         this.last = false;
         this.applyToChildren = true;
     }
-    return ThreeThemeRule;
-}());
-export { ThreeThemeRule };
+}
 
 //# sourceMappingURL=three-theme-rule.js.map

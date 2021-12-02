@@ -2,7 +2,7 @@ import { ThreeThemeRule } from "./three-theme-rule";
 import { ThreeStyleDefinition } from "./three-style-definition";
 import { ThreeTheme } from "./three-theme";
 import * as THREE from 'three';
-var rule1 = new ThreeThemeRule();
+let rule1 = new ThreeThemeRule();
 rule1.conditions = [{
         key: 'userData.id',
         type: '!=',
@@ -12,7 +12,7 @@ rule1.definition = new ThreeStyleDefinition();
 rule1.definition.display = true;
 rule1.definition.material = new THREE.MeshBasicMaterial({ color: 'red' });
 rule1.applyToChildren = false;
-var theme = new ThreeTheme();
+let theme = new ThreeTheme();
 theme.name = 'default';
 theme.rules = [
     rule1

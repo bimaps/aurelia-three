@@ -8,40 +8,36 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { computedFrom } from "aurelia-binding";
-var ThreeToolsService = (function () {
-    function ThreeToolsService(three) {
+export class ThreeToolsService {
+    constructor(three) {
         this.registeredTools = {};
         this.three = three;
     }
-    Object.defineProperty(ThreeToolsService.prototype, "currentToolName", {
-        get: function () {
-            if (!this.currentTool)
-                return '';
-            return this.currentTool.name;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ThreeToolsService.prototype.registerTool = function (tool) {
+    get currentToolName() {
+        if (!this.currentTool)
+            return '';
+        return this.currentTool.name;
+    }
+    registerTool(tool) {
         if (!tool.name)
             throw new Error('Tool must have a name');
         if (this.registeredTools[tool.name])
             throw new Error('Another tool with the same name is already registered');
         this.registeredTools[tool.name] = tool;
-    };
-    ThreeToolsService.prototype.deactivateAll = function () {
+    }
+    deactivateAll() {
         if (this.currentTool) {
             this.currentTool.deactivate();
         }
         this.currentTool = null;
-    };
-    ThreeToolsService.prototype.activate = function (tool) {
-        var toolToActivate;
+    }
+    activate(tool) {
+        let toolToActivate;
         if (typeof tool === 'string' && this.registeredTools[tool]) {
             toolToActivate = this.registeredTools[tool];
         }
         else {
-            for (var toolName in this.registeredTools) {
+            for (let toolName in this.registeredTools) {
                 if (this.registeredTools[toolName] === tool) {
                     toolToActivate = this.registeredTools[toolName];
                 }
@@ -56,17 +52,15 @@ var ThreeToolsService = (function () {
         }
         toolToActivate.activate(this.three);
         this.currentTool = toolToActivate;
-    };
-    ThreeToolsService.prototype.getRegisteredTool = function (toolName) {
+    }
+    getRegisteredTool(toolName) {
         return this.registeredTools[toolName];
-    };
-    __decorate([
-        computedFrom('currentTool', 'currentTool.name'),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [])
-    ], ThreeToolsService.prototype, "currentToolName", null);
-    return ThreeToolsService;
-}());
-export { ThreeToolsService };
+    }
+}
+__decorate([
+    computedFrom('currentTool', 'currentTool.name'),
+    __metadata("design:type", String),
+    __metadata("design:paramtypes", [])
+], ThreeToolsService.prototype, "currentToolName", null);
 
 //# sourceMappingURL=three-tools-service.js.map

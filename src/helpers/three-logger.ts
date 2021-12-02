@@ -9,7 +9,7 @@ export class ThreeLogger {
 
   }
 
-  public logPoints(points: THREE.Vector3 | THREE.Vector3[] | null, name: string, color: string, timeout: number = 0) {
+  public logPoints(points: THREE.Vector3 | THREE.Vector3[] | null, name: string, color: string, timeout: number = 0) {
     if (!this.log) {
       return;
     }
@@ -38,7 +38,7 @@ export class ThreeLogger {
     }
   }
 
-  public logAxis(axis: THREE.Vector3 | null, name: string, color: string, timeout: number = 0) {
+  public logAxis(axis: THREE.Vector3 | null, name: string, color: string, timeout: number = 0) {
     if (!this.log) {
       return;
     }
@@ -51,8 +51,7 @@ export class ThreeLogger {
     }
     const p1 = axis.clone().multiplyScalar(20);
     const p2 = p1.clone().negate();
-    const geometry = new THREE.Geometry();
-    geometry.vertices.push(p1 ,p2);
+    const geometry = new THREE.BufferGeometry().setFromPoints([p1, p2]);
     const mesh = new THREE.Line(geometry, new THREE.LineBasicMaterial({color: color, depthTest: false}));
     mesh.name = name;
     mesh.renderOrder = 10;

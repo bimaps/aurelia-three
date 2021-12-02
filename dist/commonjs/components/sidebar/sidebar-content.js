@@ -10,45 +10,40 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SidebarContent = void 0;
-var aurelia_framework_1 = require("aurelia-framework");
-var aurelia_logging_1 = require("aurelia-logging");
-var SidebarContent = (function () {
-    function SidebarContent(element) {
+const aurelia_framework_1 = require("aurelia-framework");
+const aurelia_logging_1 = require("aurelia-logging");
+let SidebarContent = class SidebarContent {
+    constructor(element) {
         this.element = element;
         this.parentElement = document.createElement('div');
         this.headerElement = document.createElement('div');
         this.footerElement = document.createElement('div');
         this.log = aurelia_logging_1.getLogger('comp:sidebar-content');
     }
-    SidebarContent.prototype.attached = function () {
+    attached() {
         this.parentElement = this.element.parentElement;
-        var header = this.element.parentElement.querySelector('.sidebar-header');
+        let header = this.element.parentElement.querySelector('.sidebar-header');
         if (header instanceof HTMLElement) {
             this.headerElement = header;
         }
-        var footer = this.element.parentElement.querySelector('.sidebar-footer');
+        let footer = this.element.parentElement.querySelector('.sidebar-footer');
         if (footer instanceof HTMLElement) {
             this.footerElement = footer;
         }
-    };
-    Object.defineProperty(SidebarContent.prototype, "height", {
-        get: function () {
-            return this.parentElement.offsetHeight - this.headerElement.offsetHeight - this.footerElement.offsetHeight;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    __decorate([
-        aurelia_framework_1.computedFrom('parentElement', 'headerElement', 'footerElement', 'parentElement.offsetHeight', 'headerElement.offsetHeight', 'footerElement.offsetHeight'),
-        __metadata("design:type", Number),
-        __metadata("design:paramtypes", [])
-    ], SidebarContent.prototype, "height", null);
-    SidebarContent = __decorate([
-        aurelia_framework_1.inject(Element),
-        __metadata("design:paramtypes", [Element])
-    ], SidebarContent);
-    return SidebarContent;
-}());
+    }
+    get height() {
+        return this.parentElement.offsetHeight - this.headerElement.offsetHeight - this.footerElement.offsetHeight;
+    }
+};
+__decorate([
+    aurelia_framework_1.computedFrom('parentElement', 'headerElement', 'footerElement', 'parentElement.offsetHeight', 'headerElement.offsetHeight', 'footerElement.offsetHeight'),
+    __metadata("design:type", Number),
+    __metadata("design:paramtypes", [])
+], SidebarContent.prototype, "height", null);
+SidebarContent = __decorate([
+    aurelia_framework_1.inject(Element),
+    __metadata("design:paramtypes", [Element])
+], SidebarContent);
 exports.SidebarContent = SidebarContent;
 
 //# sourceMappingURL=sidebar-content.js.map

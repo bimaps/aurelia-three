@@ -9,17 +9,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { inject } from 'aurelia-framework';
 import { getLogger } from 'aurelia-logging';
-var SidebarFooter = (function () {
-    function SidebarFooter(element) {
+let SidebarFooter = class SidebarFooter {
+    constructor(element) {
         this.element = element;
         this.log = getLogger('comp:sidebar-footer');
     }
-    SidebarFooter = __decorate([
-        inject(Element),
-        __metadata("design:paramtypes", [Element])
-    ], SidebarFooter);
-    return SidebarFooter;
-}());
+};
+SidebarFooter = __decorate([
+    inject(Element),
+    __metadata("design:paramtypes", [Element])
+], SidebarFooter);
 export { SidebarFooter };
 
 //# sourceMappingURL=sidebar-footer.js.map

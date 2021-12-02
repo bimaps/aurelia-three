@@ -10,38 +10,37 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CheckerModuleDistanceElement = void 0;
-var checker_internals_1 = require("./../../models/checkers/checker-internals");
-var aurelia_framework_1 = require("aurelia-framework");
-var modal_1 = require("@aurelia-ux/modal");
-var CheckerModuleDistanceElement = (function () {
-    function CheckerModuleDistanceElement(modalService) {
+const checker_internals_1 = require("./../../models/checkers/checker-internals");
+const aurelia_framework_1 = require("aurelia-framework");
+const modal_1 = require("@aurelia-ux/modal");
+let CheckerModuleDistanceElement = class CheckerModuleDistanceElement {
+    constructor(modalService) {
         this.modalService = modalService;
         this.inputOptions = [];
         this.opened = true;
     }
-    CheckerModuleDistanceElement.prototype.toggle = function () {
+    toggle() {
         this.opened = !this.opened;
-    };
-    __decorate([
-        aurelia_framework_1.bindable,
-        __metadata("design:type", checker_internals_1.CheckerModuleDistanceModel)
-    ], CheckerModuleDistanceElement.prototype, "module", void 0);
-    __decorate([
-        aurelia_framework_1.bindable,
-        __metadata("design:type", Array)
-    ], CheckerModuleDistanceElement.prototype, "inputOptions", void 0);
-    __decorate([
-        aurelia_framework_1.bindable({ defaultBindingMode: aurelia_framework_1.bindingMode.twoWay }),
-        __metadata("design:type", Object)
-    ], CheckerModuleDistanceElement.prototype, "opened", void 0);
-    CheckerModuleDistanceElement = __decorate([
-        aurelia_framework_1.customElement('checker-module-distance'),
-        aurelia_framework_1.useView('./checker-module-distance.html'),
-        aurelia_framework_1.inject(modal_1.UxModalService),
-        __metadata("design:paramtypes", [modal_1.UxModalService])
-    ], CheckerModuleDistanceElement);
-    return CheckerModuleDistanceElement;
-}());
+    }
+};
+__decorate([
+    aurelia_framework_1.bindable,
+    __metadata("design:type", checker_internals_1.CheckerModuleDistanceModel)
+], CheckerModuleDistanceElement.prototype, "module", void 0);
+__decorate([
+    aurelia_framework_1.bindable,
+    __metadata("design:type", Array)
+], CheckerModuleDistanceElement.prototype, "inputOptions", void 0);
+__decorate([
+    aurelia_framework_1.bindable({ defaultBindingMode: aurelia_framework_1.bindingMode.twoWay }),
+    __metadata("design:type", Object)
+], CheckerModuleDistanceElement.prototype, "opened", void 0);
+CheckerModuleDistanceElement = __decorate([
+    aurelia_framework_1.customElement('checker-module-distance'),
+    aurelia_framework_1.useView('./checker-module-distance.html'),
+    aurelia_framework_1.inject(modal_1.UxModalService),
+    __metadata("design:paramtypes", [modal_1.UxModalService])
+], CheckerModuleDistanceElement);
 exports.CheckerModuleDistanceElement = CheckerModuleDistanceElement;
 
 //# sourceMappingURL=checker-module-distance.js.map

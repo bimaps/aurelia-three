@@ -1,53 +1,39 @@
 "use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ThreeGeometry = void 0;
-var THREE = require("three");
-var ThreeGeometry = (function () {
-    function ThreeGeometry() {
-    }
-    ThreeGeometry.init = function () {
+const THREE = require("three");
+class ThreeGeometry {
+    static init() {
         if (ThreeGeometry.inited) {
             return;
         }
-        ThreeGeometry.register('cone', function () {
+        ThreeGeometry.register('cone', () => {
             return new THREE.ConeGeometry(20, 80, 32);
         });
-        ThreeGeometry.register('cube', function () {
-            var translation = new THREE.Matrix4().makeTranslation(10, 10, 10);
-            return new THREE.BoxGeometry(20, 20, 20).applyMatrix(translation);
+        ThreeGeometry.register('cube', () => {
+            let translation = new THREE.Matrix4().makeTranslation(10, 10, 10);
+            return new THREE.BoxGeometry(20, 20, 20).applyMatrix4(translation);
         });
-        ThreeGeometry.register('sphere', function () {
+        ThreeGeometry.register('sphere', () => {
             return new THREE.SphereGeometry(20, 32, 32);
         });
-        ThreeGeometry.register('cylinder', function () {
+        ThreeGeometry.register('cylinder', () => {
             return new THREE.CylinderGeometry(20, 20, 20, 32);
         });
         ThreeGeometry.inited = true;
-    };
-    ThreeGeometry.register = function (name, callback) {
+    }
+    static register(name, callback) {
         ThreeGeometry.registered[name] = callback;
-    };
-    ThreeGeometry.get = function (name, context) {
-        var _a;
-        if (context === void 0) { context = null; }
-        var params = [];
-        for (var _i = 2; _i < arguments.length; _i++) {
-            params[_i - 2] = arguments[_i];
-        }
+    }
+    static get(name, context = null, ...params) {
         ThreeGeometry.init();
         if (!ThreeGeometry.registered[name])
             return null;
-        return (_a = ThreeGeometry.registered[name]).call.apply(_a, __spreadArray([context], params));
-    };
-    ThreeGeometry.registered = {};
-    ThreeGeometry.inited = false;
-    return ThreeGeometry;
-}());
+        return ThreeGeometry.registered[name].call(context, ...params);
+    }
+}
 exports.ThreeGeometry = ThreeGeometry;
+ThreeGeometry.registered = {};
+ThreeGeometry.inited = false;
 
 //# sourceMappingURL=three-geometry.js.map

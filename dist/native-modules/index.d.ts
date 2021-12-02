@@ -41,7 +41,6 @@ export * from './themes/three-theme-rule';
 export * from './tools/three-measure-tool';
 export * from './tools/three-rotation-tool';
 export * from './tools/three-selection-tool';
-export * from './tools/three-slice-tool';
 export * from './tools/three-tool';
 export * from './tools/three-tools-service';
 export * from './tools/three-translation-tool';

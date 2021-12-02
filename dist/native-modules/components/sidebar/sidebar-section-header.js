@@ -9,25 +9,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { inject, bindable } from 'aurelia-framework';
 import { getLogger } from 'aurelia-logging';
-var SidebarSectionHeader = (function () {
-    function SidebarSectionHeader(element) {
+let SidebarSectionHeader = class SidebarSectionHeader {
+    constructor(element) {
         this.element = element;
         this.opened = false;
         this.log = getLogger('comp:sidebar-section-header');
     }
-    SidebarSectionHeader.prototype.toggle = function () {
+    toggle() {
         this.opened = !this.opened;
-    };
-    __decorate([
-        bindable,
-        __metadata("design:type", Boolean)
-    ], SidebarSectionHeader.prototype, "opened", void 0);
-    SidebarSectionHeader = __decorate([
-        inject(Element),
-        __metadata("design:paramtypes", [Element])
-    ], SidebarSectionHeader);
-    return SidebarSectionHeader;
-}());
+    }
+};
+__decorate([
+    bindable,
+    __metadata("design:type", Boolean)
+], SidebarSectionHeader.prototype, "opened", void 0);
+SidebarSectionHeader = __decorate([
+    inject(Element),
+    __metadata("design:paramtypes", [Element])
+], SidebarSectionHeader);
 export { SidebarSectionHeader };
 
 //# sourceMappingURL=sidebar-section-header.js.map

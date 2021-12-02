@@ -1,37 +1,35 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ThreeTool = void 0;
-var aurelia_framework_1 = require("aurelia-framework");
-var ThreeTool = (function () {
-    function ThreeTool(service) {
-        var _this = this;
+const aurelia_framework_1 = require("aurelia-framework");
+class ThreeTool {
+    constructor(service) {
         this.active = false;
-        aurelia_framework_1.Container.instance.get(aurelia_framework_1.TaskQueue).queueMicroTask(function () {
-            _this.service = service;
-            if (_this.canRegister()) {
-                _this.service.registerTool(_this);
+        aurelia_framework_1.Container.instance.get(aurelia_framework_1.TaskQueue).queueMicroTask(() => {
+            this.service = service;
+            if (this.canRegister()) {
+                this.service.registerTool(this);
             }
         });
         return this;
     }
-    ThreeTool.prototype.canRegister = function () {
+    canRegister() {
         return true;
-    };
-    ThreeTool.prototype.activate = function (three) {
+    }
+    activate(three) {
         this.three = three;
         this.active = true;
         this.onActivate();
-    };
-    ThreeTool.prototype.deactivate = function () {
+    }
+    deactivate() {
         this.onDeactivate();
         this.active = false;
-    };
-    ThreeTool.prototype.onActivate = function () {
-    };
-    ThreeTool.prototype.onDeactivate = function () {
-    };
-    return ThreeTool;
-}());
+    }
+    onActivate() {
+    }
+    onDeactivate() {
+    }
+}
 exports.ThreeTool = ThreeTool;
 
 //# sourceMappingURL=three-tool.js.map

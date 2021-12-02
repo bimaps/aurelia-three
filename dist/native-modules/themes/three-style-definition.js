@@ -1,25 +1,23 @@
-var ThreeStyleDefinition = (function () {
-    function ThreeStyleDefinition() {
-    }
-    ThreeStyleDefinition.prototype.clone = function () {
-        var clone = new ThreeStyleDefinition();
+export class ThreeStyleDefinition {
+    clone() {
+        let clone = new ThreeStyleDefinition();
         clone.setWithProperties(this);
         return clone;
-    };
-    ThreeStyleDefinition.prototype.setWithProperties = function (definition) {
-        for (var key in this) {
+    }
+    setWithProperties(definition) {
+        for (let key in this) {
             if (typeof key !== 'string')
                 continue;
             if (definition[key] !== undefined)
                 this[key] = definition[key];
         }
-    };
-    ThreeStyleDefinition.prototype.augment = function (definition) {
-        var entryDefinition = Object.assign({}, definition);
+    }
+    augment(definition) {
+        const entryDefinition = Object.assign({}, definition);
         entryDefinition.displayLabel = entryDefinition.displayLabel ? true : undefined;
         entryDefinition.icon = entryDefinition.icon ? true : undefined;
         entryDefinition.replaceGeometry = entryDefinition.replaceGeometry ? true : undefined;
-        for (var key in entryDefinition) {
+        for (const key in entryDefinition) {
             if (entryDefinition.display === undefined && (key === 'material' || key === 'geometry' || key === 'color' || key === 'opacity' || key === 'renderOrder' || key === 'image')) {
                 entryDefinition[key] = undefined;
             }
@@ -36,18 +34,16 @@ var ThreeStyleDefinition = (function () {
                 entryDefinition[key] = undefined;
             }
         }
-        for (var key in entryDefinition) {
+        for (let key in entryDefinition) {
             if (typeof key !== 'string')
                 continue;
             if (entryDefinition[key] !== undefined)
                 this[key] = entryDefinition[key];
         }
-    };
-    ThreeStyleDefinition.prototype.clear = function () {
+    }
+    clear() {
         this.setWithProperties(new ThreeStyleDefinition);
-    };
-    return ThreeStyleDefinition;
-}());
-export { ThreeStyleDefinition };
+    }
+}
 
 //# sourceMappingURL=three-style-definition.js.map

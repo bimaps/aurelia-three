@@ -10,27 +10,27 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CheckerModuleIfElement = void 0;
-var checker_internals_1 = require("./../../models/checkers/checker-internals");
-var aurelia_framework_1 = require("aurelia-framework");
-var modal_1 = require("@aurelia-ux/modal");
-var aurelia_pal_1 = require("aurelia-pal");
-var CheckerModuleIfElement = (function () {
-    function CheckerModuleIfElement(modalService, element) {
+const checker_internals_1 = require("./../../models/checkers/checker-internals");
+const aurelia_framework_1 = require("aurelia-framework");
+const modal_1 = require("@aurelia-ux/modal");
+const aurelia_pal_1 = require("aurelia-pal");
+let CheckerModuleIfElement = class CheckerModuleIfElement {
+    constructor(modalService, element) {
         this.modalService = modalService;
         this.element = element;
         this.inputOptions = [];
         this.opened = true;
     }
-    CheckerModuleIfElement.prototype.bind = function () {
+    bind() {
         if (!Array.isArray(this.module.operations)) {
             this.module.operations = [];
         }
-    };
-    CheckerModuleIfElement.prototype.setConditionType = function (condition, operation) {
+    }
+    setConditionType(condition, operation) {
         condition.operation = operation;
         this.triggerChange();
-    };
-    CheckerModuleIfElement.prototype.addOperation = function () {
+    }
+    addOperation() {
         this.module.operations.push({
             outputValue: '',
             conditions: [],
@@ -38,53 +38,52 @@ var CheckerModuleIfElement = (function () {
             outputStyle: 'default'
         });
         this.triggerChange();
-    };
-    CheckerModuleIfElement.prototype.removeOperation = function (index) {
-        var i = parseInt(index, 10);
+    }
+    removeOperation(index) {
+        const i = parseInt(index, 10);
         this.module.operations.splice(i, 1);
         this.triggerChange();
-    };
-    CheckerModuleIfElement.prototype.addCondition = function (operationIndex) {
-        var oi = parseInt(operationIndex, 10);
+    }
+    addCondition(operationIndex) {
+        const oi = parseInt(operationIndex, 10);
         this.module.operations[oi].conditions.push({
             operation: '=',
             value: ''
         });
         this.triggerChange();
-    };
-    CheckerModuleIfElement.prototype.removeCondition = function (operationIndex, conditionIndex) {
-        var oi = parseInt(operationIndex, 10);
-        var ci = parseInt(conditionIndex, 10);
+    }
+    removeCondition(operationIndex, conditionIndex) {
+        const oi = parseInt(operationIndex, 10);
+        const ci = parseInt(conditionIndex, 10);
         this.module.operations[oi].conditions.splice(ci, 1);
         this.triggerChange();
-    };
-    CheckerModuleIfElement.prototype.triggerChange = function () {
-        var customEvent = aurelia_pal_1.DOM.createCustomEvent('change', { bubbles: true });
+    }
+    triggerChange() {
+        const customEvent = aurelia_pal_1.DOM.createCustomEvent('change', { bubbles: true });
         this.element.dispatchEvent(customEvent);
-    };
-    CheckerModuleIfElement.prototype.toggle = function () {
+    }
+    toggle() {
         this.opened = !this.opened;
-    };
-    __decorate([
-        aurelia_framework_1.bindable,
-        __metadata("design:type", checker_internals_1.CheckerModuleIfModel)
-    ], CheckerModuleIfElement.prototype, "module", void 0);
-    __decorate([
-        aurelia_framework_1.bindable,
-        __metadata("design:type", Array)
-    ], CheckerModuleIfElement.prototype, "inputOptions", void 0);
-    __decorate([
-        aurelia_framework_1.bindable({ defaultBindingMode: aurelia_framework_1.bindingMode.twoWay }),
-        __metadata("design:type", Object)
-    ], CheckerModuleIfElement.prototype, "opened", void 0);
-    CheckerModuleIfElement = __decorate([
-        aurelia_framework_1.customElement('checker-module-if'),
-        aurelia_framework_1.useView('./checker-module-if.html'),
-        aurelia_framework_1.inject(modal_1.UxModalService, Element),
-        __metadata("design:paramtypes", [modal_1.UxModalService, HTMLElement])
-    ], CheckerModuleIfElement);
-    return CheckerModuleIfElement;
-}());
+    }
+};
+__decorate([
+    aurelia_framework_1.bindable,
+    __metadata("design:type", checker_internals_1.CheckerModuleIfModel)
+], CheckerModuleIfElement.prototype, "module", void 0);
+__decorate([
+    aurelia_framework_1.bindable,
+    __metadata("design:type", Array)
+], CheckerModuleIfElement.prototype, "inputOptions", void 0);
+__decorate([
+    aurelia_framework_1.bindable({ defaultBindingMode: aurelia_framework_1.bindingMode.twoWay }),
+    __metadata("design:type", Object)
+], CheckerModuleIfElement.prototype, "opened", void 0);
+CheckerModuleIfElement = __decorate([
+    aurelia_framework_1.customElement('checker-module-if'),
+    aurelia_framework_1.useView('./checker-module-if.html'),
+    aurelia_framework_1.inject(modal_1.UxModalService, Element),
+    __metadata("design:paramtypes", [modal_1.UxModalService, HTMLElement])
+], CheckerModuleIfElement);
 exports.CheckerModuleIfElement = CheckerModuleIfElement;
 
 //# sourceMappingURL=checker-module-if.js.map

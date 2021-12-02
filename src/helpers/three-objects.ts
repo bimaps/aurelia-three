@@ -3,10 +3,12 @@ import { StringAnyMap } from 'aurelia-resources';
 import { Container, computedFrom } from 'aurelia-framework';
 import { Logger, getLogger } from 'aurelia-logging';
 import { MTLLoader, OBJLoader } from 'three-obj-mtl-loader';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader';
 import * as THREE from 'three';
 (window as any).THREE = THREE;
-require('three/examples/js/loaders/ColladaLoader');
-require('three/examples/js/loaders/GLTFLoader');
+// require('three/examples/js/loaders/ColladaLoader');
+// require('three/examples/js/loaders/GLTFLoader');
 import { Subscription, EventAggregator } from 'aurelia-event-aggregator';
 
 export interface ParseLoadedDataOptions {
@@ -19,7 +21,7 @@ export interface ParseLoadedDataOptions {
 export interface ParseLoadResult {
   empty: boolean;
   bbox: THREE.Box3 | null;
-  object: THREE.Object3D | null;
+  object: THREE.Object3D | null;
 }
 
 export interface AddObjectOptions {
@@ -31,14 +33,14 @@ export class ThreeObjects {
   private jsonLoader: THREE.ObjectLoader;
   private mtlLoader: any;
   private objLoader: any;
-  private colladaLoader: any;
-  private gltfLoader: any;
+  private colladaLoader: ColladaLoader;
+  private gltfLoader: GLTFLoader;
   private log: Logger = getLogger('three-objects');
   private scene: THREE.Scene;
   private overlayScene: THREE.Scene;
   private toolsScene: THREE.Scene;
   private subscriptions: Array<Subscription> = [];
-  private offset: THREE.Vector3 | null = null;
+  private offset: THREE.Vector3 | null = null;
   private bbox: THREE.Box3 | null = null;
 
   private three: ThreeCustomElement;
@@ -105,7 +107,7 @@ export class ThreeObjects {
   }
 
   loadFile(file: File, options?: ParseLoadedDataOptions): Promise<ParseLoadResult> {
-    let filetype: 'mtl' | 'obj' | 'json' | 'dae' | 'gltf';
+    let filetype: 'mtl' | 'obj' | 'json' | 'dae' | 'gltf';
     if (file.name.substr(-4) === '.mtl') filetype = 'mtl';
     if (file.name.substr(-4) === '.obj') filetype = 'obj';
     if (file.name.substr(-5) === '.json') filetype = 'json';
@@ -161,7 +163,7 @@ export class ThreeObjects {
   }
 
   loadDae(filename: string, options?: ParseLoadedDataOptions): Promise<ParseLoadResult> {
-    if (!this.colladaLoader) this.colladaLoader = new (THREE as any).ColladaLoader();
+    if (!this.colladaLoader) this.colladaLoader = new ColladaLoader();
     //this.colladaLoader.options["verboseMessages"] = true; // for a list of available options, see ColladaLoader2.prototype._init
     return new Promise((resolve, reject) => {
       this.colladaLoader.load(filename, (object) => {
@@ -171,7 +173,7 @@ export class ThreeObjects {
   }
 
   loadGltf(filename: string, options?: ParseLoadedDataOptions): Promise<ParseLoadResult> {
-    if (!this.gltfLoader) this.gltfLoader = new (THREE as any).GLTFLoader();
+    if (!this.gltfLoader) this.gltfLoader = new GLTFLoader();
     //this.colladaLoader.options["verboseMessages"] = true; // for a list of available options, see ColladaLoader2.prototype._init
     return new Promise((resolve, reject) => {
       this.gltfLoader.load(filename, (object) => {
@@ -202,10 +204,10 @@ export class ThreeObjects {
       bbox = box.geometry.boundingBox;
     }
 
-    if (object.type === 'Scene' || object.type === 'Group') {
+    if (object.type === 'Scene' || object.type === 'Group') {
       this.log.info('Load a Scene or a Group into the Scene', object.type);
       
-      if (!object.children || object.children.length === 0) {
+      if (!object.children || object.children.length === 0) {
         this.log.info('Scene:Cancel the loading, scene has no child');
         return {empty: true, bbox: null, object: null};
       }
@@ -215,12 +217,12 @@ export class ThreeObjects {
         if (!box) {
           box = new THREE.Box3();
           box.setFromObject(node);
-        } else {
+        } else {
           box.expandByObject(node);
         }
       });
 
-      if (options.calculateOffsetCenter === 'always' || (options.calculateOffsetCenter === 'if-no-offset' && !this.offset)) {
+      if (options.calculateOffsetCenter === 'always' || (options.calculateOffsetCenter === 'if-no-offset' && !this.offset)) {
         // determine the offset of importing
         if (!this.offset) this.offset = new THREE.Vector3;
         box.getCenter(this.offset);
@@ -376,7 +378,7 @@ export class ThreeObjects {
       }
     });
 
-    for (let obj of objectsToRemove) {
+    for (let obj of objectsToRemove) {
       this.three.getScene().remove(obj);
       obj.geometry.dispose();
     }

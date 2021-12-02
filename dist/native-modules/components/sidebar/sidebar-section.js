@@ -9,17 +9,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { inject } from 'aurelia-framework';
 import { getLogger } from 'aurelia-logging';
-var SidebarSection = (function () {
-    function SidebarSection(element) {
+let SidebarSection = class SidebarSection {
+    constructor(element) {
         this.element = element;
         this.log = getLogger('comp:sidebar-section');
     }
-    SidebarSection = __decorate([
-        inject(Element),
-        __metadata("design:paramtypes", [Element])
-    ], SidebarSection);
-    return SidebarSection;
-}());
+};
+SidebarSection = __decorate([
+    inject(Element),
+    __metadata("design:paramtypes", [Element])
+], SidebarSection);
 export { SidebarSection };
 
 //# sourceMappingURL=sidebar-section.js.map

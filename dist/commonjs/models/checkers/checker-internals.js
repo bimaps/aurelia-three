@@ -23,15 +23,15 @@ __exportStar(require("./checker-module-distance.model"), exports);
 __exportStar(require("./checker-module-normal-distance.model"), exports);
 __exportStar(require("./checker-module-output.model"), exports);
 __exportStar(require("./checker-flow.model"), exports);
-var checker_module_filter_model_1 = require("./checker-module-filter.model");
-var checker_module_extract_model_1 = require("./checker-module-extract.model");
-var checker_module_math_model_1 = require("./checker-module-math.model");
-var checker_module_reducer_model_1 = require("./checker-module-reducer.model");
-var checker_module_if_model_1 = require("./checker-module-if.model");
-var checker_module_projection_model_1 = require("./checker-module-projection.model");
-var checker_module_distance_model_1 = require("./checker-module-distance.model");
-var checker_module_normal_distance_model_1 = require("./checker-module-normal-distance.model");
-var checker_module_output_model_1 = require("./checker-module-output.model");
+const checker_module_filter_model_1 = require("./checker-module-filter.model");
+const checker_module_extract_model_1 = require("./checker-module-extract.model");
+const checker_module_math_model_1 = require("./checker-module-math.model");
+const checker_module_reducer_model_1 = require("./checker-module-reducer.model");
+const checker_module_if_model_1 = require("./checker-module-if.model");
+const checker_module_projection_model_1 = require("./checker-module-projection.model");
+const checker_module_distance_model_1 = require("./checker-module-distance.model");
+const checker_module_normal_distance_model_1 = require("./checker-module-normal-distance.model");
+const checker_module_output_model_1 = require("./checker-module-output.model");
 exports.modelsByType = {
     filter: checker_module_filter_model_1.CheckerModuleFilterModel,
     extract: checker_module_extract_model_1.CheckerModuleExtractModel,

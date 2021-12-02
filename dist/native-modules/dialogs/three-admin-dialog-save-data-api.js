@@ -8,8 +8,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { inject, bindable } from 'aurelia-framework';
-var ThreeAdminDialogSaveDataApi = (function () {
-    function ThreeAdminDialogSaveDataApi(element) {
+let ThreeAdminDialogSaveDataApi = class ThreeAdminDialogSaveDataApi {
+    constructor(element) {
         this.element = element;
         this.value = {
             saveLights: false,
@@ -17,10 +17,10 @@ var ThreeAdminDialogSaveDataApi = (function () {
             importId: ''
         };
     }
-    ThreeAdminDialogSaveDataApi.prototype.bind = function () {
+    bind() {
         this.valueChanged();
-    };
-    ThreeAdminDialogSaveDataApi.prototype.valueChanged = function () {
+    }
+    valueChanged() {
         if (typeof this.value !== 'object') {
             this.value = {
                 saveLights: false,
@@ -28,17 +28,16 @@ var ThreeAdminDialogSaveDataApi = (function () {
                 importId: ''
             };
         }
-    };
-    __decorate([
-        bindable,
-        __metadata("design:type", Object)
-    ], ThreeAdminDialogSaveDataApi.prototype, "value", void 0);
-    ThreeAdminDialogSaveDataApi = __decorate([
-        inject(Element),
-        __metadata("design:paramtypes", [Element])
-    ], ThreeAdminDialogSaveDataApi);
-    return ThreeAdminDialogSaveDataApi;
-}());
+    }
+};
+__decorate([
+    bindable,
+    __metadata("design:type", Object)
+], ThreeAdminDialogSaveDataApi.prototype, "value", void 0);
+ThreeAdminDialogSaveDataApi = __decorate([
+    inject(Element),
+    __metadata("design:paramtypes", [Element])
+], ThreeAdminDialogSaveDataApi);
 export { ThreeAdminDialogSaveDataApi };
 
 //# sourceMappingURL=three-admin-dialog-save-data-api.js.map

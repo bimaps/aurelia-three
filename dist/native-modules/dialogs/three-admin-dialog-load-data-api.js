@@ -8,8 +8,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { inject, bindable } from 'aurelia-framework';
-var ThreeAdminDialogLoadDataApi = (function () {
-    function ThreeAdminDialogLoadDataApi(element) {
+let ThreeAdminDialogLoadDataApi = class ThreeAdminDialogLoadDataApi {
+    constructor(element) {
         this.element = element;
         this.value = {
             replaceLightsIfAny: true,
@@ -17,10 +17,10 @@ var ThreeAdminDialogLoadDataApi = (function () {
             zoomOnScene: true
         };
     }
-    ThreeAdminDialogLoadDataApi.prototype.bind = function () {
+    bind() {
         this.valueChanged();
-    };
-    ThreeAdminDialogLoadDataApi.prototype.valueChanged = function () {
+    }
+    valueChanged() {
         if (typeof this.value !== 'object') {
             this.value = {
                 replaceLightsIfAny: true,
@@ -28,17 +28,16 @@ var ThreeAdminDialogLoadDataApi = (function () {
                 zoomOnScene: true
             };
         }
-    };
-    __decorate([
-        bindable,
-        __metadata("design:type", Object)
-    ], ThreeAdminDialogLoadDataApi.prototype, "value", void 0);
-    ThreeAdminDialogLoadDataApi = __decorate([
-        inject(Element),
-        __metadata("design:paramtypes", [Element])
-    ], ThreeAdminDialogLoadDataApi);
-    return ThreeAdminDialogLoadDataApi;
-}());
+    }
+};
+__decorate([
+    bindable,
+    __metadata("design:type", Object)
+], ThreeAdminDialogLoadDataApi.prototype, "value", void 0);
+ThreeAdminDialogLoadDataApi = __decorate([
+    inject(Element),
+    __metadata("design:paramtypes", [Element])
+], ThreeAdminDialogLoadDataApi);
 export { ThreeAdminDialogLoadDataApi };
 
 //# sourceMappingURL=three-admin-dialog-load-data-api.js.map

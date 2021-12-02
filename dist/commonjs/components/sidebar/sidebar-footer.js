@@ -10,19 +10,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SidebarFooter = void 0;
-var aurelia_framework_1 = require("aurelia-framework");
-var aurelia_logging_1 = require("aurelia-logging");
-var SidebarFooter = (function () {
-    function SidebarFooter(element) {
+const aurelia_framework_1 = require("aurelia-framework");
+const aurelia_logging_1 = require("aurelia-logging");
+let SidebarFooter = class SidebarFooter {
+    constructor(element) {
         this.element = element;
         this.log = aurelia_logging_1.getLogger('comp:sidebar-footer');
     }
-    SidebarFooter = __decorate([
-        aurelia_framework_1.inject(Element),
-        __metadata("design:paramtypes", [Element])
-    ], SidebarFooter);
-    return SidebarFooter;
-}());
+};
+SidebarFooter = __decorate([
+    aurelia_framework_1.inject(Element),
+    __metadata("design:paramtypes", [Element])
+], SidebarFooter);
 exports.SidebarFooter = SidebarFooter;
 
 //# sourceMappingURL=sidebar-footer.js.map

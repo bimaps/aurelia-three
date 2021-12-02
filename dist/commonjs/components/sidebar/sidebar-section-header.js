@@ -10,27 +10,26 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SidebarSectionHeader = void 0;
-var aurelia_framework_1 = require("aurelia-framework");
-var aurelia_logging_1 = require("aurelia-logging");
-var SidebarSectionHeader = (function () {
-    function SidebarSectionHeader(element) {
+const aurelia_framework_1 = require("aurelia-framework");
+const aurelia_logging_1 = require("aurelia-logging");
+let SidebarSectionHeader = class SidebarSectionHeader {
+    constructor(element) {
         this.element = element;
         this.opened = false;
         this.log = aurelia_logging_1.getLogger('comp:sidebar-section-header');
     }
-    SidebarSectionHeader.prototype.toggle = function () {
+    toggle() {
         this.opened = !this.opened;
-    };
-    __decorate([
-        aurelia_framework_1.bindable,
-        __metadata("design:type", Boolean)
-    ], SidebarSectionHeader.prototype, "opened", void 0);
-    SidebarSectionHeader = __decorate([
-        aurelia_framework_1.inject(Element),
-        __metadata("design:paramtypes", [Element])
-    ], SidebarSectionHeader);
-    return SidebarSectionHeader;
-}());
+    }
+};
+__decorate([
+    aurelia_framework_1.bindable,
+    __metadata("design:type", Boolean)
+], SidebarSectionHeader.prototype, "opened", void 0);
+SidebarSectionHeader = __decorate([
+    aurelia_framework_1.inject(Element),
+    __metadata("design:paramtypes", [Element])
+], SidebarSectionHeader);
 exports.SidebarSectionHeader = SidebarSectionHeader;
 
 //# sourceMappingURL=sidebar-section-header.js.map

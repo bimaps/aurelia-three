@@ -11,40 +11,39 @@ import { CheckerModuleReducerModel } from './../../models/checkers/checker-inter
 import { inject, useView, bindable, customElement, bindingMode } from 'aurelia-framework';
 import { UxModalService } from '@aurelia-ux/modal';
 import { DOM } from 'aurelia-pal';
-var CheckerModuleReducerElement = (function () {
-    function CheckerModuleReducerElement(modalService, element) {
+let CheckerModuleReducerElement = class CheckerModuleReducerElement {
+    constructor(modalService, element) {
         this.modalService = modalService;
         this.element = element;
         this.inputOptions = [];
         this.opened = true;
     }
-    CheckerModuleReducerElement.prototype.triggerChange = function () {
-        var customEvent = DOM.createCustomEvent('change', { bubbles: true });
+    triggerChange() {
+        const customEvent = DOM.createCustomEvent('change', { bubbles: true });
         this.element.dispatchEvent(customEvent);
-    };
-    CheckerModuleReducerElement.prototype.toggle = function () {
+    }
+    toggle() {
         this.opened = !this.opened;
-    };
-    __decorate([
-        bindable,
-        __metadata("design:type", CheckerModuleReducerModel)
-    ], CheckerModuleReducerElement.prototype, "module", void 0);
-    __decorate([
-        bindable,
-        __metadata("design:type", Array)
-    ], CheckerModuleReducerElement.prototype, "inputOptions", void 0);
-    __decorate([
-        bindable({ defaultBindingMode: bindingMode.twoWay }),
-        __metadata("design:type", Object)
-    ], CheckerModuleReducerElement.prototype, "opened", void 0);
-    CheckerModuleReducerElement = __decorate([
-        customElement('checker-module-reducer'),
-        useView('./checker-module-reducer.html'),
-        inject(UxModalService, Element),
-        __metadata("design:paramtypes", [UxModalService, HTMLElement])
-    ], CheckerModuleReducerElement);
-    return CheckerModuleReducerElement;
-}());
+    }
+};
+__decorate([
+    bindable,
+    __metadata("design:type", CheckerModuleReducerModel)
+], CheckerModuleReducerElement.prototype, "module", void 0);
+__decorate([
+    bindable,
+    __metadata("design:type", Array)
+], CheckerModuleReducerElement.prototype, "inputOptions", void 0);
+__decorate([
+    bindable({ defaultBindingMode: bindingMode.twoWay }),
+    __metadata("design:type", Object)
+], CheckerModuleReducerElement.prototype, "opened", void 0);
+CheckerModuleReducerElement = __decorate([
+    customElement('checker-module-reducer'),
+    useView('./checker-module-reducer.html'),
+    inject(UxModalService, Element),
+    __metadata("design:paramtypes", [UxModalService, HTMLElement])
+], CheckerModuleReducerElement);
 export { CheckerModuleReducerElement };
 
 //# sourceMappingURL=checker-module-reducer.js.map

@@ -1,5 +1,5 @@
 import { PointCloudOctree } from '@pnext/three-loader';
-import {inject, bindable} from 'aurelia-framework';
+import { inject, bindable } from 'aurelia-framework';
 import { getLogger, Logger } from 'aurelia-logging';
 import * as THREE from 'three';
 import { DOM } from 'aurelia-pal';
@@ -55,7 +55,7 @@ export class ThreeObjectList {
   }
 
   isGeometry(object: THREE.Object3D):boolean {
-    return object instanceof THREE.Geometry;
+    return object instanceof THREE.BufferGeometry;
   }
 
   isPointClouds(object: THREE.Object3D): boolean {
@@ -74,7 +74,7 @@ export class ThreeObjectList {
 
 export class FilterObjectListValueConverter {
   toView(list: Array<THREE.Object3D>, q: string, limit: number = 10, showAll: boolean = false): Array<THREE.Object3D> {
-    if (!q && (list.length < limit || showAll)) return list;
+    if (!q && (list.length < limit || showAll)) return list;
 
     let newList: Array<THREE.Object3D> = [];
     let terms = q ? q.toLowerCase().split(' ') : [];
@@ -84,7 +84,7 @@ export class FilterObjectListValueConverter {
         if (item.name && item.name.toLowerCase().indexOf(term) !== -1) {newList.push(item); continue itemLoop;}
         if (item.uuid.toLowerCase().indexOf(term) !== -1) {newList.push(item); continue itemLoop;}
         if (item.type.toLowerCase().indexOf(term) !== -1) {newList.push(item); continue itemLoop;}
-        for (let key in item.userData || {}) {
+        for (let key in item.userData || {}) {
           let value = item.userData[key];
           if (typeof value === 'string' && value.toLowerCase().indexOf(term) !== -1) {newList.push(item); continue itemLoop;}
         }

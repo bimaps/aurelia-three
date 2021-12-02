@@ -10,13 +10,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import { Container, computedFrom } from 'aurelia-framework';
 import { getLogger } from 'aurelia-logging';
 import { MTLLoader, OBJLoader } from 'three-obj-mtl-loader';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader';
 import * as THREE from 'three';
 window.THREE = THREE;
-require('three/examples/js/loaders/ColladaLoader');
-require('three/examples/js/loaders/GLTFLoader');
 import { EventAggregator } from 'aurelia-event-aggregator';
-var ThreeObjects = (function () {
-    function ThreeObjects(three) {
+export class ThreeObjects {
+    constructor(three) {
         this.log = getLogger('three-objects');
         this.subscriptions = [];
         this.offset = null;
@@ -29,7 +29,7 @@ var ThreeObjects = (function () {
         this.overlayScene = this.three.getScene('overlay');
         this.toolsScene = this.three.getScene('tools');
     }
-    ThreeObjects.prototype.setShowEdges = function (show) {
+    setShowEdges(show) {
         this.showEdges = show;
         if (this.showEdges) {
             this.addAllEdges();
@@ -37,15 +37,13 @@ var ThreeObjects = (function () {
         else {
             this.removeAllEdges();
         }
-    };
-    ThreeObjects.prototype.subscribe = function (event, callback) {
+    }
+    subscribe(event, callback) {
         this.subscriptions.push(Container.instance.get(EventAggregator).subscribe(event, callback));
-    };
-    ThreeObjects.prototype.clearScene = function (clearToolsScene) {
-        if (clearToolsScene === void 0) { clearToolsScene = false; }
-        var keepObjects = [];
-        for (var _i = 0, _a = this.scene.children; _i < _a.length; _i++) {
-            var object = _a[_i];
+    }
+    clearScene(clearToolsScene = false) {
+        let keepObjects = [];
+        for (let object of this.scene.children) {
             if (object instanceof THREE.Light)
                 keepObjects.push(object);
             if (object instanceof THREE.Camera)
@@ -56,8 +54,7 @@ var ThreeObjects = (function () {
         while (this.scene.children.length > 0) {
             this.scene.children.pop();
         }
-        for (var _b = 0, keepObjects_1 = keepObjects; _b < keepObjects_1.length; _b++) {
-            var obj = keepObjects_1[_b];
+        for (let obj of keepObjects) {
             this.scene.add(obj);
         }
         while (this.overlayScene.children.length > 0) {
@@ -72,20 +69,18 @@ var ThreeObjects = (function () {
         this.bbox = null;
         this.three.publish('scene.request-rendering', { three: this.three });
         this.three.publish('scene.cleared', { three: this.three });
-    };
-    ThreeObjects.prototype.loadJSON = function (json, options) {
-        var _this = this;
+    }
+    loadJSON(json, options) {
         if (!this.jsonLoader)
             this.jsonLoader = new THREE.ObjectLoader();
-        return new Promise(function (resolve, reject) {
-            _this.jsonLoader.parse(json, function (object) {
-                resolve(_this.parseLoadedData(object, options));
+        return new Promise((resolve, reject) => {
+            this.jsonLoader.parse(json, (object) => {
+                resolve(this.parseLoadedData(object, options));
             });
         });
-    };
-    ThreeObjects.prototype.loadFile = function (file, options) {
-        var _this = this;
-        var filetype;
+    }
+    loadFile(file, options) {
+        let filetype;
         if (file.name.substr(-4) === '.mtl')
             filetype = 'mtl';
         if (file.name.substr(-4) === '.obj')
@@ -98,94 +93,86 @@ var ThreeObjects = (function () {
             filetype = 'gltf';
         if (!filetype)
             throw new Error('Invalid file type');
-        return new Promise(function (resolve, reject) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
+        return new Promise((resolve, reject) => {
+            let reader = new FileReader();
+            reader.onload = (e) => {
                 if (typeof e.target.result === 'string') {
-                    var url = e.target.result;
+                    let url = e.target.result;
                     if (filetype === 'mtl')
-                        _this.loadMTL(url, true).then(resolve).catch(reject);
+                        this.loadMTL(url, true).then(resolve).catch(reject);
                     if (filetype === 'obj')
-                        _this.loadOBJ(url, options).then(resolve).catch(reject);
+                        this.loadOBJ(url, options).then(resolve).catch(reject);
                     if (filetype === 'json')
-                        _this.loadJSONFile(url, options).then(resolve).catch(reject);
+                        this.loadJSONFile(url, options).then(resolve).catch(reject);
                     if (filetype === 'dae')
-                        _this.loadDae(url, options).then(resolve).catch(reject);
+                        this.loadDae(url, options).then(resolve).catch(reject);
                     if (filetype === 'gltf')
-                        _this.loadGltf(url, options).then(resolve).catch(reject);
+                        this.loadGltf(url, options).then(resolve).catch(reject);
                 }
             };
             reader.onerror = reject;
             reader.readAsDataURL(file);
         });
-    };
-    ThreeObjects.prototype.loadJSONFile = function (filename, options) {
-        var _this = this;
+    }
+    loadJSONFile(filename, options) {
         if (!this.jsonLoader)
             this.jsonLoader = new THREE.ObjectLoader();
-        return new Promise(function (resolve, reject) {
-            _this.jsonLoader.load(filename, function (object) {
-                resolve(_this.parseLoadedData(object, options));
+        return new Promise((resolve, reject) => {
+            this.jsonLoader.load(filename, (object) => {
+                resolve(this.parseLoadedData(object, options));
             }, null, reject);
         });
-    };
-    ThreeObjects.prototype.loadMTL = function (filename, preLoad, addToObjLoader) {
-        var _this = this;
-        if (preLoad === void 0) { preLoad = true; }
-        if (addToObjLoader === void 0) { addToObjLoader = true; }
+    }
+    loadMTL(filename, preLoad = true, addToObjLoader = true) {
         if (!this.mtlLoader)
             this.mtlLoader = new MTLLoader();
         if (!this.objLoader)
             this.objLoader = new OBJLoader();
-        return new Promise(function (resolve, reject) {
-            _this.mtlLoader.load(filename, function (materials) {
+        return new Promise((resolve, reject) => {
+            this.mtlLoader.load(filename, (materials) => {
                 if (preLoad)
                     materials.preload();
                 if (addToObjLoader)
-                    _this.objLoader.setMaterials(materials);
+                    this.objLoader.setMaterials(materials);
                 resolve(materials);
             }, null, reject);
         });
-    };
-    ThreeObjects.prototype.loadOBJ = function (filename, options) {
-        var _this = this;
+    }
+    loadOBJ(filename, options) {
         if (!this.objLoader)
             this.objLoader = new OBJLoader();
-        return new Promise(function (resolve, reject) {
-            _this.objLoader.load(filename, function (object) {
-                resolve(_this.parseLoadedData(object, options));
+        return new Promise((resolve, reject) => {
+            this.objLoader.load(filename, (object) => {
+                resolve(this.parseLoadedData(object, options));
             }, null, reject);
         });
-    };
-    ThreeObjects.prototype.loadDae = function (filename, options) {
-        var _this = this;
+    }
+    loadDae(filename, options) {
         if (!this.colladaLoader)
-            this.colladaLoader = new THREE.ColladaLoader();
-        return new Promise(function (resolve, reject) {
-            _this.colladaLoader.load(filename, function (object) {
-                resolve(_this.parseLoadedData(object.scene, options));
+            this.colladaLoader = new ColladaLoader();
+        return new Promise((resolve, reject) => {
+            this.colladaLoader.load(filename, (object) => {
+                resolve(this.parseLoadedData(object.scene, options));
             }, null, reject);
         });
-    };
-    ThreeObjects.prototype.loadGltf = function (filename, options) {
-        var _this = this;
+    }
+    loadGltf(filename, options) {
         if (!this.gltfLoader)
-            this.gltfLoader = new THREE.GLTFLoader();
-        return new Promise(function (resolve, reject) {
-            _this.gltfLoader.load(filename, function (object) {
-                resolve(_this.parseLoadedData(object.scene, options));
+            this.gltfLoader = new GLTFLoader();
+        return new Promise((resolve, reject) => {
+            this.gltfLoader.load(filename, (object) => {
+                resolve(this.parseLoadedData(object.scene, options));
             }, null, reject);
         });
-    };
-    ThreeObjects.prototype.parseLoadedData = function (object, options) {
-        if (options === void 0) { options = {}; }
+    }
+    parseLoadedData(object, options = {}) {
         if (options.render === undefined)
             options.render = true;
         if (options.applyStyles === undefined)
             options.applyStyles = true;
         if (options.calculateOffsetCenter === undefined)
             options.calculateOffsetCenter = 'if-no-offset';
-        var bbox;
+        let bbox;
         window.obj = object;
         if (object.type === 'Object3D') {
             this.log.info('Load an Object3D into the Scene');
@@ -195,7 +182,7 @@ var ThreeObjects = (function () {
             this.addObject(object, options);
             if (!this.offset)
                 this.offset = new THREE.Vector3(0, 0, 0);
-            var box = new THREE.BoxHelper(object);
+            let box = new THREE.BoxHelper(object);
             box.geometry.computeBoundingBox();
             bbox = box.geometry.boundingBox;
         }
@@ -205,24 +192,24 @@ var ThreeObjects = (function () {
                 this.log.info('Scene:Cancel the loading, scene has no child');
                 return { empty: true, bbox: null, object: null };
             }
-            var box_1;
-            object.traverse(function (node) {
-                if (!box_1) {
-                    box_1 = new THREE.Box3();
-                    box_1.setFromObject(node);
+            let box;
+            object.traverse((node) => {
+                if (!box) {
+                    box = new THREE.Box3();
+                    box.setFromObject(node);
                 }
                 else {
-                    box_1.expandByObject(node);
+                    box.expandByObject(node);
                 }
             });
             if (options.calculateOffsetCenter === 'always' || (options.calculateOffsetCenter === 'if-no-offset' && !this.offset)) {
                 if (!this.offset)
                     this.offset = new THREE.Vector3;
-                box_1.getCenter(this.offset);
+                box.getCenter(this.offset);
                 this.offset.negate();
             }
             while (object.children.length > 0) {
-                var child = object.children.pop();
+                let child = object.children.pop();
                 if (child.type === 'Object3D' && this.offset) {
                     child.translateOnAxis(this.offset, 1);
                 }
@@ -232,18 +219,18 @@ var ThreeObjects = (function () {
                 this.addObject(child, options);
             }
             if (this.offset) {
-                box_1.min.x += this.offset.x;
-                box_1.min.y += this.offset.y;
-                box_1.min.z += this.offset.z;
-                box_1.max.x += this.offset.x;
-                box_1.max.y += this.offset.y;
-                box_1.max.z += this.offset.z;
+                box.min.x += this.offset.x;
+                box.min.y += this.offset.y;
+                box.min.z += this.offset.z;
+                box.max.x += this.offset.x;
+                box.max.y += this.offset.y;
+                box.max.z += this.offset.z;
             }
-            this.log.info('Scene:Bbox of the scene', box_1);
-            bbox = box_1;
+            this.log.info('Scene:Bbox of the scene', box);
+            bbox = box;
         }
-        var newbbox = null;
-        this.scene.traverse(function (node) {
+        let newbbox = null;
+        this.scene.traverse((node) => {
             if (node.type === 'Scene')
                 return;
             if (node.type === 'Group')
@@ -265,20 +252,19 @@ var ThreeObjects = (function () {
             this.three.publish('scene.request-rendering', { three: this.three });
         this.three.publish('objects.parsed', { three: this.three, bbox: bbox });
         return { empty: false, object: object, bbox: bbox };
-    };
-    ThreeObjects.prototype.addObject = function (object, options) {
-        var _this = this;
+    }
+    addObject(object, options) {
         if (options && options.userData) {
             if (!object.userData)
                 object.userData = {};
-            for (var key in options.userData) {
+            for (let key in options.userData) {
                 object.userData[key] = options.userData[key];
             }
             if (object.children) {
-                object.traverse(function (o) {
+                object.traverse((o) => {
                     if (!o.userData)
                         o.userData = {};
-                    for (var key in options.userData) {
+                    for (let key in options.userData) {
                         o.userData[key] = options.userData[key];
                     }
                 });
@@ -291,27 +277,26 @@ var ThreeObjects = (function () {
         if (this.showEdges && !object.userData.__isOverlay) {
             this.addEdgestoObject(object);
             if (object.children) {
-                object.traverse(function (o) {
+                object.traverse((o) => {
                     if (!object.userData.__isOverlay) {
-                        _this.addEdgestoObject(o);
+                        this.addEdgestoObject(o);
                     }
                 });
             }
         }
-    };
-    ThreeObjects.prototype.removeObject = function (object) {
-        var _this = this;
+    }
+    removeObject(object) {
         object.__throughRemoveObject = true;
         this.scene.remove(object);
         delete object.__throughRemoveObject;
         this.removeEdgesObject(object);
         if (object.children) {
-            object.traverse(function (o) {
-                _this.removeEdgesObject(o);
+            object.traverse((o) => {
+                this.removeEdgesObject(o);
             });
         }
-    };
-    ThreeObjects.prototype.addEdgestoObject = function (object) {
+    }
+    addEdgestoObject(object) {
         if (object instanceof THREE.Mesh) {
             if (object.__edgeObject) {
                 return;
@@ -319,128 +304,102 @@ var ThreeObjects = (function () {
             if (object.__ignoreEdges) {
                 return;
             }
-            var name_1 = object.uuid + "-edge";
+            const name = `${object.uuid}-edge`;
             this.counter++;
-            var edges = new THREE.EdgesGeometry(object.geometry);
-            var line_1 = new THREE.LineSegments(edges, this.edgeMaterial);
-            line_1.userData.__isEdge = true;
-            line_1.userData.__isOverlay = true;
-            line_1.name = name_1;
-            line_1.renderOrder = 9;
-            object.__edgeObject = line_1;
-            setTimeout(function () {
-                object.add(line_1);
+            const edges = new THREE.EdgesGeometry(object.geometry);
+            const line = new THREE.LineSegments(edges, this.edgeMaterial);
+            line.userData.__isEdge = true;
+            line.userData.__isOverlay = true;
+            line.name = name;
+            line.renderOrder = 9;
+            object.__edgeObject = line;
+            setTimeout(() => {
+                object.add(line);
             }, this.counter);
         }
-    };
-    ThreeObjects.prototype.removeEdgesObject = function (object) {
+    }
+    removeEdgesObject(object) {
         if (object instanceof THREE.Mesh) {
-            var line = object.__edgeObject;
+            const line = object.__edgeObject;
             if (!line) {
                 return;
             }
             object.remove(line);
             line.geometry.dispose();
         }
-    };
-    ThreeObjects.prototype.addAllEdges = function () {
-        var _this = this;
-        this.three.getScene().traverse(function (obj) {
-            _this.addEdgestoObject(obj);
+    }
+    addAllEdges() {
+        this.three.getScene().traverse((obj) => {
+            this.addEdgestoObject(obj);
         });
-    };
-    ThreeObjects.prototype.removeAllEdges = function () {
-        var objectsToRemove = [];
-        this.three.getScene().traverse(function (obj) {
+    }
+    removeAllEdges() {
+        const objectsToRemove = [];
+        this.three.getScene().traverse((obj) => {
             if (obj.userData.__isEdge) {
                 objectsToRemove.push(obj);
             }
         });
-        for (var _i = 0, objectsToRemove_1 = objectsToRemove; _i < objectsToRemove_1.length; _i++) {
-            var obj = objectsToRemove_1[_i];
+        for (let obj of objectsToRemove) {
             this.three.getScene().remove(obj);
             obj.geometry.dispose();
         }
-    };
-    Object.defineProperty(ThreeObjects.prototype, "sceneWidth", {
-        get: function () {
-            return Math.abs(this.bbox.max.x - this.bbox.min.x);
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ThreeObjects.prototype, "sceneHeight", {
-        get: function () {
-            return Math.abs(this.bbox.max.y - this.bbox.min.y);
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ThreeObjects.prototype, "sceneDepth", {
-        get: function () {
-            return Math.abs(this.bbox.max.z - this.bbox.min.z);
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ThreeObjects.prototype.getBbox = function () {
+    }
+    get sceneWidth() {
+        return Math.abs(this.bbox.max.x - this.bbox.min.x);
+    }
+    get sceneHeight() {
+        return Math.abs(this.bbox.max.y - this.bbox.min.y);
+    }
+    get sceneDepth() {
+        return Math.abs(this.bbox.max.z - this.bbox.min.z);
+    }
+    getBbox() {
         return this.bbox;
-    };
-    Object.defineProperty(ThreeObjects.prototype, "rootObjects", {
-        get: function () {
-            var objects = [];
-            for (var _i = 0, _a = this.scene.children; _i < _a.length; _i++) {
-                var obj = _a[_i];
-                if (obj instanceof THREE.Light)
-                    continue;
-                if (obj instanceof THREE.Camera)
-                    continue;
-                if (obj instanceof THREE.AxesHelper)
-                    continue;
-                if (obj instanceof THREE.BoxHelper)
-                    continue;
-                if (obj instanceof THREE.Box3Helper)
-                    continue;
-                if (obj instanceof THREE.GridHelper)
-                    continue;
-                if (obj instanceof THREE.ArrowHelper)
-                    continue;
-                if (obj instanceof THREE.PlaneHelper)
-                    continue;
-                if (obj instanceof THREE.CameraHelper)
-                    continue;
-                objects.push(obj);
-            }
-            return objects;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ThreeObjects.prototype, "lights", {
-        get: function () {
-            var lights = [];
-            for (var _i = 0, _a = this.scene.children; _i < _a.length; _i++) {
-                var obj = _a[_i];
-                if (obj instanceof THREE.Light)
-                    lights.push(obj);
-            }
-            return lights;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    __decorate([
-        computedFrom('scene.children', 'scene.children.length'),
-        __metadata("design:type", Array),
-        __metadata("design:paramtypes", [])
-    ], ThreeObjects.prototype, "rootObjects", null);
-    __decorate([
-        computedFrom('scene.children', 'scene.children.length'),
-        __metadata("design:type", Array),
-        __metadata("design:paramtypes", [])
-    ], ThreeObjects.prototype, "lights", null);
-    return ThreeObjects;
-}());
-export { ThreeObjects };
+    }
+    get rootObjects() {
+        let objects = [];
+        for (let obj of this.scene.children) {
+            if (obj instanceof THREE.Light)
+                continue;
+            if (obj instanceof THREE.Camera)
+                continue;
+            if (obj instanceof THREE.AxesHelper)
+                continue;
+            if (obj instanceof THREE.BoxHelper)
+                continue;
+            if (obj instanceof THREE.Box3Helper)
+                continue;
+            if (obj instanceof THREE.GridHelper)
+                continue;
+            if (obj instanceof THREE.ArrowHelper)
+                continue;
+            if (obj instanceof THREE.PlaneHelper)
+                continue;
+            if (obj instanceof THREE.CameraHelper)
+                continue;
+            objects.push(obj);
+        }
+        return objects;
+    }
+    get lights() {
+        let lights = [];
+        for (let obj of this.scene.children) {
+            if (obj instanceof THREE.Light)
+                lights.push(obj);
+        }
+        return lights;
+    }
+}
+__decorate([
+    computedFrom('scene.children', 'scene.children.length'),
+    __metadata("design:type", Array),
+    __metadata("design:paramtypes", [])
+], ThreeObjects.prototype, "rootObjects", null);
+__decorate([
+    computedFrom('scene.children', 'scene.children.length'),
+    __metadata("design:type", Array),
+    __metadata("design:paramtypes", [])
+], ThreeObjects.prototype, "lights", null);
 
 //# sourceMappingURL=three-objects.js.map

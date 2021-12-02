@@ -1,19 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -25,59 +10,59 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ThreeSelectionTool = void 0;
-var three_tool_1 = require("./three-tool");
-var three_utils_1 = require("../helpers/three-utils");
-var aurelia_binding_1 = require("aurelia-binding");
-var aurelia_logging_1 = require("aurelia-logging");
-var THREE = require("three");
-var aurelia_framework_1 = require("aurelia-framework");
-var aurelia_event_aggregator_1 = require("aurelia-event-aggregator");
-var log = aurelia_logging_1.getLogger('three-selection-tool');
-var hidden = {
+const three_tool_1 = require("./three-tool");
+const three_utils_1 = require("../helpers/three-utils");
+const aurelia_binding_1 = require("aurelia-binding");
+const aurelia_logging_1 = require("aurelia-logging");
+const THREE = require("three");
+const aurelia_framework_1 = require("aurelia-framework");
+const aurelia_event_aggregator_1 = require("aurelia-event-aggregator");
+const log = aurelia_logging_1.getLogger('three-selection-tool');
+let hidden = {
     material: new THREE.MeshBasicMaterial({ color: '#fff', opacity: 0, transparent: true, alphaTest: 1 })
 };
-var original = {
+let original = {
     material: 'original'
 };
-var originalLightOverlay = {
+let originalLightOverlay = {
     material: 'original',
     overlay: new THREE.MeshBasicMaterial({ color: '#33f', opacity: 0.5, transparent: true }),
     wireframe: new THREE.MeshBasicMaterial({ color: '#333', opacity: 0.2, transparent: true, wireframe: true, depthTest: false })
 };
-var originalOverlay = {
+let originalOverlay = {
     material: 'original',
     overlay: new THREE.MeshBasicMaterial({ color: '#33f', opacity: 0.5, transparent: true }),
     wireframe: new THREE.MeshBasicMaterial({ color: '#333', opacity: 0.8, transparent: true, wireframe: true, depthTest: false })
 };
-var veryLight = {
+let veryLight = {
     material: new THREE.MeshBasicMaterial({ color: '#ddd', opacity: 0.1, transparent: true }),
     wireframe: new THREE.MeshBasicMaterial({ color: '#333', opacity: 0.2, transparent: true, wireframe: true, depthTest: false })
 };
-var light = {
+let light = {
     material: new THREE.MeshBasicMaterial({ color: '#666', opacity: 0.3, transparent: true }),
     wireframe: new THREE.MeshBasicMaterial({ color: '#333', opacity: 0.3, transparent: true, wireframe: true, depthTest: false })
 };
-var lightBlue = {
+let lightBlue = {
     material: new THREE.MeshBasicMaterial({ color: '#33f', opacity: 0.3, transparent: true }),
     wireframe: new THREE.MeshBasicMaterial({ color: '#000', opacity: 0.4, transparent: true, wireframe: true, depthTest: false })
 };
-var mediumBlue = {
+let mediumBlue = {
     material: new THREE.MeshBasicMaterial({ color: '#33f', opacity: 0.3, transparent: true }),
     wireframe: new THREE.MeshBasicMaterial({ color: '#000', opacity: 0.8, transparent: true, wireframe: true, depthTest: false })
 };
-var blackWireframe = {
+let blackWireframe = {
     material: new THREE.MeshBasicMaterial({ color: '#ddd', opacity: 0, transparent: true }),
     wireframe: new THREE.MeshBasicMaterial({ color: '#333', opacity: 0.9, transparent: true, wireframe: true, depthTest: false })
 };
-var lightBlueWithRedWireframe = {
+let lightBlueWithRedWireframe = {
     material: new THREE.MeshBasicMaterial({ color: '#33f', opacity: 0.3, transparent: true }),
     wireframe: new THREE.MeshBasicMaterial({ color: '#f00', opacity: 1, transparent: true, wireframe: true, depthTest: false })
 };
-var redWireframe = {
+let redWireframe = {
     material: new THREE.MeshBasicMaterial({ color: '#ddd', opacity: 0, transparent: true }),
     wireframe: new THREE.MeshBasicMaterial({ color: '#f00', opacity: 1, transparent: true, wireframe: true, depthTest: false })
 };
-var styles = {};
+let styles = {};
 styles.default = {
     excluded: veryLight,
     unselected: original,
@@ -99,95 +84,88 @@ styles.wireframe = {
     selected: redWireframe,
     ghost: redWireframe
 };
-var ThreeSelectionTool = (function (_super) {
-    __extends(ThreeSelectionTool, _super);
-    function ThreeSelectionTool() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.name = 'select';
-        _this.type = 'add';
-        _this.objects = [];
-        _this.subscriptions = [];
-        _this.style = styles.default;
-        _this.keydowns = {};
-        return _this;
+class ThreeSelectionTool extends three_tool_1.ThreeTool {
+    constructor() {
+        super(...arguments);
+        this.name = 'select';
+        this.type = 'add';
+        this.objects = [];
+        this.subscriptions = [];
+        this.style = styles.default;
+        this.keydowns = {};
     }
-    ThreeSelectionTool.prototype.onActivate = function () {
-        var _this = this;
+    onActivate() {
         if (!this.three) {
             throw new Error('Cannot activate selection tool without a three property');
         }
-        var ea = aurelia_framework_1.Container.instance.get(aurelia_event_aggregator_1.EventAggregator);
-        this.subscriptions.push(ea.subscribe('three-cursor:leave', function () {
-            _this.handleCursor('hover', []);
+        let ea = aurelia_framework_1.Container.instance.get(aurelia_event_aggregator_1.EventAggregator);
+        this.subscriptions.push(ea.subscribe('three-cursor:leave', () => {
+            this.handleCursor('hover', []);
         }));
-        this.subscriptions.push(ea.subscribe('three-cursor:hover', function (data) {
-            _this.handleCursor('hover', data);
+        this.subscriptions.push(ea.subscribe('three-cursor:hover', (data) => {
+            this.handleCursor('hover', data);
         }));
-        this.subscriptions.push(ea.subscribe('three-cursor:click', function (data) {
-            _this.handleCursor('click', data);
+        this.subscriptions.push(ea.subscribe('three-cursor:click', (data) => {
+            this.handleCursor('click', data);
         }));
         this.rootObject = this.three.getScene();
         this.setRootStyles();
         document.addEventListener('keydown', this);
         document.addEventListener('keyup', this);
-    };
-    ThreeSelectionTool.prototype.onDeactivate = function () {
-        for (var _i = 0, _a = this.subscriptions; _i < _a.length; _i++) {
-            var sub = _a[_i];
+    }
+    onDeactivate() {
+        for (let sub of this.subscriptions) {
             sub.dispose();
         }
         document.removeEventListener('keydown', this);
         document.removeEventListener('keyup', this);
-    };
-    ThreeSelectionTool.prototype.handleEvent = function (event) {
+    }
+    handleEvent(event) {
         if (event.keyCode === 16) {
             this.keydowns[event.keyCode] = event.type === 'keydown';
         }
-    };
-    ThreeSelectionTool.prototype.setStyle = function (style) {
-        var _this = this;
+    }
+    setStyle(style) {
         if (styles[style]) {
             this.style = styles[style];
             if (this.active) {
-                this.rootObject.children.forEach(function (obj) {
-                    _this.applySelectionStyle(obj, _this.style, 'auto', true);
+                this.rootObject.children.forEach((obj) => {
+                    this.applySelectionStyle(obj, this.style, 'auto', true);
                 });
             }
         }
-    };
-    ThreeSelectionTool.prototype.setRootStyles = function () {
-        var _this = this;
+    }
+    setRootStyles() {
         if (!this.three || !this.three.getScene()) {
             return;
         }
         this.clearSelectionStyle();
-        this.three.getScene().children.forEach(function (obj) {
-            _this.applySelectionStyle(obj, _this.style, 'excluded');
+        this.three.getScene().children.forEach((obj) => {
+            this.applySelectionStyle(obj, this.style, 'excluded');
         });
-        this.rootObject.children.forEach(function (obj) {
-            _this.applySelectionStyle(obj, _this.style, 'unselected');
+        this.rootObject.children.forEach((obj) => {
+            this.applySelectionStyle(obj, this.style, 'unselected');
         });
-    };
-    ThreeSelectionTool.prototype.clearSelectionStyle = function () {
+    }
+    clearSelectionStyle() {
         if (!this.three || this.three.getScene()) {
             return;
         }
-        this.three.getScene().traverse(function (obj) {
-            var o = obj;
+        this.three.getScene().traverse((obj) => {
+            const o = obj;
             if (o.__selectToolOriginalMaterial)
                 o.material = o.__selectToolOriginalMaterial;
             o.__selectToolOriginalMaterial = undefined;
-            var wireframe = obj.getObjectByName(obj.uuid + "-wireframe");
+            let wireframe = obj.getObjectByName(`${obj.uuid}-wireframe`);
             if (wireframe)
                 obj.remove(wireframe);
-            var overlay = obj.getObjectByName(obj.uuid + "-overlay");
+            let overlay = obj.getObjectByName(`${obj.uuid}-overlay`);
             if (overlay)
                 obj.remove(overlay);
         });
-    };
-    ThreeSelectionTool.prototype.applySelectionStyle = function (object, style, type, force) {
-        if (force === void 0) { force = false; }
-        object.traverse(function (obj) {
+    }
+    applySelectionStyle(object, style, type, force = false) {
+        object.traverse((obj) => {
             if (obj instanceof THREE.Camera)
                 return;
             if (obj instanceof THREE.Light)
@@ -196,8 +174,8 @@ var ThreeSelectionTool = (function (_super) {
                 return;
             if (obj.userData.__isOverlay)
                 return;
-            var o = obj;
-            var objType = type;
+            const o = obj;
+            let objType = type;
             if (o.__currentSelectStyleType === objType && !force)
                 return;
             if (objType === 'auto')
@@ -205,16 +183,16 @@ var ThreeSelectionTool = (function (_super) {
             if (o.material && !o.__selectToolOriginalMaterial) {
                 o.__selectToolOriginalMaterial = o.material;
             }
-            var sMaterial = style[objType].material === 'original' ? o.__selectToolOriginalMaterial : style[objType].material;
-            var sWireframe = style[objType].wireframe;
-            var sOverlay = style[objType].overlay;
+            let sMaterial = style[objType].material === 'original' ? o.__selectToolOriginalMaterial : style[objType].material;
+            let sWireframe = style[objType].wireframe;
+            let sOverlay = style[objType].overlay;
             if (o.material) {
                 o.material = sMaterial;
-                var wireframe = obj.getObjectByName(obj.uuid + "-wireframe");
+                let wireframe = obj.getObjectByName(`${obj.uuid}-wireframe`);
                 if (sWireframe && o.geometry) {
                     if (!wireframe) {
                         wireframe = new THREE.Mesh(o.geometry, sWireframe);
-                        wireframe.name = obj.uuid + "-wireframe";
+                        wireframe.name = `${obj.uuid}-wireframe`;
                         wireframe.userData.__isWireframe = true;
                         wireframe.userData.__isOverlay = true;
                         obj.add(wireframe);
@@ -226,11 +204,11 @@ var ThreeSelectionTool = (function (_super) {
                 else if (wireframe) {
                     obj.remove(wireframe);
                 }
-                var overlay = obj.getObjectByName(obj.uuid + "-overlay");
+                let overlay = obj.getObjectByName(`${obj.uuid}-overlay`);
                 if (sOverlay && o.geometry) {
                     if (!overlay) {
                         overlay = new THREE.Mesh(o.geometry, sOverlay);
-                        overlay.name = obj.uuid + "-overlay";
+                        overlay.name = `${obj.uuid}-overlay`;
                         overlay.userData.__isOverlay = true;
                         obj.add(overlay);
                     }
@@ -244,21 +222,17 @@ var ThreeSelectionTool = (function (_super) {
             }
             o.__currentSelectStyleType = objType;
         });
-    };
-    Object.defineProperty(ThreeSelectionTool.prototype, "isRoot", {
-        get: function () {
-            if (!this.three)
-                return false;
-            if (!this.rootObject)
-                return false;
-            return this.rootObject === this.three.getScene();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ThreeSelectionTool.prototype.all = function (type) {
+    }
+    get isRoot() {
+        if (!this.three)
+            return false;
+        if (!this.rootObject)
+            return false;
+        return this.rootObject === this.three.getScene();
+    }
+    all(type) {
         this.service.activate(this);
-        this.setSelectedObjects(this.rootObject.children.filter(function (item) {
+        this.setSelectedObjects(this.rootObject.children.filter((item) => {
             if (item instanceof THREE.Camera)
                 return false;
             if (item instanceof THREE.Light)
@@ -268,8 +242,8 @@ var ThreeSelectionTool = (function (_super) {
         if (type) {
             this.type = type;
         }
-    };
-    ThreeSelectionTool.prototype.none = function (type) {
+    }
+    none(type) {
         if (!this.three)
             return false;
         this.setSelectedObjects([]);
@@ -278,27 +252,21 @@ var ThreeSelectionTool = (function (_super) {
         if (type) {
             this.type = type;
         }
-    };
-    Object.defineProperty(ThreeSelectionTool.prototype, "selectionHasChildren", {
-        get: function () {
-            if (!this.objects)
-                return false;
-            if (this.objects.length === 0)
-                return false;
-            return this.getFirstObjectWithChildren() !== null;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ThreeSelectionTool.prototype.getFirstObjectWithChildren = function () {
+    }
+    get selectionHasChildren() {
+        if (!this.objects)
+            return false;
+        if (this.objects.length === 0)
+            return false;
+        return this.getFirstObjectWithChildren() !== null;
+    }
+    getFirstObjectWithChildren() {
         if (!this.objects)
             return null;
         if (this.objects.length === 0)
             return null;
-        for (var _i = 0, _a = this.objects; _i < _a.length; _i++) {
-            var object = _a[_i];
-            for (var _b = 0, _c = object.children || []; _b < _c.length; _b++) {
-                var child = _c[_b];
+        for (let object of this.objects) {
+            for (let child of object.children || []) {
                 if (child instanceof THREE.Camera)
                     continue;
                 if (child instanceof THREE.Light)
@@ -313,216 +281,193 @@ var ThreeSelectionTool = (function (_super) {
             }
         }
         return null;
-    };
-    ThreeSelectionTool.prototype.selectChildren = function () {
-        var object = this.getFirstObjectWithChildren();
+    }
+    selectChildren() {
+        let object = this.getFirstObjectWithChildren();
         this.rootObject = object;
         this.all();
         this.objects = [];
         this.setRootStyles();
-    };
-    ThreeSelectionTool.prototype.toggleType = function (type) {
+    }
+    toggleType(type) {
         if (this.active && this.type === type) {
             this.service.deactivateAll();
         }
         else {
             this.setType(type);
         }
-    };
-    ThreeSelectionTool.prototype.setType = function (type) {
-        if (type === void 0) { type = 'add'; }
+    }
+    setType(type = 'add') {
         log.debug('setType', type);
         this.service.activate(this);
         this.type = type;
-    };
-    ThreeSelectionTool.prototype.handleCursor = function (type, intersections) {
-        var _this = this;
+    }
+    handleCursor(type, intersections) {
         if (!this.active)
             return;
         if (typeof this.filterObjects === 'function') {
             intersections = this.filterObjects(type, intersections);
         }
         if (type === 'hover') {
-            var uuids_1 = intersections.reduce(function (res, i) {
-                var o = i.object;
+            let uuids = intersections.reduce((res, i) => {
+                let o = i.object;
                 do {
                     res.push(o.uuid);
                     o = o.parent;
                 } while (o);
                 return res;
             }, []);
-            this.rootObject.children.forEach(function (obj) {
+            this.rootObject.children.forEach((obj) => {
                 if (obj instanceof THREE.Camera)
                     return;
                 if (obj instanceof THREE.Light)
                     return;
-                var o = obj;
-                if (uuids_1.indexOf(obj.uuid) !== -1) {
+                const o = obj;
+                if (uuids.indexOf(obj.uuid) !== -1) {
                     o.__currentSelectStyleType = 'hover';
                 }
-                else if (_this.objects.indexOf(obj) !== -1) {
+                else if (this.objects.indexOf(obj) !== -1) {
                     o.__currentSelectStyleType = 'selected';
                 }
                 else {
                     o.__currentSelectStyleType = 'unselected';
                 }
                 if (o.__currentSelectStyleType) {
-                    _this.applySelectionStyle(obj, _this.style, 'auto');
+                    this.applySelectionStyle(obj, this.style, 'auto');
                 }
             });
         }
         if (type === 'click') {
-            var uuids_2 = intersections.reduce(function (res, i) {
-                var o = i.object;
+            let uuids = intersections.reduce((res, i) => {
+                let o = i.object;
                 do {
                     res.push(o.uuid);
                     o = o.parent;
                 } while (o);
                 return res;
             }, []);
-            var objectsAffectedByClick_1 = [];
-            this.rootObject.children.forEach(function (obj) {
+            let objectsAffectedByClick = [];
+            this.rootObject.children.forEach((obj) => {
                 if (obj instanceof THREE.Camera)
                     return;
                 if (obj instanceof THREE.Light)
                     return;
-                if (uuids_2.indexOf(obj.uuid) !== -1) {
-                    objectsAffectedByClick_1.push(obj);
+                if (uuids.indexOf(obj.uuid) !== -1) {
+                    objectsAffectedByClick.push(obj);
                 }
             });
-            var selectType = this.type;
+            let selectType = this.type;
             if (this.keydowns[16] && selectType === 'select') {
                 selectType = 'add';
             }
             if (selectType === 'select') {
-                if (objectsAffectedByClick_1.length === 0)
+                if (objectsAffectedByClick.length === 0)
                     return;
-                this.setSelectedObjects(objectsAffectedByClick_1);
+                this.setSelectedObjects(objectsAffectedByClick);
             }
             else if (selectType === 'add') {
-                this.addObjectsToSelection(objectsAffectedByClick_1);
+                this.addObjectsToSelection(objectsAffectedByClick);
             }
             else if (selectType === 'remove') {
-                this.removeObjectsFromSelection(objectsAffectedByClick_1);
+                this.removeObjectsFromSelection(objectsAffectedByClick);
             }
         }
-    };
-    ThreeSelectionTool.prototype.setSelectedObjects = function (objects) {
+    }
+    setSelectedObjects(objects) {
         log.debug('setSelectedObjects', objects);
-        for (var _i = 0, _a = this.objects; _i < _a.length; _i++) {
-            var obj = _a[_i];
+        for (let obj of this.objects) {
         }
-        for (var _b = 0, objects_1 = objects; _b < objects_1.length; _b++) {
-            var obj = objects_1[_b];
+        for (let obj of objects) {
             this.applySelectionStyle(obj, this.style, 'selected');
         }
         this.objects = objects;
-        var ea = aurelia_framework_1.Container.instance.get(aurelia_event_aggregator_1.EventAggregator);
+        let ea = aurelia_framework_1.Container.instance.get(aurelia_event_aggregator_1.EventAggregator);
         ea.publish('three-selection:changed', {
             type: 'set',
             objects: this.objects
         });
-    };
-    ThreeSelectionTool.prototype.addObjectsToSelection = function (objects) {
-        var _a;
-        var _this = this;
-        var objectsToAdd = objects.filter(function (i) { return _this.objects.indexOf(i) === -1; });
-        (_a = this.objects).push.apply(_a, objectsToAdd);
-        for (var _i = 0, objectsToAdd_1 = objectsToAdd; _i < objectsToAdd_1.length; _i++) {
-            var obj = objectsToAdd_1[_i];
+    }
+    addObjectsToSelection(objects) {
+        let objectsToAdd = objects.filter(i => this.objects.indexOf(i) === -1);
+        this.objects.push(...objectsToAdd);
+        for (let obj of objectsToAdd) {
             this.applySelectionStyle(obj, this.style, 'selected', true);
         }
-        var ea = aurelia_framework_1.Container.instance.get(aurelia_event_aggregator_1.EventAggregator);
+        let ea = aurelia_framework_1.Container.instance.get(aurelia_event_aggregator_1.EventAggregator);
         ea.publish('three-selection:changed', {
             type: 'add',
             objects: this.objects,
             added: objectsToAdd
         });
-    };
-    ThreeSelectionTool.prototype.removeObjectsFromSelection = function (objects) {
-        this.objects = this.objects.filter(function (i) { return objects.indexOf(i) === -1; });
-        for (var _i = 0, objects_2 = objects; _i < objects_2.length; _i++) {
-            var obj = objects_2[_i];
+    }
+    removeObjectsFromSelection(objects) {
+        this.objects = this.objects.filter(i => objects.indexOf(i) === -1);
+        for (let obj of objects) {
             this.applySelectionStyle(obj, this.style, 'unselected', true);
         }
-        var ea = aurelia_framework_1.Container.instance.get(aurelia_event_aggregator_1.EventAggregator);
+        let ea = aurelia_framework_1.Container.instance.get(aurelia_event_aggregator_1.EventAggregator);
         ea.publish('three-selection:changed', {
             type: 'add',
             objects: this.objects,
             added: objects
         });
-    };
-    Object.defineProperty(ThreeSelectionTool.prototype, "hasSelection", {
-        get: function () {
-            if (!this.objects)
-                return false;
-            return this.objects.length !== 0;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ThreeSelectionTool.prototype, "box", {
-        get: function () {
-            return three_utils_1.ThreeUtils.bboxFromObjects(this.objects);
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(ThreeSelectionTool.prototype, "center", {
-        get: function () {
-            return three_utils_1.ThreeUtils.centroidFromObjects(this.objects);
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ThreeSelectionTool.prototype.clearSelectionStyles = function () {
+    }
+    get hasSelection() {
+        if (!this.objects)
+            return false;
+        return this.objects.length !== 0;
+    }
+    get box() {
+        return three_utils_1.ThreeUtils.bboxFromObjects(this.objects);
+    }
+    get center() {
+        return three_utils_1.ThreeUtils.centroidFromObjects(this.objects);
+    }
+    clearSelectionStyles() {
         if (!this.three || !this.three.getScene()) {
             return;
         }
-        var objToRemove = [];
-        this.three.getScene().traverse(function (object) {
+        const objToRemove = [];
+        this.three.getScene().traverse((object) => {
             delete object.__selectToolOriginalMaterial;
             if (object.userData.__isWireframe) {
                 objToRemove.push(object);
             }
         });
-        for (var _i = 0, objToRemove_1 = objToRemove; _i < objToRemove_1.length; _i++) {
-            var object = objToRemove_1[_i];
+        for (let object of objToRemove) {
             this.three.getScene().remove(object);
         }
-    };
-    ThreeSelectionTool.prototype.applySelectionStyles = function () {
-        var _this = this;
+    }
+    applySelectionStyles() {
         if (!this.three || !this.three.getScene()) {
             return;
         }
-        this.three.getScene().traverse(function (object) {
-            var selectedUuids = _this.objects.map(function (o) { return o.uuid; });
+        this.three.getScene().traverse((object) => {
+            const selectedUuids = this.objects.map(o => o.uuid);
             if (selectedUuids.includes(object.uuid)) {
-                _this.applySelectionStyle(object, _this.style, 'selected', true);
+                this.applySelectionStyle(object, this.style, 'selected', true);
             }
             else if (object.__currentSelectStyleType) {
-                _this.applySelectionStyle(object, _this.style, object.__currentSelectStyleType, true);
+                this.applySelectionStyle(object, this.style, object.__currentSelectStyleType, true);
             }
         });
-    };
-    __decorate([
-        aurelia_binding_1.computedFrom('rootObject', 'three'),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [])
-    ], ThreeSelectionTool.prototype, "isRoot", null);
-    __decorate([
-        aurelia_binding_1.computedFrom('objects', 'objects.length'),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [])
-    ], ThreeSelectionTool.prototype, "selectionHasChildren", null);
-    __decorate([
-        aurelia_binding_1.computedFrom('objects', 'objects.length'),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [])
-    ], ThreeSelectionTool.prototype, "hasSelection", null);
-    return ThreeSelectionTool;
-}(three_tool_1.ThreeTool));
+    }
+}
+__decorate([
+    aurelia_binding_1.computedFrom('rootObject', 'three'),
+    __metadata("design:type", Boolean),
+    __metadata("design:paramtypes", [])
+], ThreeSelectionTool.prototype, "isRoot", null);
+__decorate([
+    aurelia_binding_1.computedFrom('objects', 'objects.length'),
+    __metadata("design:type", Boolean),
+    __metadata("design:paramtypes", [])
+], ThreeSelectionTool.prototype, "selectionHasChildren", null);
+__decorate([
+    aurelia_binding_1.computedFrom('objects', 'objects.length'),
+    __metadata("design:type", Boolean),
+    __metadata("design:paramtypes", [])
+], ThreeSelectionTool.prototype, "hasSelection", null);
 exports.ThreeSelectionTool = ThreeSelectionTool;
 
 //# sourceMappingURL=three-selection-tool.js.map

@@ -3,8 +3,8 @@ import * as THREE from 'three';
 export class ThreeStyleDefinition {
 
   public display?: boolean;
-  public material?: THREE.Material | THREE.Material[];
-  public geometry?: THREE.Geometry | THREE.BufferGeometry;
+  public material?: THREE.Material | THREE.Material[];
+  public geometry?: THREE.BufferGeometry;
   // TODO: handle renderOrder
   
   public displayLabel?: boolean;
@@ -59,7 +59,7 @@ export class ThreeStyleDefinition {
     entryDefinition.replaceGeometry = entryDefinition.replaceGeometry ? true : undefined;
 
     for (const key in entryDefinition) {
-      if (entryDefinition.display === undefined && (key === 'material' || key === 'geometry' || key === 'color' || key === 'opacity' || key === 'renderOrder' || key === 'image')) {
+      if (entryDefinition.display === undefined && (key === 'material' || key === 'geometry' || key === 'color' || key === 'opacity' || key === 'renderOrder' || key === 'image')) {
         entryDefinition[key] = undefined;
       }
       if (entryDefinition.displayLabel === undefined && key.substr(0, 5) === 'label') {

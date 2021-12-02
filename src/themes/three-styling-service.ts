@@ -291,7 +291,8 @@ export class ThreeStylingService {
       // otherwise we position the label using the centroid of the object
       let bbox = ThreeUtils.bboxFromObject(object);
       if (definition.labelCentroidMethod === 'polylabel' && object instanceof THREE.Mesh) {
-        position = ThreeUtils.polylabel(object, bbox.min.y);
+        console.warn('Polylabel is not currently supported');
+        // position = ThreeUtils.polylabel(object, bbox.min.y);
       } else {
         position = ThreeUtils.centroidFromBbox(bbox);
       }
@@ -389,7 +390,8 @@ export class ThreeStylingService {
       // otherwise we position the label using the centroid of the object
       let bbox = ThreeUtils.bboxFromObject(object);
       if (definition.iconCentroidMethod === 'polylabel' && object instanceof THREE.Mesh) {
-        position = ThreeUtils.polylabel(object, bbox.min.y);
+        console.warn('Polylabel is not currently supported');
+        // position = ThreeUtils.polylabel(object, bbox.min.y);
       } else {
         position = ThreeUtils.centroidFromBbox(bbox);
       }
@@ -493,7 +495,7 @@ export class ThreeStylingService {
     matrix.multiply(translation).multiply(rotationX).multiply(rotationY).multiply(rotationZ).multiply(scale);
 
     let geometry = ThreeGeometry.get(definition.geometryShape);
-    geometry.applyMatrix(matrix);
+    geometry.applyMatrix4(matrix);
     if (object instanceof THREE.Mesh) {
       // if the object is a mesh we can directly replace its geometry
       // todo: evaluate the impact of not registering function to create geometries but to actually only have one geometry by shape to save memory
@@ -542,7 +544,7 @@ export interface ApplyThemeOptions {
 export class StylingObject extends THREE.Object3D {
   __originalSaved?: boolean;
   __originalMaterial?: THREE.Material | THREE.Material[];
-  __originalGeometry?: THREE.Geometry | THREE.BufferGeometry;
+  __originalGeometry?: THREE.BufferGeometry;
   __originalVisible?: boolean;
   __originalOpacity?: number;
   __originalPosition?: THREE.Vector3;

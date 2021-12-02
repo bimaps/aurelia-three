@@ -10,31 +10,30 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SidebarHeader = void 0;
-var aurelia_framework_1 = require("aurelia-framework");
-var aurelia_logging_1 = require("aurelia-logging");
-var SidebarHeader = (function () {
-    function SidebarHeader(element) {
+const aurelia_framework_1 = require("aurelia-framework");
+const aurelia_logging_1 = require("aurelia-logging");
+let SidebarHeader = class SidebarHeader {
+    constructor(element) {
         this.element = element;
         this.log = aurelia_logging_1.getLogger('comp:sidebar-header');
     }
-    __decorate([
-        aurelia_framework_1.bindable,
-        __metadata("design:type", String)
-    ], SidebarHeader.prototype, "prev", void 0);
-    __decorate([
-        aurelia_framework_1.bindable,
-        __metadata("design:type", Boolean)
-    ], SidebarHeader.prototype, "back", void 0);
-    __decorate([
-        aurelia_framework_1.bindable,
-        __metadata("design:type", String)
-    ], SidebarHeader.prototype, "icon", void 0);
-    SidebarHeader = __decorate([
-        aurelia_framework_1.inject(Element),
-        __metadata("design:paramtypes", [Element])
-    ], SidebarHeader);
-    return SidebarHeader;
-}());
+};
+__decorate([
+    aurelia_framework_1.bindable,
+    __metadata("design:type", String)
+], SidebarHeader.prototype, "prev", void 0);
+__decorate([
+    aurelia_framework_1.bindable,
+    __metadata("design:type", Boolean)
+], SidebarHeader.prototype, "back", void 0);
+__decorate([
+    aurelia_framework_1.bindable,
+    __metadata("design:type", String)
+], SidebarHeader.prototype, "icon", void 0);
+SidebarHeader = __decorate([
+    aurelia_framework_1.inject(Element),
+    __metadata("design:paramtypes", [Element])
+], SidebarHeader);
 exports.SidebarHeader = SidebarHeader;
 
 //# sourceMappingURL=sidebar-header.js.map

@@ -10,36 +10,31 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SidebarButtons = void 0;
-var aurelia_framework_1 = require("aurelia-framework");
-var aurelia_logging_1 = require("aurelia-logging");
-var SidebarButtons = (function () {
-    function SidebarButtons(element) {
+const aurelia_framework_1 = require("aurelia-framework");
+const aurelia_logging_1 = require("aurelia-logging");
+let SidebarButtons = class SidebarButtons {
+    constructor(element) {
         this.element = element;
         this.align = 'center';
         this.log = aurelia_logging_1.getLogger('comp:sidebar-buttons');
     }
-    Object.defineProperty(SidebarButtons.prototype, "justify", {
-        get: function () {
-            if (this.align === 'center')
-                return 'center';
-            else if (this.align === 'left')
-                return 'flex-start';
-            else if (this.align === 'right')
-                return 'flex-end';
-        },
-        enumerable: false,
-        configurable: true
-    });
-    __decorate([
-        aurelia_framework_1.bindable,
-        __metadata("design:type", String)
-    ], SidebarButtons.prototype, "align", void 0);
-    SidebarButtons = __decorate([
-        aurelia_framework_1.inject(Element),
-        __metadata("design:paramtypes", [Element])
-    ], SidebarButtons);
-    return SidebarButtons;
-}());
+    get justify() {
+        if (this.align === 'center')
+            return 'center';
+        else if (this.align === 'left')
+            return 'flex-start';
+        else if (this.align === 'right')
+            return 'flex-end';
+    }
+};
+__decorate([
+    aurelia_framework_1.bindable,
+    __metadata("design:type", String)
+], SidebarButtons.prototype, "align", void 0);
+SidebarButtons = __decorate([
+    aurelia_framework_1.inject(Element),
+    __metadata("design:paramtypes", [Element])
+], SidebarButtons);
 exports.SidebarButtons = SidebarButtons;
 
 //# sourceMappingURL=sidebar-buttons.js.map

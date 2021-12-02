@@ -49,8 +49,8 @@ export class ThreeObjectPropertyList {
       keys.unshift('name');
     }
     keys.sort((a, b) => {
-      let pa = keyPriority[a] || 0;
-      let pb = keyPriority[b] || 0;
+      let pa = keyPriority[a] || 0;
+      let pb = keyPriority[b] || 0;
       if (pa < pb) return 1;
       if (pa > pb) return -1;
       return 0;
@@ -70,7 +70,7 @@ export class ThreeObjectPropertyList {
   }
 
   public edit3d(prop) {
-    if (prop === 'position' || prop === 'rotation' || prop === 'up' || prop === 'scale') return true;
+    if (prop === 'position' || prop === 'rotation' || prop === 'up' || prop === 'scale') return true;
     return false;
   }
 
@@ -91,7 +91,7 @@ export class ThreeObjectPropertyList {
 
   public hidePropDueToEdit(prop) {
     if (!this.editable) return false;
-    return this.editString(prop) || this.edit3d(prop) || this.edit4d(prop) || this.editNumber(prop) || this.editBoolean(prop);
+    return this.editString(prop) || this.edit3d(prop) || this.edit4d(prop) || this.editNumber(prop) || this.editBoolean(prop);
   }
 
   public propClick(prop: string) {
@@ -112,12 +112,12 @@ export class ThreePropertyValueConverter {
     if (typeof value === 'string') return value;
     if (typeof value === 'boolean') return value ? 'true' : 'false';
     if (typeof value === 'number') return value.toString();
-    if (value instanceof THREE.Vector3 || value instanceof THREE.Euler) return `{<br>&nbsp;&nbsp;x: ${value.x}, <br>&nbsp;&nbsp;y: ${value.y}, <br>&nbsp;&nbsp;z: ${value.z}<br>}`;
+    if (value instanceof THREE.Vector3 || value instanceof THREE.Euler) return `{<br>&nbsp;&nbsp;x: ${value.x}, <br>&nbsp;&nbsp;y: ${value.y}, <br>&nbsp;&nbsp;z: ${value.z}<br>}`;
     if (value instanceof THREE.Quaternion) return `{<br>&nbsp;&nbsp;w: ${value.w}, <br>&nbsp;&nbsp;x: ${value.x}, <br>&nbsp;&nbsp;y: ${value.y}, <br>&nbsp;&nbsp;z: ${value.z}<br>}`;
-    if (value instanceof THREE.Object3D) return `${value.name || value.uuid}`;
+    if (value instanceof THREE.Object3D) return `${value.name || value.uuid}`;
     if (value instanceof THREE.Matrix4) return `[ ${value.elements.slice(0,4).join(', ')}, <br>${value.elements.slice(4,8).join(', ')}, <br>${value.elements.slice(8,12).join(', ')}, <br>${value.elements.slice(12,16).join(', ')}]`;
     if (value instanceof THREE.Layers) return `mask: ${value.mask}`;
-    if (value instanceof THREE.Geometry) return value.uuid;
+    if (value instanceof THREE.BufferGeometry) return value.uuid;
     if (value instanceof THREE.BufferGeometry) return value.uuid;
     if (value instanceof THREE.Material) return value.uuid;
     if (value instanceof THREE.Color) return `{<br>&nbsp;&nbsp;r: ${value.r}, <br>&nbsp;&nbsp;g: ${value.g}, <br>&nbsp;&nbsp;b: ${value.b}<br>}<br>${value.getHexString()}`;

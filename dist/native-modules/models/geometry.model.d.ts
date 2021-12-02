@@ -9,7 +9,7 @@ export declare class ThreeGeometryModel extends Model {
     type: string;
     vertices: Array<THREE.Vector3>;
     colors: Array<any>;
-    faces: Array<THREE.Face3>;
+    faces: Array<THREE.Face>;
     faceVertexUvs: any;
     morphTargets: any;
     morphNormals: any;

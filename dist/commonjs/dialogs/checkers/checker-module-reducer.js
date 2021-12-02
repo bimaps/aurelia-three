@@ -10,44 +10,43 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CheckerModuleReducerElement = void 0;
-var checker_internals_1 = require("./../../models/checkers/checker-internals");
-var aurelia_framework_1 = require("aurelia-framework");
-var modal_1 = require("@aurelia-ux/modal");
-var aurelia_pal_1 = require("aurelia-pal");
-var CheckerModuleReducerElement = (function () {
-    function CheckerModuleReducerElement(modalService, element) {
+const checker_internals_1 = require("./../../models/checkers/checker-internals");
+const aurelia_framework_1 = require("aurelia-framework");
+const modal_1 = require("@aurelia-ux/modal");
+const aurelia_pal_1 = require("aurelia-pal");
+let CheckerModuleReducerElement = class CheckerModuleReducerElement {
+    constructor(modalService, element) {
         this.modalService = modalService;
         this.element = element;
         this.inputOptions = [];
         this.opened = true;
     }
-    CheckerModuleReducerElement.prototype.triggerChange = function () {
-        var customEvent = aurelia_pal_1.DOM.createCustomEvent('change', { bubbles: true });
+    triggerChange() {
+        const customEvent = aurelia_pal_1.DOM.createCustomEvent('change', { bubbles: true });
         this.element.dispatchEvent(customEvent);
-    };
-    CheckerModuleReducerElement.prototype.toggle = function () {
+    }
+    toggle() {
         this.opened = !this.opened;
-    };
-    __decorate([
-        aurelia_framework_1.bindable,
-        __metadata("design:type", checker_internals_1.CheckerModuleReducerModel)
-    ], CheckerModuleReducerElement.prototype, "module", void 0);
-    __decorate([
-        aurelia_framework_1.bindable,
-        __metadata("design:type", Array)
-    ], CheckerModuleReducerElement.prototype, "inputOptions", void 0);
-    __decorate([
-        aurelia_framework_1.bindable({ defaultBindingMode: aurelia_framework_1.bindingMode.twoWay }),
-        __metadata("design:type", Object)
-    ], CheckerModuleReducerElement.prototype, "opened", void 0);
-    CheckerModuleReducerElement = __decorate([
-        aurelia_framework_1.customElement('checker-module-reducer'),
-        aurelia_framework_1.useView('./checker-module-reducer.html'),
-        aurelia_framework_1.inject(modal_1.UxModalService, Element),
-        __metadata("design:paramtypes", [modal_1.UxModalService, HTMLElement])
-    ], CheckerModuleReducerElement);
-    return CheckerModuleReducerElement;
-}());
+    }
+};
+__decorate([
+    aurelia_framework_1.bindable,
+    __metadata("design:type", checker_internals_1.CheckerModuleReducerModel)
+], CheckerModuleReducerElement.prototype, "module", void 0);
+__decorate([
+    aurelia_framework_1.bindable,
+    __metadata("design:type", Array)
+], CheckerModuleReducerElement.prototype, "inputOptions", void 0);
+__decorate([
+    aurelia_framework_1.bindable({ defaultBindingMode: aurelia_framework_1.bindingMode.twoWay }),
+    __metadata("design:type", Object)
+], CheckerModuleReducerElement.prototype, "opened", void 0);
+CheckerModuleReducerElement = __decorate([
+    aurelia_framework_1.customElement('checker-module-reducer'),
+    aurelia_framework_1.useView('./checker-module-reducer.html'),
+    aurelia_framework_1.inject(modal_1.UxModalService, Element),
+    __metadata("design:paramtypes", [modal_1.UxModalService, HTMLElement])
+], CheckerModuleReducerElement);
 exports.CheckerModuleReducerElement = CheckerModuleReducerElement;
 
 //# sourceMappingURL=checker-module-reducer.js.map

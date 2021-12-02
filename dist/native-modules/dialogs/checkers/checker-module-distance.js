@@ -10,35 +10,34 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import { CheckerModuleDistanceModel } from './../../models/checkers/checker-internals';
 import { inject, useView, bindable, customElement, bindingMode } from 'aurelia-framework';
 import { UxModalService } from '@aurelia-ux/modal';
-var CheckerModuleDistanceElement = (function () {
-    function CheckerModuleDistanceElement(modalService) {
+let CheckerModuleDistanceElement = class CheckerModuleDistanceElement {
+    constructor(modalService) {
         this.modalService = modalService;
         this.inputOptions = [];
         this.opened = true;
     }
-    CheckerModuleDistanceElement.prototype.toggle = function () {
+    toggle() {
         this.opened = !this.opened;
-    };
-    __decorate([
-        bindable,
-        __metadata("design:type", CheckerModuleDistanceModel)
-    ], CheckerModuleDistanceElement.prototype, "module", void 0);
-    __decorate([
-        bindable,
-        __metadata("design:type", Array)
-    ], CheckerModuleDistanceElement.prototype, "inputOptions", void 0);
-    __decorate([
-        bindable({ defaultBindingMode: bindingMode.twoWay }),
-        __metadata("design:type", Object)
-    ], CheckerModuleDistanceElement.prototype, "opened", void 0);
-    CheckerModuleDistanceElement = __decorate([
-        customElement('checker-module-distance'),
-        useView('./checker-module-distance.html'),
-        inject(UxModalService),
-        __metadata("design:paramtypes", [UxModalService])
-    ], CheckerModuleDistanceElement);
-    return CheckerModuleDistanceElement;
-}());
+    }
+};
+__decorate([
+    bindable,
+    __metadata("design:type", CheckerModuleDistanceModel)
+], CheckerModuleDistanceElement.prototype, "module", void 0);
+__decorate([
+    bindable,
+    __metadata("design:type", Array)
+], CheckerModuleDistanceElement.prototype, "inputOptions", void 0);
+__decorate([
+    bindable({ defaultBindingMode: bindingMode.twoWay }),
+    __metadata("design:type", Object)
+], CheckerModuleDistanceElement.prototype, "opened", void 0);
+CheckerModuleDistanceElement = __decorate([
+    customElement('checker-module-distance'),
+    useView('./checker-module-distance.html'),
+    inject(UxModalService),
+    __metadata("design:paramtypes", [UxModalService])
+], CheckerModuleDistanceElement);
 export { CheckerModuleDistanceElement };
 
 //# sourceMappingURL=checker-module-distance.js.map

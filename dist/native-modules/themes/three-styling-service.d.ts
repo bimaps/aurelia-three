@@ -35,7 +35,7 @@ export interface ApplyThemeOptions {
 export declare class StylingObject extends THREE.Object3D {
     __originalSaved?: boolean;
     __originalMaterial?: THREE.Material | THREE.Material[];
-    __originalGeometry?: THREE.Geometry | THREE.BufferGeometry;
+    __originalGeometry?: THREE.BufferGeometry;
     __originalVisible?: boolean;
     __originalOpacity?: number;
     __originalPosition?: THREE.Vector3;

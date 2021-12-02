@@ -10,19 +10,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SidebarSection = void 0;
-var aurelia_framework_1 = require("aurelia-framework");
-var aurelia_logging_1 = require("aurelia-logging");
-var SidebarSection = (function () {
-    function SidebarSection(element) {
+const aurelia_framework_1 = require("aurelia-framework");
+const aurelia_logging_1 = require("aurelia-logging");
+let SidebarSection = class SidebarSection {
+    constructor(element) {
         this.element = element;
         this.log = aurelia_logging_1.getLogger('comp:sidebar-section');
     }
-    SidebarSection = __decorate([
-        aurelia_framework_1.inject(Element),
-        __metadata("design:paramtypes", [Element])
-    ], SidebarSection);
-    return SidebarSection;
-}());
+};
+SidebarSection = __decorate([
+    aurelia_framework_1.inject(Element),
+    __metadata("design:paramtypes", [Element])
+], SidebarSection);
 exports.SidebarSection = SidebarSection;
 
 //# sourceMappingURL=sidebar-section.js.map

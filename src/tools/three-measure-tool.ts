@@ -1,10 +1,10 @@
 import { ThreeToolsService } from './three-tools-service';
 import { ThreeLogger } from './../helpers/three-logger';
 import { ThreeUtils } from './../helpers/three-utils';
-import { ThreeTool } from './three-tool';
-import { Container } from 'aurelia-framework';
-import { EventAggregator, Subscription } from 'aurelia-event-aggregator';
-import { getLogger } from 'aurelia-logging';
+import { ThreeTool } from './three-tool';
+import { Container } from 'aurelia-framework';
+import { EventAggregator, Subscription } from 'aurelia-event-aggregator';
+import { getLogger } from 'aurelia-logging';
 import { CursorRawProcessingData } from '../components/three';
 import * as THREE from 'three';
 import { Line3, ShapePath, ShapeUtils } from 'three';
@@ -145,7 +145,7 @@ export class ThreeMeasureTool extends ThreeTool {
 
       // take clipping into account
       let clippingDistance = 0;
-      let plane: THREE.Plane | null = null;
+      let plane: THREE.Plane | null = null;
       let direction: 'BACK' | 'FRONT';
 
       let intersections = raycaster.intersectObjects(this.three.getScene().children, true);
@@ -166,43 +166,22 @@ export class ThreeMeasureTool extends ThreeTool {
           const geometry = object.geometry;
           const face = intersection.face;
           if (this.snapping === 'summit') {
-            if (geometry instanceof THREE.Geometry) {
-              coordinates.push(geometry.vertices[face.a]);
-              coordinates.push(geometry.vertices[face.b]);
-              coordinates.push(geometry.vertices[face.c]);
-            } else if (geometry instanceof THREE.BufferGeometry) {
-              coordinates.push(new THREE.Vector3().fromBufferAttribute(geometry.attributes.position as any, face.a));
-              coordinates.push(new THREE.Vector3().fromBufferAttribute(geometry.attributes.position as any, face.b));
-              coordinates.push(new THREE.Vector3().fromBufferAttribute(geometry.attributes.position as any, face.c));
-            }
+            coordinates.push(new THREE.Vector3().fromBufferAttribute(geometry.attributes.position as any, face.a));
+            coordinates.push(new THREE.Vector3().fromBufferAttribute(geometry.attributes.position as any, face.b));
+            coordinates.push(new THREE.Vector3().fromBufferAttribute(geometry.attributes.position as any, face.c));
           } else if (this.snapping === 'edge') {
-            if (geometry instanceof THREE.Geometry) {
-              const lineA = new Line3(geometry.vertices[face.a], geometry.vertices[face.b]);
-              const lineB = new Line3(geometry.vertices[face.a], geometry.vertices[face.c]);
-              const lineC = new Line3(geometry.vertices[face.b], geometry.vertices[face.c]);
-              const vA = new THREE.Vector3();
-              const vB = new THREE.Vector3();
-              const vC = new THREE.Vector3();
-              lineA.closestPointToPoint(intersection.point, true, vA);
-              lineB.closestPointToPoint(intersection.point, true, vB);
-              lineC.closestPointToPoint(intersection.point, true, vC);
-              coordinates.push(vA);
-              coordinates.push(vB);
-              coordinates.push(vC);
-            } else if (geometry instanceof THREE.BufferGeometry) {
-              const lineA = new Line3(new THREE.Vector3().fromBufferAttribute(geometry.attributes.position as any, face.a), new THREE.Vector3().fromBufferAttribute(geometry.attributes.position as any, face.b));
-              const lineB = new Line3(new THREE.Vector3().fromBufferAttribute(geometry.attributes.position as any, face.a), new THREE.Vector3().fromBufferAttribute(geometry.attributes.position as any, face.c));
-              const lineC = new Line3(new THREE.Vector3().fromBufferAttribute(geometry.attributes.position as any, face.b), new THREE.Vector3().fromBufferAttribute(geometry.attributes.position as any, face.c));
-              const vA = new THREE.Vector3();
-              const vB = new THREE.Vector3();
-              const vC = new THREE.Vector3();
-              lineA.closestPointToPoint(intersection.point, true, vA);
-              lineB.closestPointToPoint(intersection.point, true, vB);
-              lineC.closestPointToPoint(intersection.point, true, vC);
-              coordinates.push(vA);
-              coordinates.push(vB);
-              coordinates.push(vC);
-            }
+            const lineA = new Line3(new THREE.Vector3().fromBufferAttribute(geometry.attributes.position as any, face.a), new THREE.Vector3().fromBufferAttribute(geometry.attributes.position as any, face.b));
+            const lineB = new Line3(new THREE.Vector3().fromBufferAttribute(geometry.attributes.position as any, face.a), new THREE.Vector3().fromBufferAttribute(geometry.attributes.position as any, face.c));
+            const lineC = new Line3(new THREE.Vector3().fromBufferAttribute(geometry.attributes.position as any, face.b), new THREE.Vector3().fromBufferAttribute(geometry.attributes.position as any, face.c));
+            const vA = new THREE.Vector3();
+            const vB = new THREE.Vector3();
+            const vC = new THREE.Vector3();
+            lineA.closestPointToPoint(intersection.point, true, vA);
+            lineB.closestPointToPoint(intersection.point, true, vB);
+            lineC.closestPointToPoint(intersection.point, true, vC);
+            coordinates.push(vA);
+            coordinates.push(vB);
+            coordinates.push(vC);
           }
         }
 
@@ -275,7 +254,7 @@ export class ThreeMeasureTool extends ThreeTool {
       this.currentMeasureCoordinates.push(mesh);
       this.three.getScene('overlay').add(mesh);
     }
-    if ((this.type === 'surface' || this.type === 'volume') && this.currentMeasure.coords.length > 2) {
+    if ((this.type === 'surface' || this.type === 'volume') && this.currentMeasure.coords.length > 2) {
       const surfaceShape = new THREE.Shape();
       const points = this.currentMeasure.coords.map(c => new THREE.Vector2(c.x, c.z));
       surfaceShape.setFromPoints(points);
@@ -357,11 +336,14 @@ export class ThreeMeasureTool extends ThreeTool {
       point2.position.set(measure.coords[1].x, measure.coords[1].y, measure.coords[1].z);
       measure.display.points.push(point1, point2);
       this.three.getScene('overlay').add(point1, point2);
-      const lineGeometry = new THREE.Geometry();
-      lineGeometry.vertices.push(measure.coords[0], measure.coords[1]);
+
+      const points = [];
+      points.push( measure.coords[0] );
+      points.push( measure.coords[1] );
+      const lineGeometry = new THREE.BufferGeometry().setFromPoints( points );
       let line = new THREE.Line(lineGeometry, new THREE.LineBasicMaterial({color: 'black', opacity: 1, side: THREE.DoubleSide}));
       line.name = '__measure_current-measure-line__';
-      (line.material as THREE.MeshBasicMaterial).depthTest = false;
+      line.material.depthTest = false;
       line.renderOrder = 10;
       measure.display.lines.push(line);
       this.three.getScene('overlay').add(line);
@@ -407,20 +389,18 @@ export class ThreeMeasureTool extends ThreeTool {
       point2.position.set(projectedCoord.x, projectedCoord.y, projectedCoord.z);
       measure.display.points.push(point1, point2);
       this.three.getScene('overlay').add(point1, point2);
-      const lineGeometry = new THREE.Geometry();
-      lineGeometry.vertices.push(measure.coords[0], projectedCoord);
+      const lineGeometry = new THREE.BufferGeometry().setFromPoints([measure.coords[0], projectedCoord]);
       let line = new THREE.Line(lineGeometry, new THREE.LineBasicMaterial({color: 'black', opacity: 1, side: THREE.DoubleSide}));
       line.name = '__measure_current-measure-line__';
-      (line.material as THREE.MeshBasicMaterial).depthTest = false;
+      line.material.depthTest = false;
       line.renderOrder = 10;
       measure.display.lines.push(line);
       this.three.getScene('overlay').add(line);
 
-      const projectedLineGeometry = new THREE.Geometry();
-      projectedLineGeometry.vertices.push(measure.coords[1], projectedCoord);
+      const projectedLineGeometry = new THREE.BufferGeometry().setFromPoints([measure.coords[1], projectedCoord])
       let projectedLine = new THREE.Line(projectedLineGeometry, new THREE.LineBasicMaterial({color: '#fff', opacity: 1, side: THREE.DoubleSide}));
       projectedLine.name = '__measure_current-measure-line__';
-      (projectedLine.material as THREE.MeshBasicMaterial).depthTest = false;
+      projectedLine.material.depthTest = false;
       projectedLine.renderOrder = 10;
       measure.display.lines.push(projectedLine);
       this.three.getScene('overlay').add(projectedLine);
@@ -591,7 +571,7 @@ export class ThreeMeasureTool extends ThreeTool {
       this.measures.push(this.currentMeasure);
       this.displayMeasures();
       this.clearMeasuring();
-    } else if (this.currentMeasure.type === 'surface' || this.currentMeasure.type === 'volume') {
+    } else if (this.currentMeasure.type === 'surface' || this.currentMeasure.type === 'volume') {
       if (this.currentMeasure.coords.length > 2) {
         const contour = this.currentMeasure.coords.map(c => {
           return {
@@ -617,7 +597,7 @@ export class ThreeMeasureTool extends ThreeTool {
   }
 
   public endMeasuring() {
-    if (this.currentMeasure.type === 'surface' && (this.currentMeasure.coords.length < 3 || !this.currentMeasure.value)) {
+    if (this.currentMeasure.type === 'surface' && (this.currentMeasure.coords.length < 3 || !this.currentMeasure.value)) {
       this.clearMeasuring();
     } else if (this.currentMeasure.type === 'surface') {
       this.measures.push(this.currentMeasure);
@@ -673,7 +653,7 @@ export class ThreeMeasureTool extends ThreeTool {
   }
 
   private hideMeasureOverlayTool() {
-    if (!this.overlayTool || !this.overlayTool.userData.displayed) return;
+    if (!this.overlayTool || !this.overlayTool.userData.displayed) return;
     this.three.getScene('tools').remove(this.overlayTool);
     this.overlayTool.userData.displayed = false;
   }
@@ -688,7 +668,7 @@ export class ThreeMeasureTool extends ThreeTool {
     groupContainer.add(group);
     groupContainer.traverse((obj) => {
       obj.renderOrder = 10;
-      if ((obj instanceof THREE.Mesh || obj instanceof THREE.Line) && (obj.material instanceof THREE.MeshBasicMaterial || obj.material instanceof THREE.LineBasicMaterial)) {
+      if ((obj instanceof THREE.Mesh || obj instanceof THREE.Line) && (obj.material instanceof THREE.MeshBasicMaterial || obj.material instanceof THREE.LineBasicMaterial)) {
         obj.material.depthTest = false;
       }
     });
@@ -717,7 +697,7 @@ export class ThreeMeasureTool extends ThreeTool {
       for (let measure of this.measures) {
         if (measure.display) {
           for (let obj of measure.display.points) {
-            if (obj.geometry instanceof THREE.ShapeGeometry || obj.geometry instanceof THREE.ExtrudeGeometry) {
+            if (obj.geometry instanceof THREE.ShapeGeometry || obj.geometry instanceof THREE.ExtrudeGeometry) {
               continue;
             }
             obj.scale.setScalar(50 / cameraZoom);

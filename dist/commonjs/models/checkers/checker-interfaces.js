@@ -5,11 +5,8 @@ exports.CheckerModuleTypeOptions = ['filter', 'extract', 'math', 'reducer', 'if'
 exports.CheckerModuleIOTypeOptions = ['scene', 'three-objects', 'three-object', 'triangles', 'triangle', 'line3s', 'line3', 'vector3s', 'vector3', 'vector2s', 'vector2', 'box3s', 'box3', 'strings', 'string', 'numbers', 'number', 'booleans', 'boolean', 'json'];
 exports.CheckerModuleIOStyleOptions = ['default', 'correct', 'incorrect', 'danger'];
 exports.CheckerExtractTypeOptions = ['faces', 'edges', 'vertices', 'wireframe', 'property'];
-var CheckerModule = (function () {
-    function CheckerModule() {
-    }
-    return CheckerModule;
-}());
+class CheckerModule {
+}
 exports.CheckerModule = CheckerModule;
 exports.CheckerModuleReducerOperationOptions = ['min', 'max', 'average', 'count', 'sum'];
 

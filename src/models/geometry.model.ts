@@ -38,7 +38,7 @@ export class ThreeGeometryModel extends Model {
   public colors: Array<any>;
 
   @type.array({type: 'any'})
-  public faces: Array<THREE.Face3>;
+  public faces: Array<THREE.Face>;
 
   @type.any
   public faceVertexUvs: any;

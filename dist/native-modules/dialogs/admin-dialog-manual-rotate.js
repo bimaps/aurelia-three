@@ -8,8 +8,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { inject, bindable } from 'aurelia-framework';
-var AdminDialogManualRotate = (function () {
-    function AdminDialogManualRotate(element) {
+let AdminDialogManualRotate = class AdminDialogManualRotate {
+    constructor(element) {
         this.element = element;
         this.value = {
             constraint: 'X',
@@ -17,10 +17,10 @@ var AdminDialogManualRotate = (function () {
             unit: 'degree'
         };
     }
-    AdminDialogManualRotate.prototype.bind = function () {
+    bind() {
         this.valueChanged();
-    };
-    AdminDialogManualRotate.prototype.valueChanged = function () {
+    }
+    valueChanged() {
         if (typeof this.value !== 'object') {
             this.value = {
                 constraint: 'X',
@@ -28,17 +28,16 @@ var AdminDialogManualRotate = (function () {
                 unit: 'degree'
             };
         }
-    };
-    __decorate([
-        bindable,
-        __metadata("design:type", Object)
-    ], AdminDialogManualRotate.prototype, "value", void 0);
-    AdminDialogManualRotate = __decorate([
-        inject(Element),
-        __metadata("design:paramtypes", [Element])
-    ], AdminDialogManualRotate);
-    return AdminDialogManualRotate;
-}());
+    }
+};
+__decorate([
+    bindable,
+    __metadata("design:type", Object)
+], AdminDialogManualRotate.prototype, "value", void 0);
+AdminDialogManualRotate = __decorate([
+    inject(Element),
+    __metadata("design:paramtypes", [Element])
+], AdminDialogManualRotate);
 export { AdminDialogManualRotate };
 
 //# sourceMappingURL=admin-dialog-manual-rotate.js.map

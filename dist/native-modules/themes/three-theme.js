@@ -1,22 +1,20 @@
-var ThreeTheme = (function () {
-    function ThreeTheme() {
+export class ThreeTheme {
+    constructor() {
         this.rules = [];
     }
-    ThreeTheme.prototype.activate = function (three) {
+    activate(three) {
         this.three = three;
         this.active = true;
         this.onActivate();
-    };
-    ThreeTheme.prototype.deactivate = function () {
+    }
+    deactivate() {
         this.onDeactivate();
         this.active = false;
-    };
-    ThreeTheme.prototype.onActivate = function () {
-    };
-    ThreeTheme.prototype.onDeactivate = function () {
-    };
-    return ThreeTheme;
-}());
-export { ThreeTheme };
+    }
+    onActivate() {
+    }
+    onDeactivate() {
+    }
+}
 
 //# sourceMappingURL=three-theme.js.map

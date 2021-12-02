@@ -11,7 +11,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.configure = void 0;
-var aurelia_pal_1 = require("aurelia-pal");
+const aurelia_pal_1 = require("aurelia-pal");
 function configure(config) {
     config.globalResources([
         aurelia_pal_1.PLATFORM.moduleName('./components/three'),
@@ -80,7 +80,6 @@ __exportStar(require("./themes/three-theme-rule"), exports);
 __exportStar(require("./tools/three-measure-tool"), exports);
 __exportStar(require("./tools/three-rotation-tool"), exports);
 __exportStar(require("./tools/three-selection-tool"), exports);
-__exportStar(require("./tools/three-slice-tool"), exports);
 __exportStar(require("./tools/three-tool"), exports);
 __exportStar(require("./tools/three-tools-service"), exports);
 __exportStar(require("./tools/three-translation-tool"), exports);

@@ -1,25 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ThreeTheme = void 0;
-var ThreeTheme = (function () {
-    function ThreeTheme() {
+class ThreeTheme {
+    constructor() {
         this.rules = [];
     }
-    ThreeTheme.prototype.activate = function (three) {
+    activate(three) {
         this.three = three;
         this.active = true;
         this.onActivate();
-    };
-    ThreeTheme.prototype.deactivate = function () {
+    }
+    deactivate() {
         this.onDeactivate();
         this.active = false;
-    };
-    ThreeTheme.prototype.onActivate = function () {
-    };
-    ThreeTheme.prototype.onDeactivate = function () {
-    };
-    return ThreeTheme;
-}());
+    }
+    onActivate() {
+    }
+    onDeactivate() {
+    }
+}
 exports.ThreeTheme = ThreeTheme;
 
 //# sourceMappingURL=three-theme.js.map

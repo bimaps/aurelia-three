@@ -111,10 +111,10 @@ export class ThreeTranslationTool extends ThreeTool {
       let ty: number = 0;
       let tz: number = 0;
 
-      let prop: 'xy' | 'xz' | 'yz';
-      if (this.axisConstraint === 'X' || this.axisConstraint === 'Z' || this.axisConstraint === 'XZ') {
+      let prop: 'xy' | 'xz' | 'yz';
+      if (this.axisConstraint === 'X' || this.axisConstraint === 'Z' || this.axisConstraint === 'XZ') {
         prop = 'xz';
-      } else if (this.axisConstraint === 'Y' || this.axisConstraint === 'YZ') {
+      } else if (this.axisConstraint === 'Y' || this.axisConstraint === 'YZ') {
         prop = 'yz';
       } else if (this.axisConstraint === 'XY') {
         prop = 'xy';
@@ -178,98 +178,86 @@ export class ThreeTranslationTool extends ThreeTool {
   }
 
   private hideTranslateOverlayTool() {
-    if (!this.overlayTool || !this.overlayTool.userData.displayed) return;
+    if (!this.overlayTool || !this.overlayTool.userData.displayed) return;
     this.three.getScene('tools').remove(this.overlayTool);
     this.overlayTool.userData.displayed = false;
   }
 
-  private createOverlayTool() {
-    let group = new THREE.Group();
-    let xLineGeometry = new THREE.Geometry();
-    xLineGeometry.vertices.push(
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(10, 0, 0)
-    );
-    let yLineGeometry = new THREE.Geometry();
-    yLineGeometry.vertices.push(
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(0, 10, 0)
-    );
-    let zLineGeometry = new THREE.Geometry();
-    zLineGeometry.vertices.push(
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(0, 0, 10)
-    );
-    let xLine = new THREE.Line(xLineGeometry, new THREE.LineBasicMaterial({color: 'red', opacity: 0.5, transparent: true, side: THREE.FrontSide}));
-    let yLine = new THREE.Line(yLineGeometry, new THREE.LineBasicMaterial({color: 'green', opacity: 0.5, transparent: true, side: THREE.FrontSide}));
-    let zLine = new THREE.Line(zLineGeometry, new THREE.LineBasicMaterial({color: 'blue', opacity: 0.5, transparent: true, side: THREE.FrontSide}));
+private createOverlayTool() {
+  let group = new THREE.Group();
+  let xLineGeometry = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), new THREE.Vector3(10, 0, 0)]);
+  let yLineGeometry = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 10, 0)]);
+  let zLineGeometry = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 10)]);
+  let xLine = new THREE.Line(xLineGeometry, new THREE.LineBasicMaterial({color: 'red', opacity: 0.5, transparent: true, side: THREE.FrontSide}));
+  let yLine = new THREE.Line(yLineGeometry, new THREE.LineBasicMaterial({color: 'green', opacity: 0.5, transparent: true, side: THREE.FrontSide}));
+  let zLine = new THREE.Line(zLineGeometry, new THREE.LineBasicMaterial({color: 'blue', opacity: 0.5, transparent: true, side: THREE.FrontSide}));
 
-    let xConeGeometry = new THREE.ConeGeometry(0.4, 1.2);
-    let xCone = new THREE.Mesh(xConeGeometry, new THREE.MeshBasicMaterial({color: 'red', opacity: 0.5, transparent: true, side: THREE.FrontSide}));
-    xCone.rotateOnAxis(new THREE.Vector3(0, 0, 1), -90 / 180 * Math.PI);
-    xCone.translateY(10);
+  let xConeGeometry = new THREE.ConeGeometry(0.4, 1.2);
+  let xCone = new THREE.Mesh(xConeGeometry, new THREE.MeshBasicMaterial({color: 'red', opacity: 0.5, transparent: true, side: THREE.FrontSide}));
+  xCone.rotateOnAxis(new THREE.Vector3(0, 0, 1), -90 / 180 * Math.PI);
+  xCone.translateY(10);
 
-    let yConeGeometry = new THREE.ConeGeometry(0.4, 1.2);
-    let yCone = new THREE.Mesh(yConeGeometry, new THREE.MeshBasicMaterial({color: 'green', opacity: 0.5, transparent: true, side: THREE.FrontSide}));
-    yCone.translateY(10);
+  let yConeGeometry = new THREE.ConeGeometry(0.4, 1.2);
+  let yCone = new THREE.Mesh(yConeGeometry, new THREE.MeshBasicMaterial({color: 'green', opacity: 0.5, transparent: true, side: THREE.FrontSide}));
+  yCone.translateY(10);
 
-    let zConeGeometry = new THREE.ConeGeometry(0.4, 1.2);
-    let zCone = new THREE.Mesh(zConeGeometry, new THREE.MeshBasicMaterial({color: 'blue', opacity: 0.5, transparent: true, side: THREE.FrontSide}));
-    zCone.rotateOnAxis(new THREE.Vector3(1, 0, 0), 90 / 180 * Math.PI);
-    zCone.translateY(10);    
+  let zConeGeometry = new THREE.ConeGeometry(0.4, 1.2);
+  let zCone = new THREE.Mesh(zConeGeometry, new THREE.MeshBasicMaterial({color: 'blue', opacity: 0.5, transparent: true, side: THREE.FrontSide}));
+  zCone.rotateOnAxis(new THREE.Vector3(1, 0, 0), 90 / 180 * Math.PI);
+  zCone.translateY(10);    
 
-    let xzPlaneGeometry = new THREE.PlaneGeometry(5, 5);
-    let xzPlaneMaterial = new THREE.MeshBasicMaterial({color: '#f0f', opacity: 0.5, transparent: true, side: THREE.DoubleSide});
-    let xzPlane = new THREE.Mesh(xzPlaneGeometry, xzPlaneMaterial);
-    xzPlane.rotateOnAxis(new THREE.Vector3(1, 0, 0), -90 / 180 * Math.PI);
-    xzPlane.translateX(2.5).translateY(-2.5);
+  let xzPlaneGeometry = new THREE.PlaneGeometry(5, 5);
+  let xzPlaneMaterial = new THREE.MeshBasicMaterial({color: '#f0f', opacity: 0.5, transparent: true, side: THREE.DoubleSide});
+  let xzPlane = new THREE.Mesh(xzPlaneGeometry, xzPlaneMaterial);
+  xzPlane.rotateOnAxis(new THREE.Vector3(1, 0, 0), -90 / 180 * Math.PI);
+  xzPlane.translateX(2.5).translateY(-2.5);
 
-    let xyPlaneGeometry = new THREE.PlaneGeometry(5, 5);
-    let xyPlaneMaterial = new THREE.MeshBasicMaterial({color: '#ff0', opacity: 0.5, transparent: true, side: THREE.DoubleSide});
-    let xyPlane = new THREE.Mesh(xyPlaneGeometry, xyPlaneMaterial);
-    xyPlane.translateX(2.5).translateY(2.5);
+  let xyPlaneGeometry = new THREE.PlaneGeometry(5, 5);
+  let xyPlaneMaterial = new THREE.MeshBasicMaterial({color: '#ff0', opacity: 0.5, transparent: true, side: THREE.DoubleSide});
+  let xyPlane = new THREE.Mesh(xyPlaneGeometry, xyPlaneMaterial);
+  xyPlane.translateX(2.5).translateY(2.5);
 
-    let yzPlaneGeometry = new THREE.PlaneGeometry(5, 5);
-    let yzPlaneMaterial = new THREE.MeshBasicMaterial({color: '#0ff', opacity: 0.5, transparent: true, side: THREE.DoubleSide});
-    let yzPlane = new THREE.Mesh(yzPlaneGeometry, yzPlaneMaterial);
-    yzPlane.rotateOnAxis(new THREE.Vector3(0, 1, 0), -90 / 180 * Math.PI);
-    yzPlane.translateX(2.5).translateY(2.5);
+  let yzPlaneGeometry = new THREE.PlaneGeometry(5, 5);
+  let yzPlaneMaterial = new THREE.MeshBasicMaterial({color: '#0ff', opacity: 0.5, transparent: true, side: THREE.DoubleSide});
+  let yzPlane = new THREE.Mesh(yzPlaneGeometry, yzPlaneMaterial);
+  yzPlane.rotateOnAxis(new THREE.Vector3(0, 1, 0), -90 / 180 * Math.PI);
+  yzPlane.translateX(2.5).translateY(2.5);
 
-    xLine.userData = {axis: 'X'};
-    yLine.userData = {axis: 'Y'};
-    zLine.userData = {axis: 'Z'};
-    xCone.userData = {axis: 'X'};
-    yCone.userData = {axis: 'Y'};
-    zCone.userData = {axis: 'Z'};
-    xzPlane.userData = {axis: 'XZ'};
-    xyPlane.userData = {axis: 'XY'};
-    yzPlane.userData = {axis: 'YZ'};
+  xLine.userData = {axis: 'X'};
+  yLine.userData = {axis: 'Y'};
+  zLine.userData = {axis: 'Z'};
+  xCone.userData = {axis: 'X'};
+  yCone.userData = {axis: 'Y'};
+  zCone.userData = {axis: 'Z'};
+  xzPlane.userData = {axis: 'XZ'};
+  xyPlane.userData = {axis: 'XY'};
+  yzPlane.userData = {axis: 'YZ'};
 
-    group.add(xLine);
-    group.add(yLine);
-    group.add(zLine);
-    group.add(xCone);
-    group.add(yCone);
-    group.add(zCone);
-    group.add(xzPlane);
-    group.add(xyPlane);
-    group.add(yzPlane);
+  group.add(xLine);
+  group.add(yLine);
+  group.add(zLine);
+  group.add(xCone);
+  group.add(yCone);
+  group.add(zCone);
+  group.add(xzPlane);
+  group.add(xyPlane);
+  group.add(yzPlane);
 
-    // let p = this.select.center;
-    // group.position.set(p.x, p.y, p.z);
-    group.name = '__translate-tools__';
-    let groupContainer = new THREE.Group;
-    groupContainer.name = '__translate-tools-container__';
-    groupContainer.add(group);
-    groupContainer.traverse((obj) => {
-      obj.renderOrder = 10;
-      if ((obj instanceof THREE.Mesh || obj instanceof THREE.Line) && (obj.material instanceof THREE.MeshBasicMaterial || obj.material instanceof THREE.LineBasicMaterial)) {
-        obj.material.depthTest = false;
-      }
-    });
-    this.overlayTool = groupContainer;
-    this.adjustOverlayToolZoom();
-  }
+  // let p = this.select.center;
+  // group.position.set(p.x, p.y, p.z);
+  group.name = '__translate-tools__';
+  let groupContainer = new THREE.Group;
+  groupContainer.name = '__translate-tools-container__';
+  groupContainer.add(group);
+  groupContainer.traverse((obj) => {
+    obj.renderOrder = 10;
+    if ((obj instanceof THREE.Mesh || obj instanceof THREE.Line) && (obj.material instanceof THREE.MeshBasicMaterial || obj.material instanceof THREE.LineBasicMaterial)) {
+      obj.material.depthTest = false;
+    }
+  });
+  this.overlayTool = groupContainer;
+  this.adjustOverlayToolZoom();
+}
 
   private adjustOverlayToolPosition() {
     let p = this.select.center;
@@ -290,7 +278,7 @@ export class ThreeTranslationTool extends ThreeTool {
     if (!this.overlayTool) return;
     let tool = this.overlayTool.getObjectByName('__translate-tools__');
     tool.traverse((obj) => {
-      if (obj instanceof THREE.Mesh || obj instanceof THREE.Line) {
+      if (obj instanceof THREE.Mesh || obj instanceof THREE.Line) {
         let material = obj.material as THREE.Material;
         if (!this.axisConstraint) material.opacity = 0.5;
         else {

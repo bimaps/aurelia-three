@@ -9,29 +9,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { inject, bindable } from 'aurelia-framework';
 import { getLogger } from 'aurelia-logging';
-var SidebarHeader = (function () {
-    function SidebarHeader(element) {
+let SidebarHeader = class SidebarHeader {
+    constructor(element) {
         this.element = element;
         this.log = getLogger('comp:sidebar-header');
     }
-    __decorate([
-        bindable,
-        __metadata("design:type", String)
-    ], SidebarHeader.prototype, "prev", void 0);
-    __decorate([
-        bindable,
-        __metadata("design:type", Boolean)
-    ], SidebarHeader.prototype, "back", void 0);
-    __decorate([
-        bindable,
-        __metadata("design:type", String)
-    ], SidebarHeader.prototype, "icon", void 0);
-    SidebarHeader = __decorate([
-        inject(Element),
-        __metadata("design:paramtypes", [Element])
-    ], SidebarHeader);
-    return SidebarHeader;
-}());
+};
+__decorate([
+    bindable,
+    __metadata("design:type", String)
+], SidebarHeader.prototype, "prev", void 0);
+__decorate([
+    bindable,
+    __metadata("design:type", Boolean)
+], SidebarHeader.prototype, "back", void 0);
+__decorate([
+    bindable,
+    __metadata("design:type", String)
+], SidebarHeader.prototype, "icon", void 0);
+SidebarHeader = __decorate([
+    inject(Element),
+    __metadata("design:paramtypes", [Element])
+], SidebarHeader);
 export { SidebarHeader };
 
 //# sourceMappingURL=sidebar-header.js.map

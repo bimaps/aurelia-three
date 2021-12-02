@@ -17,171 +17,121 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CheckerModuleFilterElement = void 0;
-var aurelia_resources_1 = require("aurelia-resources");
-var checker_internals_1 = require("./../../models/checkers/checker-internals");
-var aurelia_framework_1 = require("aurelia-framework");
-var modal_1 = require("@aurelia-ux/modal");
-var aurelia_pal_1 = require("aurelia-pal");
-var CheckerModuleFilterElement = (function () {
-    function CheckerModuleFilterElement(modalService, element) {
+const aurelia_resources_1 = require("aurelia-resources");
+const checker_internals_1 = require("./../../models/checkers/checker-internals");
+const aurelia_framework_1 = require("aurelia-framework");
+const modal_1 = require("@aurelia-ux/modal");
+const aurelia_pal_1 = require("aurelia-pal");
+let CheckerModuleFilterElement = class CheckerModuleFilterElement {
+    constructor(modalService, element) {
         this.modalService = modalService;
         this.element = element;
         this.keyValues = {};
         this.inputOptions = [];
         this.opened = true;
     }
-    CheckerModuleFilterElement.prototype.bind = function () {
+    bind() {
         if (!Array.isArray(this.module.conditions)) {
             this.module.conditions = [];
         }
         if (this.module.conditionsOperator !== 'and' && this.module.conditionsOperator !== 'or') {
             this.module.conditionsOperator = 'and';
         }
-    };
-    CheckerModuleFilterElement.prototype.addCondition = function () {
+    }
+    addCondition() {
         this.module.conditions.push({
             key: '',
             operation: '=',
             value: ''
         });
         this.triggerChange();
-    };
-    CheckerModuleFilterElement.prototype.removeCondition = function (index) {
-        var i = parseInt(index, 10);
+    }
+    removeCondition(index) {
+        const i = parseInt(index, 10);
         this.module.conditions.splice(i, 1);
         this.triggerChange();
-    };
-    CheckerModuleFilterElement.prototype.setConditionType = function (condition, operation) {
+    }
+    setConditionType(condition, operation) {
         condition.operation = operation;
         this.triggerChange();
-    };
-    CheckerModuleFilterElement.prototype.keyHelperList = function (destinationObject, destinationKey) {
-        return __awaiter(this, void 0, void 0, function () {
-            var currentValue, options, key, dialog, result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        currentValue = destinationObject[destinationKey];
-                        options = [];
-                        for (key in this.keyValues) {
-                            options.push(key);
-                        }
-                        return [4, this.modalService.open({
-                                viewModel: aurelia_resources_1.PromptSelectDialog,
-                                model: {
-                                    options: options,
-                                    autoClose: true,
-                                    required: false,
-                                    mode: 'single',
-                                    value: currentValue
-                                }
-                            })];
-                    case 1:
-                        dialog = _a.sent();
-                        return [4, dialog.whenClosed()];
-                    case 2:
-                        result = _a.sent();
-                        if (!result.wasCancelled && result.output) {
-                            destinationObject[destinationKey] = result.output;
-                        }
-                        return [2];
+    }
+    keyHelperList(destinationObject, destinationKey) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const currentValue = destinationObject[destinationKey];
+            let options = [];
+            for (const key in this.keyValues) {
+                options.push(key);
+            }
+            const dialog = yield this.modalService.open({
+                viewModel: aurelia_resources_1.PromptSelectDialog,
+                model: {
+                    options: options,
+                    autoClose: true,
+                    required: false,
+                    mode: 'single',
+                    value: currentValue
                 }
             });
+            const result = yield dialog.whenClosed();
+            if (!result.wasCancelled && result.output) {
+                destinationObject[destinationKey] = result.output;
+            }
         });
-    };
-    CheckerModuleFilterElement.prototype.valueHelperList = function (key, destinationObject, destinationKey) {
-        return __awaiter(this, void 0, void 0, function () {
-            var currentValue, options, dialog, result;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (!key)
-                            return [2];
-                        currentValue = destinationObject[destinationKey];
-                        options = this.keyValues[key] || [];
-                        return [4, this.modalService.open({
-                                viewModel: aurelia_resources_1.PromptSelectDialog,
-                                model: {
-                                    options: options,
-                                    autoClose: true,
-                                    required: false,
-                                    mode: 'single',
-                                    value: currentValue
-                                }
-                            })];
-                    case 1:
-                        dialog = _a.sent();
-                        return [4, dialog.whenClosed()];
-                    case 2:
-                        result = _a.sent();
-                        if (!result.wasCancelled && result.output) {
-                            destinationObject[destinationKey] = result.output;
-                        }
-                        return [2];
+    }
+    valueHelperList(key, destinationObject, destinationKey) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!key)
+                return;
+            const currentValue = destinationObject[destinationKey];
+            let options = this.keyValues[key] || [];
+            const dialog = yield this.modalService.open({
+                viewModel: aurelia_resources_1.PromptSelectDialog,
+                model: {
+                    options: options,
+                    autoClose: true,
+                    required: false,
+                    mode: 'single',
+                    value: currentValue
                 }
             });
+            const result = yield dialog.whenClosed();
+            if (!result.wasCancelled && result.output) {
+                destinationObject[destinationKey] = result.output;
+            }
         });
-    };
-    CheckerModuleFilterElement.prototype.triggerChange = function () {
-        var customEvent = aurelia_pal_1.DOM.createCustomEvent('change', { bubbles: true });
+    }
+    triggerChange() {
+        const customEvent = aurelia_pal_1.DOM.createCustomEvent('change', { bubbles: true });
         this.element.dispatchEvent(customEvent);
-    };
-    CheckerModuleFilterElement.prototype.toggle = function () {
+    }
+    toggle() {
         this.opened = !this.opened;
-    };
-    __decorate([
-        aurelia_framework_1.bindable,
-        __metadata("design:type", checker_internals_1.CheckerModuleFilterModel)
-    ], CheckerModuleFilterElement.prototype, "module", void 0);
-    __decorate([
-        aurelia_framework_1.bindable,
-        __metadata("design:type", Object)
-    ], CheckerModuleFilterElement.prototype, "keyValues", void 0);
-    __decorate([
-        aurelia_framework_1.bindable,
-        __metadata("design:type", Array)
-    ], CheckerModuleFilterElement.prototype, "inputOptions", void 0);
-    __decorate([
-        aurelia_framework_1.bindable({ defaultBindingMode: aurelia_framework_1.bindingMode.twoWay }),
-        __metadata("design:type", Object)
-    ], CheckerModuleFilterElement.prototype, "opened", void 0);
-    CheckerModuleFilterElement = __decorate([
-        aurelia_framework_1.customElement('checker-module-filter'),
-        aurelia_framework_1.useView('./checker-module-filter.html'),
-        aurelia_framework_1.inject(modal_1.UxModalService, Element),
-        __metadata("design:paramtypes", [modal_1.UxModalService, HTMLElement])
-    ], CheckerModuleFilterElement);
-    return CheckerModuleFilterElement;
-}());
+    }
+};
+__decorate([
+    aurelia_framework_1.bindable,
+    __metadata("design:type", checker_internals_1.CheckerModuleFilterModel)
+], CheckerModuleFilterElement.prototype, "module", void 0);
+__decorate([
+    aurelia_framework_1.bindable,
+    __metadata("design:type", Object)
+], CheckerModuleFilterElement.prototype, "keyValues", void 0);
+__decorate([
+    aurelia_framework_1.bindable,
+    __metadata("design:type", Array)
+], CheckerModuleFilterElement.prototype, "inputOptions", void 0);
+__decorate([
+    aurelia_framework_1.bindable({ defaultBindingMode: aurelia_framework_1.bindingMode.twoWay }),
+    __metadata("design:type", Object)
+], CheckerModuleFilterElement.prototype, "opened", void 0);
+CheckerModuleFilterElement = __decorate([
+    aurelia_framework_1.customElement('checker-module-filter'),
+    aurelia_framework_1.useView('./checker-module-filter.html'),
+    aurelia_framework_1.inject(modal_1.UxModalService, Element),
+    __metadata("design:paramtypes", [modal_1.UxModalService, HTMLElement])
+], CheckerModuleFilterElement);
 exports.CheckerModuleFilterElement = CheckerModuleFilterElement;
 
 //# sourceMappingURL=checker-module-filter.js.map

@@ -10,9 +10,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ThreeAdminDialogSaveDataApi = void 0;
-var aurelia_framework_1 = require("aurelia-framework");
-var ThreeAdminDialogSaveDataApi = (function () {
-    function ThreeAdminDialogSaveDataApi(element) {
+const aurelia_framework_1 = require("aurelia-framework");
+let ThreeAdminDialogSaveDataApi = class ThreeAdminDialogSaveDataApi {
+    constructor(element) {
         this.element = element;
         this.value = {
             saveLights: false,
@@ -20,10 +20,10 @@ var ThreeAdminDialogSaveDataApi = (function () {
             importId: ''
         };
     }
-    ThreeAdminDialogSaveDataApi.prototype.bind = function () {
+    bind() {
         this.valueChanged();
-    };
-    ThreeAdminDialogSaveDataApi.prototype.valueChanged = function () {
+    }
+    valueChanged() {
         if (typeof this.value !== 'object') {
             this.value = {
                 saveLights: false,
@@ -31,17 +31,16 @@ var ThreeAdminDialogSaveDataApi = (function () {
                 importId: ''
             };
         }
-    };
-    __decorate([
-        aurelia_framework_1.bindable,
-        __metadata("design:type", Object)
-    ], ThreeAdminDialogSaveDataApi.prototype, "value", void 0);
-    ThreeAdminDialogSaveDataApi = __decorate([
-        aurelia_framework_1.inject(Element),
-        __metadata("design:paramtypes", [Element])
-    ], ThreeAdminDialogSaveDataApi);
-    return ThreeAdminDialogSaveDataApi;
-}());
+    }
+};
+__decorate([
+    aurelia_framework_1.bindable,
+    __metadata("design:type", Object)
+], ThreeAdminDialogSaveDataApi.prototype, "value", void 0);
+ThreeAdminDialogSaveDataApi = __decorate([
+    aurelia_framework_1.inject(Element),
+    __metadata("design:paramtypes", [Element])
+], ThreeAdminDialogSaveDataApi);
 exports.ThreeAdminDialogSaveDataApi = ThreeAdminDialogSaveDataApi;
 
 //# sourceMappingURL=three-admin-dialog-save-data-api.js.map

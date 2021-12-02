@@ -2,7 +2,7 @@ import * as THREE from 'three';
 export declare class ThreeStyleDefinition {
     display?: boolean;
     material?: THREE.Material | THREE.Material[];
-    geometry?: THREE.Geometry | THREE.BufferGeometry;
+    geometry?: THREE.BufferGeometry;
     displayLabel?: boolean;
     labelKey?: string;
     labelTemplate?: string;

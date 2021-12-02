@@ -1,44 +1,30 @@
-import * as THREE from 'three';
+import { Box3, Object3D, Vector3, Mesh, Plane, PlaneGeometry } from 'three';
+import { Line3, MeshBasicMaterial } from 'three';
 export declare class ThreeUtils {
-    static bboxFromObject(object: THREE.Object3D): THREE.Box3;
-    static bboxFromObjects(objects: Array<THREE.Object3D>): THREE.Box3 | null;
-    static isBbox000(bbox: THREE.Box3): boolean;
-    static centroidFromBbox(bbox: THREE.Box3): THREE.Vector3;
-    static centroidFromObject(object: THREE.Object3D): THREE.Vector3;
-    static centroidFromObjects(objects: Array<THREE.Object3D>): THREE.Vector3 | null;
-    static edgesFromObject(object: THREE.Mesh): THREE.Line3[];
-    static polylabel(object: THREE.Mesh, y: number): THREE.Vector3;
-    static textureText(text: string, font?: string, paddingX?: number, paddingY?: number): THREE.Mesh;
-    static PlaneHelper(plane: THREE.Plane, size?: number): THREE.Mesh;
-    static geometryFromBuffer(bufferGeometry: THREE.BufferGeometry): THREE.Geometry;
-    static sliceGeometry(geometry: THREE.Geometry, plane: THREE.Plane, DIRECTION?: string): THREE.Geometry;
-    static sliceFace(plane: THREE.Plane, geom: THREE.Geometry, points: any, DIRECTION: any): void;
-    static addFace(geom: THREE.Geometry, points: any): void;
-    static facePoints(geom: THREE.Geometry, face: THREE.Face3, faceIndex: number): {
-        vertex: THREE.Vector3;
-        normal: THREE.Vector3;
-        uv: THREE.Vector2;
-    }[];
+    static bboxFromObject(object: Object3D): Box3;
+    static bboxFromObjects(objects: Array<Object3D>): Box3 | null;
+    static isBbox000(bbox: Box3): boolean;
+    static centroidFromBbox(bbox: Box3): Vector3;
+    static centroidFromObject(object: Object3D): Vector3;
+    static centroidFromObjects(objects: Array<Object3D>): Vector3 | null;
+    static edgesFromObject(object: Mesh): Line3[];
+    static textureText(text: string, font?: string, paddingX?: number, paddingY?: number): Mesh<PlaneGeometry, MeshBasicMaterial>;
+    static PlaneHelper(plane: Plane, size?: number): Mesh<PlaneGeometry, MeshBasicMaterial>;
     static intersectPlane(p1: any, p2: any, plane: any): {
         vertex: any;
         normal: any;
         uv: any;
     };
     static facePosition(plane: any, points: any): string;
-    static vertexPosition(plane: THREE.Plane, vertex: any): string;
-    static objectToAxisPolygon(object: THREE.Mesh, positionOnAxis: any, planeNormalAxis?: string): any[];
-    static objectToPolygon(object: THREE.Mesh, plane: THREE.Plane, scene?: any): any[];
-    static combineHoles(polygons: any): any[];
-    static intersectingLines(object: THREE.Mesh, plane: THREE.Plane): any[];
-    static intersectingGeometry(object: THREE.Mesh, plane: THREE.Plane, scene: any): THREE.Geometry;
+    static vertexPosition(plane: Plane, vertex: any): string;
     static centroidOfPolygon(arr: any): number[];
     static isPointInsidePolygon(point: any, polygon: any): boolean;
-    static planeConstantNormalToPositionDirection(constant: number, normal: THREE.Vector3): {
-        position: THREE.Vector3;
-        direction: THREE.Vector3;
+    static planeConstantNormalToPositionDirection(constant: number, normal: Vector3): {
+        position: Vector3;
+        direction: Vector3;
     };
-    static planePositionDirectionToConstantNormal(position: THREE.Vector3, direction: THREE.Vector3): {
+    static planePositionDirectionToConstantNormal(position: Vector3, direction: Vector3): {
         constant: number;
-        normal: THREE.Vector3;
+        normal: Vector3;
     };
 }

@@ -11,40 +11,39 @@ import { CheckerModuleNormalDistanceModel } from './../../models/checkers/checke
 import { inject, useView, bindable, customElement, bindingMode } from 'aurelia-framework';
 import { UxModalService } from '@aurelia-ux/modal';
 import { DOM } from 'aurelia-pal';
-var CheckerModuleNormalDistanceElement = (function () {
-    function CheckerModuleNormalDistanceElement(modalService, element) {
+let CheckerModuleNormalDistanceElement = class CheckerModuleNormalDistanceElement {
+    constructor(modalService, element) {
         this.modalService = modalService;
         this.element = element;
         this.inputOptions = [];
         this.opened = true;
     }
-    CheckerModuleNormalDistanceElement.prototype.triggerChange = function () {
-        var customEvent = DOM.createCustomEvent('change', { bubbles: true });
+    triggerChange() {
+        const customEvent = DOM.createCustomEvent('change', { bubbles: true });
         this.element.dispatchEvent(customEvent);
-    };
-    CheckerModuleNormalDistanceElement.prototype.toggle = function () {
+    }
+    toggle() {
         this.opened = !this.opened;
-    };
-    __decorate([
-        bindable,
-        __metadata("design:type", CheckerModuleNormalDistanceModel)
-    ], CheckerModuleNormalDistanceElement.prototype, "module", void 0);
-    __decorate([
-        bindable,
-        __metadata("design:type", Array)
-    ], CheckerModuleNormalDistanceElement.prototype, "inputOptions", void 0);
-    __decorate([
-        bindable({ defaultBindingMode: bindingMode.twoWay }),
-        __metadata("design:type", Object)
-    ], CheckerModuleNormalDistanceElement.prototype, "opened", void 0);
-    CheckerModuleNormalDistanceElement = __decorate([
-        customElement('checker-module-normal-distance'),
-        useView('./checker-module-normal-distance.html'),
-        inject(UxModalService, Element),
-        __metadata("design:paramtypes", [UxModalService, HTMLElement])
-    ], CheckerModuleNormalDistanceElement);
-    return CheckerModuleNormalDistanceElement;
-}());
+    }
+};
+__decorate([
+    bindable,
+    __metadata("design:type", CheckerModuleNormalDistanceModel)
+], CheckerModuleNormalDistanceElement.prototype, "module", void 0);
+__decorate([
+    bindable,
+    __metadata("design:type", Array)
+], CheckerModuleNormalDistanceElement.prototype, "inputOptions", void 0);
+__decorate([
+    bindable({ defaultBindingMode: bindingMode.twoWay }),
+    __metadata("design:type", Object)
+], CheckerModuleNormalDistanceElement.prototype, "opened", void 0);
+CheckerModuleNormalDistanceElement = __decorate([
+    customElement('checker-module-normal-distance'),
+    useView('./checker-module-normal-distance.html'),
+    inject(UxModalService, Element),
+    __metadata("design:paramtypes", [UxModalService, HTMLElement])
+], CheckerModuleNormalDistanceElement);
 export { CheckerModuleNormalDistanceElement };
 
 //# sourceMappingURL=checker-module-normal-distance.js.map

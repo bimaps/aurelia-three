@@ -13,8 +13,8 @@ import { EventAggregator } from 'aurelia-event-aggregator';
 import { Container, computedFrom } from 'aurelia-framework';
 import * as OrbitControls from 'three-orbitcontrols';
 import { getLogger } from 'aurelia-logging';
-var ThreeNavigation = (function () {
-    function ThreeNavigation(three) {
+export class ThreeNavigation {
+    constructor(three) {
         this.log = getLogger('three-navigation');
         this.cameraIsAnimating = false;
         this.observationOn = false;
@@ -22,64 +22,60 @@ var ThreeNavigation = (function () {
         this.observationCameraZoom = 3;
         this.three = three;
     }
-    ThreeNavigation.prototype.initControls = function () {
-        var _this = this;
-        var camera = this.three.getCamera();
+    initControls() {
+        let camera = this.three.getCamera();
         if (!camera)
             return;
         this.controls = new OrbitControls(camera, this.three.getRenderer().domElement);
         this.controls.minZoom = 0.0001;
         this.controls.mouseButtons.PAN = 0;
         this.controls.mouseButtons.ORBIT = 2;
-        this.controls.addEventListener('change', function () {
+        this.controls.addEventListener('change', () => {
             if (camera instanceof THREE.OrthographicCamera) {
-                _this.three.cameraZoom = camera.zoom;
+                this.three.cameraZoom = camera.zoom;
             }
-            _this.three.requestRendering();
-            _this.three.publish('camera:moved');
+            this.three.requestRendering();
+            this.three.publish('camera:moved');
         });
-    };
-    ThreeNavigation.prototype.zoomOnBbox = function (bbox, orientation, animate, render) {
-        var _this = this;
-        if (animate === void 0) { animate = false; }
-        if (render === void 0) { render = true; }
-        var showBbox = false;
-        var showBboxDuration = 10000;
+    }
+    zoomOnBbox(bbox, orientation, animate = false, render = true) {
+        let showBbox = false;
+        let showBboxDuration = 10000;
         if (showBbox) {
             if (this.zoomOnBboxObject)
                 this.three.getScene().remove(this.zoomOnBboxObject);
-            var width = bbox.max.x - bbox.min.x;
-            var height = bbox.max.y - bbox.min.y;
-            var depth = bbox.max.z - bbox.min.z;
-            var x = (bbox.max.x + bbox.min.x) / 2;
-            var y = (bbox.max.y + bbox.min.y) / 2;
-            var z = (bbox.max.z + bbox.min.z) / 2;
-            var geometry = new THREE.BoxGeometry(width, height, depth);
-            var material = new THREE.MeshBasicMaterial({ color: 0x888888, wireframe: true });
+            let width = bbox.max.x - bbox.min.x;
+            let height = bbox.max.y - bbox.min.y;
+            let depth = bbox.max.z - bbox.min.z;
+            let x = (bbox.max.x + bbox.min.x) / 2;
+            let y = (bbox.max.y + bbox.min.y) / 2;
+            let z = (bbox.max.z + bbox.min.z) / 2;
+            let geometry = new THREE.BoxGeometry(width, height, depth);
+            let material = new THREE.MeshBasicMaterial({ color: 0x888888, wireframe: true });
             this.zoomOnBboxObject = new THREE.Mesh(geometry, material);
             this.zoomOnBboxObject.position.set(x, y, z);
             this.zoomOnBboxObject.userData._isHelper = true;
             this.three.objects.addObject(this.zoomOnBboxObject);
             if (showBboxDuration) {
-                setTimeout(function () {
-                    if (_this.zoomOnBboxObject)
-                        _this.three.getScene().remove(_this.zoomOnBboxObject);
+                setTimeout(() => {
+                    if (this.zoomOnBboxObject)
+                        this.three.getScene().remove(this.zoomOnBboxObject);
                 }, 10000);
             }
         }
-        var newCameraPosition = new THREE.Vector3();
-        var newCameraRotation = new THREE.Vector3();
-        var newCameraZoom;
-        var bboxCenterPosition = new THREE.Vector3();
+        let newCameraPosition = new THREE.Vector3();
+        let newCameraRotation = new THREE.Vector3();
+        let newCameraZoom;
+        let bboxCenterPosition = new THREE.Vector3();
         bbox.getCenter(bboxCenterPosition);
-        var bboxWidth = bbox.max.x - bbox.min.x;
-        var bboxHeight = bbox.max.y - bbox.min.y;
-        var bboxDepth = bbox.max.z - bbox.min.z;
-        var z1;
-        var z2;
-        var z3;
-        var z4;
-        var z5;
+        let bboxWidth = bbox.max.x - bbox.min.x;
+        let bboxHeight = bbox.max.y - bbox.min.y;
+        let bboxDepth = bbox.max.z - bbox.min.z;
+        let z1;
+        let z2;
+        let z3;
+        let z4;
+        let z5;
         switch (orientation) {
             case 'top':
                 newCameraPosition.x = bboxCenterPosition.x;
@@ -148,7 +144,7 @@ var ThreeNavigation = (function () {
                 newCameraZoom = Math.min(z1, z2) * 0.9;
                 break;
             case '3d':
-                var offset = 20;
+                let offset = 20;
                 newCameraPosition.x = bboxCenterPosition.x + offset;
                 newCameraPosition.y = bboxCenterPosition.y + offset;
                 newCameraPosition.z = bboxCenterPosition.z + offset;
@@ -164,7 +160,7 @@ var ThreeNavigation = (function () {
                 break;
             default:
         }
-        var camera = this.three.getCamera();
+        let camera = this.three.getCamera();
         if (!animate) {
             camera.position.set(newCameraPosition.x, newCameraPosition.y, newCameraPosition.z);
             camera.lookAt(bboxCenterPosition);
@@ -179,9 +175,9 @@ var ThreeNavigation = (function () {
             return;
         }
         this.controls.enabled = false;
-        var currentLookAt = new THREE.Vector3(0, 0, -1);
+        let currentLookAt = new THREE.Vector3(0, 0, -1);
         currentLookAt.applyQuaternion(camera.quaternion);
-        var currentOrientation = {
+        let currentOrientation = {
             x: camera.position.x,
             y: camera.position.y,
             z: camera.position.z,
@@ -198,7 +194,7 @@ var ThreeNavigation = (function () {
         if (camera instanceof THREE.OrthographicCamera) {
             currentOrientation.zoom = camera.zoom;
         }
-        var newOrientation = {
+        let newOrientation = {
             x: newCameraPosition.x,
             y: newCameraPosition.y,
             z: newCameraPosition.z,
@@ -217,7 +213,7 @@ var ThreeNavigation = (function () {
             this.tweenCamera.stop();
         }
         this.tweenCamera = new TWEEN.Tween(currentOrientation)
-            .to(newOrientation, 1000).onUpdate(function () {
+            .to(newOrientation, 1000).onUpdate(() => {
             camera.position.set(currentOrientation.x, currentOrientation.y, currentOrientation.z);
             camera.rotation.x = currentOrientation.rotationX;
             camera.rotation.y = currentOrientation.rotationY;
@@ -226,19 +222,19 @@ var ThreeNavigation = (function () {
             if (orientation === 'top') {
                 camera.rotation.z = currentOrientation.rotationZ;
             }
-            _this.controls.target = new THREE.Vector3(currentOrientation.targetX, currentOrientation.targetY, currentOrientation.targetZ);
+            this.controls.target = new THREE.Vector3(currentOrientation.targetX, currentOrientation.targetY, currentOrientation.targetZ);
             if (camera instanceof THREE.OrthographicCamera) {
                 camera.zoom = currentOrientation.zoom;
                 camera.updateProjectionMatrix();
             }
             camera.updateMatrixWorld();
-        }).onStart(function () {
-            _this.cameraIsAnimating = true;
-        }).onStop(function () {
-            _this.cameraIsAnimating = false;
-        }).onComplete(function () {
-            _this.cameraIsAnimating = false;
-            _this.controls.enabled = true;
+        }).onStart(() => {
+            this.cameraIsAnimating = true;
+        }).onStop(() => {
+            this.cameraIsAnimating = false;
+        }).onComplete(() => {
+            this.cameraIsAnimating = false;
+            this.controls.enabled = true;
             if (camera instanceof THREE.OrthographicCamera) {
                 camera.updateProjectionMatrix();
             }
@@ -247,14 +243,11 @@ var ThreeNavigation = (function () {
         this.cameraIsAnimating = true;
         this.tweenCamera.start();
         this.three.requestRendering();
-    };
-    ThreeNavigation.prototype.zoom = function (target, factor, orientation, animate, render) {
-        if (orientation === void 0) { orientation = '3d'; }
-        if (animate === void 0) { animate = false; }
-        if (render === void 0) { render = true; }
+    }
+    zoom(target, factor, orientation = '3d', animate = false, render = true) {
         if (target === 'scene') {
-            var bbox_1 = null;
-            this.three.getScene().traverse(function (object) {
+            let bbox = null;
+            this.three.getScene().traverse((object) => {
                 if (!object.visible)
                     return;
                 if (object.type === 'Scene')
@@ -271,26 +264,26 @@ var ThreeNavigation = (function () {
                     return;
                 if (object.userData._isHelper)
                     return;
-                if (!bbox_1) {
-                    bbox_1 = new THREE.Box3();
-                    bbox_1.setFromObject(object);
+                if (!bbox) {
+                    bbox = new THREE.Box3();
+                    bbox.setFromObject(object);
                 }
                 else {
-                    bbox_1.expandByObject(object);
+                    bbox.expandByObject(object);
                 }
             });
-            if (bbox_1) {
+            if (bbox) {
                 if (factor === 'auto') {
-                    bbox_1 = this.three.autoExtendBbox(bbox_1);
+                    bbox = this.three.autoExtendBbox(bbox);
                 }
                 else {
-                    bbox_1 = this.three.scaleBbox(bbox_1, factor);
+                    bbox = this.three.scaleBbox(bbox, factor);
                 }
-                this.zoomOnBbox(bbox_1, orientation, animate, render);
+                this.zoomOnBbox(bbox, orientation, animate, render);
             }
         }
         else if (target === 'currentBbox') {
-            var bbox = void 0;
+            let bbox;
             if (factor === 'auto') {
                 bbox = this.three.autoExtendBbox(this.three.objects.getBbox());
             }
@@ -300,32 +293,32 @@ var ThreeNavigation = (function () {
             this.zoomOnBbox(bbox, orientation, animate, render);
         }
         else if (typeof target === 'string') {
-            var scene = new THREE.Scene();
-            var hasObjects = false;
-            var bbox_2;
-            this.three.getScene().traverse(function (object) {
-                if (object["_" + target]) {
-                    if (!bbox_2) {
-                        bbox_2 = new THREE.Box3();
-                        bbox_2.setFromObject(object);
+            let scene = new THREE.Scene();
+            let hasObjects = false;
+            let bbox;
+            this.three.getScene().traverse((object) => {
+                if (object[`_${target}`]) {
+                    if (!bbox) {
+                        bbox = new THREE.Box3();
+                        bbox.setFromObject(object);
                     }
                     else {
-                        bbox_2.expandByObject(object);
+                        bbox.expandByObject(object);
                     }
                 }
             });
-            if (bbox_2) {
+            if (bbox) {
                 if (factor === 'auto') {
-                    bbox_2 = this.three.autoExtendBbox(bbox_2);
+                    bbox = this.three.autoExtendBbox(bbox);
                 }
                 else {
-                    bbox_2 = this.three.scaleBbox(bbox_2, factor);
+                    bbox = this.three.scaleBbox(bbox, factor);
                 }
-                this.zoomOnBbox(bbox_2, orientation, animate, render);
+                this.zoomOnBbox(bbox, orientation, animate, render);
             }
         }
         else if (typeof target === 'object' && target instanceof THREE.Object3D) {
-            var bbox = new THREE.Box3().setFromObject(target);
+            let bbox = new THREE.Box3().setFromObject(target);
             if (factor === 'auto') {
                 bbox = this.three.autoExtendBbox(bbox);
             }
@@ -335,7 +328,7 @@ var ThreeNavigation = (function () {
             this.zoomOnBbox(bbox, orientation, animate, render);
         }
         else if (typeof target === 'object' && target instanceof THREE.Box3) {
-            var bbox = target;
+            let bbox = target;
             if (factor === 'auto') {
                 bbox = this.three.autoExtendBbox(bbox);
             }
@@ -345,10 +338,9 @@ var ThreeNavigation = (function () {
             this.zoomOnBbox(bbox, orientation, animate, render);
         }
         else if (Array.isArray(target) && target.length) {
-            var bbox = void 0;
-            for (var _i = 0, target_1 = target; _i < target_1.length; _i++) {
-                var object = target_1[_i];
-                var objectBbox = new THREE.Box3().setFromObject(object);
+            let bbox;
+            for (let object of target) {
+                let objectBbox = new THREE.Box3().setFromObject(object);
                 if (this.three.isBbox000(objectBbox))
                     continue;
                 if (!bbox) {
@@ -367,29 +359,17 @@ var ThreeNavigation = (function () {
             }
             this.zoomOnBbox(bbox, orientation, animate, render);
         }
-    };
-    ThreeNavigation.prototype.zoomOnObject = function (object, factor, orientation, animate, render) {
-        if (factor === void 0) { factor = 1; }
-        if (orientation === void 0) { orientation = 'top'; }
-        if (animate === void 0) { animate = false; }
-        if (render === void 0) { render = true; }
+    }
+    zoomOnObject(object, factor = 1, orientation = 'top', animate = false, render = true) {
         this.zoom(object, factor, orientation, animate, render);
-    };
-    ThreeNavigation.prototype.zoomOnScene = function (factor, orientation, animate, render) {
-        if (orientation === void 0) { orientation = '3d'; }
-        if (animate === void 0) { animate = false; }
-        if (render === void 0) { render = true; }
+    }
+    zoomOnScene(factor, orientation = '3d', animate = false, render = true) {
         return this.zoom('scene', factor, orientation, animate, render);
-    };
-    Object.defineProperty(ThreeNavigation.prototype, "camera", {
-        get: function () {
-            return this.three.getCamera();
-        },
-        enumerable: false,
-        configurable: true
-    });
-    ThreeNavigation.prototype.startObservation = function () {
-        var _this = this;
+    }
+    get camera() {
+        return this.three.getCamera();
+    }
+    startObservation() {
         this.observationViewer = document.createElement('div');
         this.observationViewer.style.position = 'absolute';
         this.observationViewer.style.zIndex = '10';
@@ -403,8 +383,8 @@ var ThreeNavigation = (function () {
         this.observationRenderer.setClearColor('#fff');
         this.observationRenderer.setSize(this.observationViewer.offsetWidth, this.observationViewer.offsetHeight);
         this.observationViewer.appendChild(this.observationRenderer.domElement);
-        var w = this.observationViewer.offsetWidth;
-        var h = this.observationViewer.offsetHeight;
+        let w = this.observationViewer.offsetWidth;
+        let h = this.observationViewer.offsetHeight;
         this.observationCamera = new THREE.OrthographicCamera(w / (this.observationCameraFrustrumFactor * -1), w / this.observationCameraFrustrumFactor, h / this.observationCameraFrustrumFactor, h / (this.observationCameraFrustrumFactor * -1), -1000000, 1000000);
         this.observationCamera.name = 'Observation Camera';
         this.observationCamera.position.x = -10;
@@ -414,22 +394,22 @@ var ThreeNavigation = (function () {
         this.observationCamera.lookAt(new THREE.Vector3(0, 0, 0));
         this.observationCamera.updateProjectionMatrix();
         this.observationCamera.updateMatrixWorld();
-        this.observationSubscription = Container.instance.get(EventAggregator).subscribe('three-post-render', function () {
-            _this.observationCamera.updateProjectionMatrix();
-            _this.camera.updateMatrixWorld();
-            if (!_this.observationRenderer)
+        this.observationSubscription = Container.instance.get(EventAggregator).subscribe('three-post-render', () => {
+            this.observationCamera.updateProjectionMatrix();
+            this.camera.updateMatrixWorld();
+            if (!this.observationRenderer)
                 return;
-            _this.observationRenderer.autoClear = true;
-            _this.observationRenderer.render(_this.three.getScene(), _this.observationCamera);
-            _this.observationRenderer.autoClear = false;
-            _this.observationRenderer.render(_this.three.getScene('points'), _this.observationCamera);
-            _this.observationRenderer.render(_this.three.getScene('overlay'), _this.observationCamera);
-            _this.observationRenderer.render(_this.three.getScene('tools'), _this.observationCamera);
+            this.observationRenderer.autoClear = true;
+            this.observationRenderer.render(this.three.getScene(), this.observationCamera);
+            this.observationRenderer.autoClear = false;
+            this.observationRenderer.render(this.three.getScene('points'), this.observationCamera);
+            this.observationRenderer.render(this.three.getScene('overlay'), this.observationCamera);
+            this.observationRenderer.render(this.three.getScene('tools'), this.observationCamera);
         });
         this.showCameraHelper();
         this.observationOn = true;
-    };
-    ThreeNavigation.prototype.endObservation = function () {
+    }
+    endObservation() {
         this.removeCameraHelper();
         this.observationViewer.remove();
         delete this.observationRenderer;
@@ -437,40 +417,38 @@ var ThreeNavigation = (function () {
         delete this.observationViewer;
         this.observationSubscription.dispose();
         this.observationOn = false;
-    };
-    ThreeNavigation.prototype.toggleObservation = function () {
+    }
+    toggleObservation() {
         if (!this.observationOn) {
             this.startObservation();
         }
         else {
             this.endObservation();
         }
-    };
-    ThreeNavigation.prototype.showCameraHelper = function () {
+    }
+    showCameraHelper() {
         this.log.debug('showCameraHelper');
-        var scene = this.three.getScene('overlay');
+        let scene = this.three.getScene('overlay');
         if (scene.getObjectByName('camera_helper'))
             return;
-        var helper = new THREE.CameraHelper(this.camera);
-        setInterval(function () {
+        let helper = new THREE.CameraHelper(this.camera);
+        setInterval(() => {
             helper.update();
         }, 500);
         helper.name = 'camera_helper';
         scene.add(helper);
-    };
-    ThreeNavigation.prototype.removeCameraHelper = function () {
-        var scene = this.three.getScene('overlay');
+    }
+    removeCameraHelper() {
+        let scene = this.three.getScene('overlay');
         if (scene.getObjectByName('camera_helper')) {
             scene.remove(scene.getObjectByName('camera_helper'));
         }
-    };
-    __decorate([
-        computedFrom('three'),
-        __metadata("design:type", THREE.Camera),
-        __metadata("design:paramtypes", [])
-    ], ThreeNavigation.prototype, "camera", null);
-    return ThreeNavigation;
-}());
-export { ThreeNavigation };
+    }
+}
+__decorate([
+    computedFrom('three'),
+    __metadata("design:type", THREE.Camera),
+    __metadata("design:paramtypes", [])
+], ThreeNavigation.prototype, "camera", null);
 
 //# sourceMappingURL=three-navigation.js.map

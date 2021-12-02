@@ -10,38 +10,37 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ThreeCubeView = void 0;
-var THREE = require("three");
-var aurelia_framework_1 = require("aurelia-framework");
-var aurelia_logging_1 = require("aurelia-logging");
-var three_1 = require("./three");
-var log = aurelia_logging_1.getLogger('three-cube-view');
-var ThreeCubeView = (function () {
-    function ThreeCubeView() {
+const THREE = require("three");
+const aurelia_framework_1 = require("aurelia-framework");
+const aurelia_logging_1 = require("aurelia-logging");
+const three_1 = require("./three");
+const log = aurelia_logging_1.getLogger('three-cube-view');
+class ThreeCubeView {
+    constructor() {
         this.observing = false;
     }
-    ThreeCubeView.prototype.bind = function () {
+    bind() {
         this.threeChanged();
-    };
-    ThreeCubeView.prototype.startObserving = function () {
+    }
+    startObserving() {
         if (this.observing) {
             return;
         }
         this.observing = true;
         this.update();
-    };
-    ThreeCubeView.prototype.stopObserving = function () {
+    }
+    stopObserving() {
         this.observing = false;
-    };
-    ThreeCubeView.prototype.update = function () {
-        var _this = this;
-        requestAnimationFrame(function () {
-            _this.controls.update();
-            if (_this.observing) {
-                _this.update();
+    }
+    update() {
+        requestAnimationFrame(() => {
+            this.controls.update();
+            if (this.observing) {
+                this.update();
             }
         });
-    };
-    ThreeCubeView.prototype.threeChanged = function () {
+    }
+    threeChanged() {
         log.debug('cameraChanged', this.three.getCamera());
         this.stopObserving();
         if (this.controls) {
@@ -58,27 +57,26 @@ var ThreeCubeView = (function () {
         this.host.append(this.controls.element);
         this.controls.element.addEventListener('click', this);
         this.startObserving();
-    };
-    ThreeCubeView.prototype.handleEvent = function (event) {
-        var id = (event.target && event.target instanceof HTMLElement) ? event.target.id : '';
+    }
+    handleEvent(event) {
+        const id = (event.target && event.target instanceof HTMLElement) ? event.target.id : '';
         if (id === 'front' || id === 'back' || id === 'top' || id === 'bottom' || id === 'left' || id === 'right') {
             this.three.navigation.zoomOnScene(1, id, true);
         }
-    };
-    __decorate([
-        aurelia_framework_1.bindable,
-        __metadata("design:type", three_1.ThreeCustomElement)
-    ], ThreeCubeView.prototype, "three", void 0);
-    return ThreeCubeView;
-}());
+    }
+}
+__decorate([
+    aurelia_framework_1.bindable,
+    __metadata("design:type", three_1.ThreeCustomElement)
+], ThreeCubeView.prototype, "three", void 0);
 exports.ThreeCubeView = ThreeCubeView;
 THREE.OrientationControls = (function () {
     function epsilon(value) {
         return Math.abs(value) < 1e-10 ? 0 : value;
     }
     function getObjectCSSMatrix(matrix) {
-        var elements = matrix.elements;
-        var matrix3d = 'matrix3d(' +
+        const elements = matrix.elements;
+        const matrix3d = 'matrix3d(' +
             epsilon(elements[0]) + ',' +
             epsilon(elements[1]) + ',' +
             epsilon(elements[2]) + ',' +
@@ -98,8 +96,8 @@ THREE.OrientationControls = (function () {
             ')';
         return 'translate(-50%,-50%)' + matrix3d;
     }
-    var matrix = new THREE.Matrix4;
-    var sides = {
+    const matrix = new THREE.Matrix4;
+    const sides = {
         front: 'rotateY(  0deg) translateZ(%SIZE)',
         right: 'rotateY( 90deg) translateZ(%SIZE)',
         back: 'rotateY(180deg) translateZ(%SIZE)',
@@ -107,7 +105,7 @@ THREE.OrientationControls = (function () {
         top: 'rotateX( 90deg) translateZ(%SIZE)',
         bottom: 'rotateX(-90deg) translateZ(%SIZE)'
     };
-    var offsets = {
+    const offsets = {
         n: [0, -1],
         e: [1, 0],
         s: [0, 1],
@@ -116,34 +114,34 @@ THREE.OrientationControls = (function () {
     function OrientationControls(camera, size, options) {
         size = size || 80;
         options = options || {};
-        var unit = 'px';
-        var half = size / 2;
+        const unit = 'px';
+        const half = size / 2;
         options.perspective = options.perspective || false;
-        var container = document.createElement('div');
+        const container = document.createElement('div');
         container.className = 'three-cube-view__element';
         container.style.width = size + unit;
         container.style.height = size + unit;
         container.style.left = size / 2 + unit;
         container.style.top = size / 2 + unit;
-        var box = document.createElement('div');
+        const box = document.createElement('div');
         box.className = 'three-cube-view__box';
         box.style.width = size + unit;
         box.style.height = size + unit;
         box.style.fontSize = (size / 6) + unit;
         container.appendChild(box);
-        var ring = document.createElement('div');
-        var R = 1.7320508075688772;
-        var s = size * R / 2;
-        var directions = {
+        const ring = document.createElement('div');
+        const R = 1.7320508075688772;
+        const s = size * R / 2;
+        const directions = {
             n: 'translateX(' + s + unit + ') translateY(' + 0 + unit + ')',
             e: 'translateX(' + s * 2 + unit + ') translateY(' + s + unit + ')',
             s: 'translateX(' + s + unit + ') translateY(' + s * 2 + unit + ')',
             w: 'translateX(' + 0 + unit + ') translateY(' + s + unit + ')'
         };
         function direction(name) {
-            var e = document.createElement('div');
-            var id = name.toLowerCase();
-            var fs = size / 6;
+            const e = document.createElement('div');
+            const id = name.toLowerCase();
+            const fs = size / 6;
             e.id = id;
             e.textContent = name;
             e.style.transform = directions[id];
@@ -162,8 +160,8 @@ THREE.OrientationControls = (function () {
         ring.style.height = size * R + unit;
         box.appendChild(ring);
         function plane(side) {
-            var e = document.createElement('div');
-            var id = side.toLowerCase();
+            const e = document.createElement('div');
+            const id = side.toLowerCase();
             e.id = id;
             e.textContent = side;
             e.className = id + ' face';
@@ -186,7 +184,7 @@ THREE.OrientationControls = (function () {
             matrix.elements[12] = half;
             matrix.elements[13] = half;
             matrix.elements[14] = 0;
-            var style = getObjectCSSMatrix(matrix);
+            const style = getObjectCSSMatrix(matrix);
             box.style.transform = style;
             container.style.perspective = ((options.perspective && camera instanceof THREE.PerspectiveCamera) ?
                 (Math.pow(size * size + size * size, 0.5) / Math.tan((camera.fov / 2) * Math.PI / 180)) : 0) + unit;

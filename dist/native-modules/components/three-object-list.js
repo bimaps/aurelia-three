@@ -12,8 +12,8 @@ import { inject, bindable } from 'aurelia-framework';
 import { getLogger } from 'aurelia-logging';
 import * as THREE from 'three';
 import { DOM } from 'aurelia-pal';
-var ThreeObjectList = (function () {
-    function ThreeObjectList(element) {
+let ThreeObjectList = class ThreeObjectList {
+    constructor(element) {
         this.element = element;
         this.objects = [];
         this.q = '';
@@ -21,91 +21,84 @@ var ThreeObjectList = (function () {
         this.showAll = false;
         this.log = getLogger('comp:three-object-list');
     }
-    ThreeObjectList.prototype.toggleObject = function (object, event) {
+    toggleObject(object, event) {
         if (event.stopPropagation)
             event.stopPropagation();
-        var o = object;
+        const o = object;
         if (Array.isArray(object.children) && object.children.length) {
             o.__list_opened = !o.__list_opened;
         }
         else {
             o.__list_opened = false;
         }
-    };
-    ThreeObjectList.prototype.toggleVisible = function (object, event) {
+    }
+    toggleVisible(object, event) {
         if (event.stopPropagation)
             event.stopPropagation();
         object.visible = !object.visible;
-    };
-    ThreeObjectList.prototype.selectObject = function (object, event) {
+    }
+    selectObject(object, event) {
         if (event.stopPropagation)
             event.stopPropagation();
-        var eventDetail = object;
+        let eventDetail = object;
         this.element.dispatchEvent(DOM.createCustomEvent('select-object', { detail: eventDetail, bubbles: true }));
-    };
-    ThreeObjectList.prototype.isCamera = function (object) {
+    }
+    isCamera(object) {
         return object instanceof THREE.Camera;
-    };
-    ThreeObjectList.prototype.isLight = function (object) {
+    }
+    isLight(object) {
         return object instanceof THREE.Light;
-    };
-    ThreeObjectList.prototype.isGroup = function (object) {
+    }
+    isGroup(object) {
         return object instanceof THREE.Group;
-    };
-    ThreeObjectList.prototype.isMesh = function (object) {
+    }
+    isMesh(object) {
         return object instanceof THREE.Mesh;
-    };
-    ThreeObjectList.prototype.isGeometry = function (object) {
-        return object instanceof THREE.Geometry;
-    };
-    ThreeObjectList.prototype.isPointClouds = function (object) {
+    }
+    isGeometry(object) {
+        return object instanceof THREE.BufferGeometry;
+    }
+    isPointClouds(object) {
         return object instanceof PointCloudOctree;
-    };
-    ThreeObjectList.prototype.isObject = function (object) {
+    }
+    isObject(object) {
         return !this.isCamera(object) &&
             !this.isLight(object) &&
             !this.isGroup(object) &&
             !this.isMesh(object) &&
             !this.isPointClouds(object) &&
             !this.isGeometry(object);
-    };
-    __decorate([
-        bindable,
-        __metadata("design:type", Array)
-    ], ThreeObjectList.prototype, "objects", void 0);
-    __decorate([
-        bindable,
-        __metadata("design:type", String)
-    ], ThreeObjectList.prototype, "q", void 0);
-    __decorate([
-        bindable,
-        __metadata("design:type", Number)
-    ], ThreeObjectList.prototype, "limit", void 0);
-    ThreeObjectList = __decorate([
-        inject(Element),
-        __metadata("design:paramtypes", [Element])
-    ], ThreeObjectList);
-    return ThreeObjectList;
-}());
-export { ThreeObjectList };
-var FilterObjectListValueConverter = (function () {
-    function FilterObjectListValueConverter() {
     }
-    FilterObjectListValueConverter.prototype.toView = function (list, q, limit, showAll) {
-        if (limit === void 0) { limit = 10; }
-        if (showAll === void 0) { showAll = false; }
+};
+__decorate([
+    bindable,
+    __metadata("design:type", Array)
+], ThreeObjectList.prototype, "objects", void 0);
+__decorate([
+    bindable,
+    __metadata("design:type", String)
+], ThreeObjectList.prototype, "q", void 0);
+__decorate([
+    bindable,
+    __metadata("design:type", Number)
+], ThreeObjectList.prototype, "limit", void 0);
+ThreeObjectList = __decorate([
+    inject(Element),
+    __metadata("design:paramtypes", [Element])
+], ThreeObjectList);
+export { ThreeObjectList };
+export class FilterObjectListValueConverter {
+    toView(list, q, limit = 10, showAll = false) {
         if (!q && (list.length < limit || showAll))
             return list;
-        var newList = [];
-        var terms = q ? q.toLowerCase().split(' ') : [];
-        itemLoop: for (var _i = 0, list_1 = list; _i < list_1.length; _i++) {
-            var item = list_1[_i];
+        let newList = [];
+        let terms = q ? q.toLowerCase().split(' ') : [];
+        itemLoop: for (let item of list) {
             if (!q) {
                 newList.push(item);
                 continue itemLoop;
             }
-            for (var _a = 0, terms_1 = terms; _a < terms_1.length; _a++) {
-                var term = terms_1[_a];
+            for (let term of terms) {
                 if (item.name && item.name.toLowerCase().indexOf(term) !== -1) {
                     newList.push(item);
                     continue itemLoop;
@@ -118,8 +111,8 @@ var FilterObjectListValueConverter = (function () {
                     newList.push(item);
                     continue itemLoop;
                 }
-                for (var key in item.userData || {}) {
-                    var value = item.userData[key];
+                for (let key in item.userData || {}) {
+                    let value = item.userData[key];
                     if (typeof value === 'string' && value.toLowerCase().indexOf(term) !== -1) {
                         newList.push(item);
                         continue itemLoop;
@@ -131,9 +124,7 @@ var FilterObjectListValueConverter = (function () {
             newList = newList.slice(0, limit);
         }
         return newList;
-    };
-    return FilterObjectListValueConverter;
-}());
-export { FilterObjectListValueConverter };
+    }
+}
 
 //# sourceMappingURL=three-object-list.js.map

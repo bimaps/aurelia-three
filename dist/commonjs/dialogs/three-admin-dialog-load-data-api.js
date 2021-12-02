@@ -10,9 +10,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ThreeAdminDialogLoadDataApi = void 0;
-var aurelia_framework_1 = require("aurelia-framework");
-var ThreeAdminDialogLoadDataApi = (function () {
-    function ThreeAdminDialogLoadDataApi(element) {
+const aurelia_framework_1 = require("aurelia-framework");
+let ThreeAdminDialogLoadDataApi = class ThreeAdminDialogLoadDataApi {
+    constructor(element) {
         this.element = element;
         this.value = {
             replaceLightsIfAny: true,
@@ -20,10 +20,10 @@ var ThreeAdminDialogLoadDataApi = (function () {
             zoomOnScene: true
         };
     }
-    ThreeAdminDialogLoadDataApi.prototype.bind = function () {
+    bind() {
         this.valueChanged();
-    };
-    ThreeAdminDialogLoadDataApi.prototype.valueChanged = function () {
+    }
+    valueChanged() {
         if (typeof this.value !== 'object') {
             this.value = {
                 replaceLightsIfAny: true,
@@ -31,17 +31,16 @@ var ThreeAdminDialogLoadDataApi = (function () {
                 zoomOnScene: true
             };
         }
-    };
-    __decorate([
-        aurelia_framework_1.bindable,
-        __metadata("design:type", Object)
-    ], ThreeAdminDialogLoadDataApi.prototype, "value", void 0);
-    ThreeAdminDialogLoadDataApi = __decorate([
-        aurelia_framework_1.inject(Element),
-        __metadata("design:paramtypes", [Element])
-    ], ThreeAdminDialogLoadDataApi);
-    return ThreeAdminDialogLoadDataApi;
-}());
+    }
+};
+__decorate([
+    aurelia_framework_1.bindable,
+    __metadata("design:type", Object)
+], ThreeAdminDialogLoadDataApi.prototype, "value", void 0);
+ThreeAdminDialogLoadDataApi = __decorate([
+    aurelia_framework_1.inject(Element),
+    __metadata("design:paramtypes", [Element])
+], ThreeAdminDialogLoadDataApi);
 exports.ThreeAdminDialogLoadDataApi = ThreeAdminDialogLoadDataApi;
 
 //# sourceMappingURL=three-admin-dialog-load-data-api.js.map

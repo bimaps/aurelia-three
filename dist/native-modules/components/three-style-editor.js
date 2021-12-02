@@ -11,40 +11,38 @@ import { ThreeStyleModel } from './../models/style.model';
 import { inject, bindable, Container } from 'aurelia-framework';
 import { getLogger } from 'aurelia-logging';
 import { EventAggregator } from 'aurelia-event-aggregator';
-var ThreeStyleEditor = (function () {
-    function ThreeStyleEditor(element) {
+let ThreeStyleEditor = class ThreeStyleEditor {
+    constructor(element) {
         this.element = element;
         this.subscriptions = [];
         this.log = getLogger('comp:three-style-editor');
     }
-    ThreeStyleEditor.prototype.detatched = function () {
-        for (var _i = 0, _a = this.subscriptions; _i < _a.length; _i++) {
-            var sub = _a[_i];
+    detatched() {
+        for (let sub of this.subscriptions) {
             sub.dispose();
         }
-    };
-    ThreeStyleEditor.prototype.styleModif = function (prop) {
-        var s = this._style;
+    }
+    styleModif(prop) {
+        const s = this._style;
         if (!Array.isArray(s.__editedProperties)) {
             s.__editedProperties = [];
         }
         if (!s.__editedProperties.includes(prop))
             s.__editedProperties.push(prop);
         this.notifyStyleChange();
-    };
-    ThreeStyleEditor.prototype.notifyStyleChange = function () {
+    }
+    notifyStyleChange() {
         Container.instance.get(EventAggregator).publish('three-style:update');
-    };
-    __decorate([
-        bindable,
-        __metadata("design:type", ThreeStyleModel)
-    ], ThreeStyleEditor.prototype, "_style", void 0);
-    ThreeStyleEditor = __decorate([
-        inject(Element),
-        __metadata("design:paramtypes", [Element])
-    ], ThreeStyleEditor);
-    return ThreeStyleEditor;
-}());
+    }
+};
+__decorate([
+    bindable,
+    __metadata("design:type", ThreeStyleModel)
+], ThreeStyleEditor.prototype, "_style", void 0);
+ThreeStyleEditor = __decorate([
+    inject(Element),
+    __metadata("design:paramtypes", [Element])
+], ThreeStyleEditor);
 export { ThreeStyleEditor };
 
 //# sourceMappingURL=three-style-editor.js.map
