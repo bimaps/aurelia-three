@@ -1,10 +1,8 @@
-import { ThreeMaterialModel } from './material.model';
-import { ThreeGeometryModel } from './geometry.model';
-import { ThreeObjectModel, ThreeObjectPrepareFiltersOptions } from './object.model';
 import { model, Model, type, jsonify, Metadata } from 'aurelia-deco';
 import * as THREE from 'three';
-import { Logger, getLogger } from 'aurelia-logging';
+import { Logger, getLogger } from 'aurelia-logging';
 import * as GeoJSON from 'geojson';
+import { ThreeMaterialModel, ThreeGeometryModel, ThreeObjectModel, ThreeObjectPrepareFiltersOptions } from '../internal';
 const log: Logger = getLogger('three-site-model');
 
 export interface ThreeSiteModelAddJsonDataOptions {
@@ -120,7 +118,7 @@ export class ThreeSiteModel extends Model {
     URL.revokeObjectURL(url);
   }
 
-  static addJsonData(siteId: string, json: Blob | any, options?: ThreeSiteModelAddJsonDataOptions) {
+  static addJsonData(siteId: string, json: Blob | any, options?: ThreeSiteModelAddJsonDataOptions) {
     let blob: Blob;
     if (json instanceof Blob) {
       blob = json;
@@ -162,7 +160,7 @@ export class ThreeSiteModel extends Model {
     if (result.status === 'completed') {
       return true;
     }
-    if (result.status === 'in-progress' || result.message === 'Failed to fetch') {
+    if (result.status === 'in-progress' || result.message === 'Failed to fetch') {
       return ThreeSiteModel.waitForOperationCompleted(siteId, operationId);
     }
     throw new Error(result.message);

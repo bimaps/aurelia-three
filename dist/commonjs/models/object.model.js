@@ -11,10 +11,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var ThreeObjectModel_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ThreeObjectModel = void 0;
-const site_model_1 = require("./site.model");
 const aurelia_deco_1 = require("aurelia-deco");
 const THREE = require("three");
 const aurelia_logging_1 = require("aurelia-logging");
+const internal_1 = require("../internal");
 const log = aurelia_logging_1.getLogger('three-object-model');
 let ThreeObjectModel = ThreeObjectModel_1 = class ThreeObjectModel extends aurelia_deco_1.Model {
     constructor() {
@@ -171,7 +171,7 @@ __decorate([
     __metadata("design:type", String)
 ], ThreeObjectModel.prototype, "id", void 0);
 __decorate([
-    aurelia_deco_1.type.model({ model: site_model_1.ThreeSiteModel }),
+    aurelia_deco_1.type.model({ model: internal_1.ThreeSiteModel }),
     aurelia_deco_1.validate.required,
     __metadata("design:type", String)
 ], ThreeObjectModel.prototype, "siteId", void 0);

@@ -11,13 +11,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var ThreeThemeModel_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ThreeThemeModel = exports.ThreeThemeModelRule = void 0;
+const THREE = require("three");
+const internal_1 = require("../internal");
+const aurelia_deco_1 = require("aurelia-deco");
+const aurelia_logging_1 = require("aurelia-logging");
 const three_style_definition_1 = require("./../themes/three-style-definition");
 const three_theme_1 = require("./../themes/three-theme");
 const three_theme_rule_1 = require("../themes/three-theme-rule");
-const site_model_1 = require("./site.model");
-const aurelia_deco_1 = require("aurelia-deco");
-const THREE = require("three");
-const aurelia_logging_1 = require("aurelia-logging");
 const log = aurelia_logging_1.getLogger('theme-model');
 class ThreeThemeModelRule extends three_theme_rule_1.ThreeThemeRule {
 }
@@ -135,7 +135,7 @@ __decorate([
     __metadata("design:type", String)
 ], ThreeThemeModel.prototype, "id", void 0);
 __decorate([
-    aurelia_deco_1.type.model({ model: site_model_1.ThreeSiteModel }),
+    aurelia_deco_1.type.model({ model: internal_1.ThreeSiteModel }),
     aurelia_deco_1.validate.required,
     __metadata("design:type", String)
 ], ThreeThemeModel.prototype, "siteId", void 0);

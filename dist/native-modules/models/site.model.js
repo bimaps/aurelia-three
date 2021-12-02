@@ -17,12 +17,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 var ThreeSiteModel_1;
-import { ThreeMaterialModel } from './material.model';
-import { ThreeGeometryModel } from './geometry.model';
-import { ThreeObjectModel } from './object.model';
 import { model, Model, type, jsonify } from 'aurelia-deco';
 import * as THREE from 'three';
 import { getLogger } from 'aurelia-logging';
+import { ThreeMaterialModel, ThreeGeometryModel, ThreeObjectModel } from '../internal';
 const log = getLogger('three-site-model');
 ;
 let ThreeSiteModel = ThreeSiteModel_1 = class ThreeSiteModel extends Model {

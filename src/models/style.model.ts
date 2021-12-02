@@ -1,5 +1,5 @@
-import { ThreeSiteModel } from './site.model';
 import { model, Model, type, validate } from 'aurelia-deco';
+import { ThreeSiteModel } from '../internal';
 
 export interface ThreePos {
   x: number;

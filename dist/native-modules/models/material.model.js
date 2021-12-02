@@ -8,9 +8,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var ThreeMaterialModel_1;
-import { ThreeSiteModel } from './site.model';
 import { model, Model, type, validate } from 'aurelia-deco';
 import * as THREE from 'three';
+import { ThreeSiteModel } from '../internal';
 let ThreeMaterialModel = ThreeMaterialModel_1 = class ThreeMaterialModel extends Model {
     static getAll(suffix, options) {
         return super.getAll(suffix, options).then((el) => {

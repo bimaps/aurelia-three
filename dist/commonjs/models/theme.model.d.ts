@@ -1,8 +1,8 @@
+import { ThreeStyleModel } from '../internal';
+import { Model } from 'aurelia-deco';
 import { ThreeStyleDefinition } from './../themes/three-style-definition';
 import { ThreeTheme } from './../themes/three-theme';
 import { ThreeThemeRule } from '../themes/three-theme-rule';
-import { Model } from 'aurelia-deco';
-import { ThreeStyleModel } from './style.model';
 export declare class ThreeThemeModelRule extends ThreeThemeRule {
     styles: Array<string>;
 }

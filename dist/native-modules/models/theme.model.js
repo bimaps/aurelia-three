@@ -8,13 +8,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var ThreeThemeModel_1;
+import * as THREE from 'three';
+import { ThreeSiteModel } from '../internal';
+import { model, Model, type, validate } from 'aurelia-deco';
+import { getLogger } from 'aurelia-logging';
 import { ThreeStyleDefinition } from './../themes/three-style-definition';
 import { ThreeTheme } from './../themes/three-theme';
 import { ThreeThemeRule } from '../themes/three-theme-rule';
-import { ThreeSiteModel } from './site.model';
-import { model, Model, type, validate } from 'aurelia-deco';
-import * as THREE from 'three';
-import { getLogger } from 'aurelia-logging';
 const log = getLogger('theme-model');
 export class ThreeThemeModelRule extends ThreeThemeRule {
 }

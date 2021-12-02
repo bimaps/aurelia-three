@@ -1,7 +1,7 @@
-import { ThreeObjectPrepareFiltersOptions } from './object.model';
 import { Model, Metadata } from 'aurelia-deco';
 import * as THREE from 'three';
 import * as GeoJSON from 'geojson';
+import { ThreeObjectPrepareFiltersOptions } from '../internal';
 export interface ThreeSiteModelAddJsonDataOptions {
     importId?: string;
     saveLights?: boolean;

@@ -20,12 +20,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 var ThreeSiteModel_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ThreeSiteModel = void 0;
-const material_model_1 = require("./material.model");
-const geometry_model_1 = require("./geometry.model");
-const object_model_1 = require("./object.model");
 const aurelia_deco_1 = require("aurelia-deco");
 const THREE = require("three");
 const aurelia_logging_1 = require("aurelia-logging");
+const internal_1 = require("../internal");
 const log = aurelia_logging_1.getLogger('three-site-model');
 ;
 let ThreeSiteModel = ThreeSiteModel_1 = class ThreeSiteModel extends aurelia_deco_1.Model {
@@ -174,11 +172,11 @@ let ThreeSiteModel = ThreeSiteModel_1 = class ThreeSiteModel extends aurelia_dec
         let promises = [];
         let filterObjects = '';
         if (filterObjectsOptions) {
-            filterObjects = '&' + object_model_1.ThreeObjectModel.prepareFilters(filterObjectsOptions);
+            filterObjects = '&' + internal_1.ThreeObjectModel.prepareFilters(filterObjectsOptions);
         }
-        promises.push(object_model_1.ThreeObjectModel.getAll(`?siteId=${siteId}${filterObjects}`));
-        promises.push(geometry_model_1.ThreeGeometryModel.getAll(`?siteId=${siteId}`));
-        promises.push(material_model_1.ThreeMaterialModel.getAll(`?siteId=${siteId}`));
+        promises.push(internal_1.ThreeObjectModel.getAll(`?siteId=${siteId}${filterObjects}`));
+        promises.push(internal_1.ThreeGeometryModel.getAll(`?siteId=${siteId}`));
+        promises.push(internal_1.ThreeMaterialModel.getAll(`?siteId=${siteId}`));
         return Promise.all(promises);
     }
 };

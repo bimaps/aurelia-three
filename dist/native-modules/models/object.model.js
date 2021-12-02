@@ -8,10 +8,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var ThreeObjectModel_1;
-import { ThreeSiteModel } from './site.model';
 import { model, Model, type, validate } from 'aurelia-deco';
 import * as THREE from 'three';
 import { getLogger } from 'aurelia-logging';
+import { ThreeSiteModel } from '../internal';
 const log = getLogger('three-object-model');
 let ThreeObjectModel = ThreeObjectModel_1 = class ThreeObjectModel extends Model {
     constructor() {

@@ -11,9 +11,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var ThreeMaterialModel_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ThreeMaterialModel = void 0;
-const site_model_1 = require("./site.model");
 const aurelia_deco_1 = require("aurelia-deco");
 const THREE = require("three");
+const internal_1 = require("../internal");
 let ThreeMaterialModel = ThreeMaterialModel_1 = class ThreeMaterialModel extends aurelia_deco_1.Model {
     static getAll(suffix, options) {
         return super.getAll(suffix, options).then((el) => {
@@ -36,7 +36,7 @@ __decorate([
     __metadata("design:type", String)
 ], ThreeMaterialModel.prototype, "id", void 0);
 __decorate([
-    aurelia_deco_1.type.model({ model: site_model_1.ThreeSiteModel }),
+    aurelia_deco_1.type.model({ model: internal_1.ThreeSiteModel }),
     aurelia_deco_1.validate.required,
     __metadata("design:type", String)
 ], ThreeMaterialModel.prototype, "siteId", void 0);

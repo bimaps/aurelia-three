@@ -1,8 +1,8 @@
-import { ThreeSiteModel } from './site.model';
-import { model, Model, type, validate, Metadata, GetAllOptions } from 'aurelia-deco';
+import { model, Model, type, validate, GetAllOptions } from 'aurelia-deco';
 import * as THREE from 'three';
 import { StringTMap } from 'aurelia-resources';
 import { Logger, getLogger } from 'aurelia-logging';
+import { ThreeSiteModel } from '../internal';
 const log: Logger = getLogger('three-object-model');
 
 @model('/three/object')

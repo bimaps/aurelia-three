@@ -1,6 +1,6 @@
-import { ThreeSiteModel } from './site.model';
-import { model, Model, type, validate, Metadata, GetAllOptions } from 'aurelia-deco';
+import { model, Model, type, validate, GetAllOptions } from 'aurelia-deco';
 import * as THREE from 'three';
+import { ThreeSiteModel } from '../internal';
 
 
 @model('/three/geometry')
