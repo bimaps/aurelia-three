@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ThreeThemeModel = exports.ThreeStyleModel = exports.ThreeSiteModel = exports.ThreeObjectModel = exports.ThreeMaterialModel = exports.ThreeGeometryModel = void 0;
+exports.ThreeThemeModelRule = exports.ThreeThemeModel = exports.ThreeStyleModel = exports.ThreeSiteModel = exports.ThreeObjectModel = exports.ThreeMaterialModel = exports.ThreeGeometryModel = void 0;
 const geometry_model_1 = require("./models/geometry.model");
 Object.defineProperty(exports, "ThreeGeometryModel", { enumerable: true, get: function () { return geometry_model_1.ThreeGeometryModel; } });
 const material_model_1 = require("./models/material.model");
@@ -13,5 +13,6 @@ const style_model_1 = require("./models/style.model");
 Object.defineProperty(exports, "ThreeStyleModel", { enumerable: true, get: function () { return style_model_1.ThreeStyleModel; } });
 const theme_model_1 = require("./models/theme.model");
 Object.defineProperty(exports, "ThreeThemeModel", { enumerable: true, get: function () { return theme_model_1.ThreeThemeModel; } });
+Object.defineProperty(exports, "ThreeThemeModelRule", { enumerable: true, get: function () { return theme_model_1.ThreeThemeModelRule; } });
 
 //# sourceMappingURL=internal.js.map
